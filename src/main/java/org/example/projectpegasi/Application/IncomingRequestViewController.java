@@ -1,4 +1,4 @@
-package Application;
+package org.example.projectpegasi.Application;
 
 public class IncomingRequestViewController
 {
