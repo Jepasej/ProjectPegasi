@@ -1,4 +1,4 @@
-package BusinessService;
+package org.example.projectpegasi.BusinessService;
 
 /**
  *  A helper class that delays the creation of an object of type T
@@ -23,6 +23,5 @@ public class Lazy<T>
         }
 
         return value;
-
     }
 }
