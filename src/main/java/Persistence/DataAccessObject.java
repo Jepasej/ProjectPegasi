@@ -1,4 +1,4 @@
-package Persistance;
+package Persistence;
 
 public class DataAccessObject
 {
