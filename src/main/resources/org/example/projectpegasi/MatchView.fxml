@@ -16,10 +16,10 @@
             </Label>
             <TableView layoutY="132.0" prefHeight="368.0" prefWidth="1000.0">
               <columns>
-                <TableColumn prefWidth="393.6666717529297" text="Jobtitle" />
-                <TableColumn minWidth="0.0" prefWidth="357.0" text="Company" />
-                  <TableColumn prefWidth="128.3333740234375" text="Request swap" />
-                  <TableColumn prefWidth="123.33331298828125" text="Decline match" />
+                <TableColumn fx:id="JobTitleColumnMatch" prefWidth="393.6666717529297" text="Jobtitle" />
+                <TableColumn fx:id="CompanyColumnMatch" minWidth="0.0" prefWidth="357.0" text="Company" />
+                  <TableColumn fx:id="RequestSwapColumnMatch" prefWidth="128.3333740234375" text="Request swap" />
+                  <TableColumn fx:id="DeclineMatchColumnMatch" prefWidth="123.33331298828125" text="Decline match" />
               </columns>
             </TableView>
             <Button layoutX="113.0" layoutY="83.0" mnemonicParsing="false" text="Matches" />
