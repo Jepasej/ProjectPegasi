@@ -30,14 +30,20 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
+    /**
+     * Method tied to CreateProfileView.fxml's SaveButton
+     */
     @FXML
-    public void onSaveClick()
+    public void onSaveButtonClick()
     {
 
     }
 
+    /**
+     * Method tied to CreateProfileView.fxml's CancelButton
+     */
     @FXML
-    public void onCancelClick()
+    public void onCancelButtonClick()
     {
 
     }
