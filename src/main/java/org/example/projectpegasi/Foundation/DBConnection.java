@@ -57,6 +57,20 @@ public class DBConnection
      */
     public Connection getConnection()
     {
-        return connection;
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            this.connection = DriverManager.getConnection(DATABASEURL, USERNAME, PASSWORD);
+            return connection;
+        }
+        catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
