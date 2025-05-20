@@ -5,25 +5,67 @@ import org.example.projectpegasi.DomainModels.Match;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.DomainModels.User;
+import org.example.projectpegasi.Foundation.DBConnection;
 
 public class DataAccessObject implements DAO
 {
     //Hent data fra match via matchId
-    public Match readAMatchID(int AmatchID) throws Exception
+    public Match getAMatchID(int AmatchID) throws Exception
     {
         int matchID = 0;
 
-
+        // SQL query to retrieve the match ID info based on the match ID
         String sql = "SELECT * FROM tblMatches WHERE fldMatchID=?";
-        Connection conn = ;//Mangler metoden fra DBConnection
+        Connection conn = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setInt(1, AmatchID);
         ResultSet rs = pstm.executeQuery();
 
-        Match match = new Match();
-        match.setMatchID(rs.getInt(1));
+        boolean hasMatch = false;
+        Match match = null;
+        //If match found
+        while (rs.next())
+        {
+            match = new Match();
+            hasMatch = true;
+            match.setMatchID(rs.getInt(1));
+            match.setProfileAID(rs.getInt(2));
+            match.setProfileBID(rs.getInt(3));
+            match.setStateID(rs.getInt(4));
+            match.setMatchDate(rs.getDate(5));
+            match.setMatchResponseDate(rs.getDate(6));
+        }
 
-        return Match;
+        //If match not found
+        if (!hasMatch)
+        {
+            System.out.println("No match found");
+        }
+
+        return match;
+    }
+
+    /**
+     * Saves match in DB when one profil has accepted
+     * @param request
+     * @throws Exception
+     */
+    public void saveSwapRequest(SwapRequest request) throws Exception
+    {
+        String sql = "Insert into tblMatches (fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) values(?,?,?,?,?,?)";
+        Connection conn = DBConnection.getInstance().getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setInt(1, request.getMatchId());
+        pstm.setInt(2, request.getProfileAId());
+        pstm.setInt(3, request.getProfileBId());
+        pstm.setInt(4, request.getStateId());
+        pstm.setDate(5, request.getMatchDate());
+        pstm.setDate(6, request.getMatchDateResponse());
+        pstm.executeUpdate();
+        conn.close();
     }
 
     @Override

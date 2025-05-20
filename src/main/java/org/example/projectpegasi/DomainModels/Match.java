@@ -1,6 +1,6 @@
 package org.example.projectpegasi.DomainModels;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Match
 {
@@ -8,7 +8,7 @@ public class Match
     private int profileAID;
     private int profileBID;
     private int stateID;
-    private Date matchDAte;
+    private Date matchDate;
     private Date matchResponseDate;
     private Date requestResponseDate;
     private Date swapResponseDate;
@@ -45,15 +45,15 @@ public class Match
         this.stateID = stateID;
     }
 
-    public Date getMatchDAte() {
-        return matchDAte;
+    public java.sql.Date getMatchDate() {
+        return matchDate;
     }
 
-    public void setMatchDAte(Date matchDAte) {
-        this.matchDAte = matchDAte;
+    public void setMatchDate(Date matchDAte) {
+        this.matchDate = matchDAte;
     }
 
-    public Date getMatchResponseDate() {
+    public java.sql.Date getMatchResponseDate() {
         return matchResponseDate;
     }
 
