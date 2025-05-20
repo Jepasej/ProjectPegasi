@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class SwapRequest
 {
+    private int profileAId;
     private int profileBId;
     private int matchId;
     private int stateId;
     private Date matchDate;
     private Date matchDateResponse;
 
-    private int profileAId;
 
     public int getProfileAId() {
         return profileAId;
