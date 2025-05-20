@@ -1,6 +1,7 @@
 package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.User;
+import org.example.projectpegasi.Foundation.DBConnection;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -48,11 +49,11 @@ public class DataAccessObject implements DAO
         //return whether input matches record. CheckPassword
 
         //SKAL OPDATERES TIL VORES SINGLETON CONNECTION.
-        Connection conn = null;
 
         String sql = "{call CheckPassword(?,?)}";
         try
         {
+            Connection conn = DBConnection.getInstance().getConnection();
 
             CallableStatement cs = conn.prepareCall(sql);
             cs.setString(1, user.getUserName());
@@ -65,5 +66,11 @@ public class DataAccessObject implements DAO
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
     }
+
 }
