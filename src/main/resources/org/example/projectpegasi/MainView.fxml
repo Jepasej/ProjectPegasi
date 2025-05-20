@@ -9,6 +9,7 @@
 
         <!-- Titel -->
         <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Welcome to JobSwap" />
+      <Label fx:id="wrongCredentials" text="Wrong login credentials, please try again." textFill="RED" visible="false" />
 
         <!-- Brugernavn + adgangskode sektion -->
         <VBox alignment="CENTER_LEFT" spacing="10">
@@ -22,7 +23,7 @@
         <!-- Knapper -->
         <HBox alignment="CENTER" spacing="20">
             <Button fx:id="createProfileButton" onAction="#onCreateProfileButtonClick" text="Create Profile" />
-            <Button fx:id="loginButton" text="Login" />
+            <Button fx:id="loginButton" onAction="#onLoginButtonClick" text="Login" />
         </HBox>
     </VBox>
 </AnchorPane>
