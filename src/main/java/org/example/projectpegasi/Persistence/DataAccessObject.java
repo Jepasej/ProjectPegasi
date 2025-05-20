@@ -5,8 +5,9 @@ import org.example.projectpegasi.DomainModels.Match;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import org.example.projectpegasi.DomainModels.User;
 
-public class DataAccessObject
+public class DataAccessObject implements DAO
 {
     //Hent data fra match via matchId
     public Match readAMatchID(int AmatchID) throws Exception
@@ -23,5 +24,45 @@ public class DataAccessObject
         match.setMatchID(rs.getInt(1));
 
         return Match;
+    }
+
+    @Override
+    public void create(Object object)
+    {
+
+    }
+
+    @Override
+    public void read(Object object)
+    {
+
+    }
+
+    @Override
+    public void readALl(Object object)
+    {
+
+    }
+
+    @Override
+    public void update(Object object)
+    {
+
+    }
+
+    @Override
+    public void delete(Object object)
+    {
+
+    }
+
+    @Override
+    public boolean verifyUser(User user)
+    {
+        //TO BE IMPLEMENTED
+        //take user
+        //run stored provedure
+        //return whether input matches record.
+        return false;
     }
 }
