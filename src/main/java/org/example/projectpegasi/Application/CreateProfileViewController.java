@@ -8,6 +8,10 @@ import javafx.scene.control.TextField;
 public class CreateProfileViewController
 {
     @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField passwordField;
+    @FXML
     private TextField fullNameField;
     @FXML
     private TextField jobTitleField;
