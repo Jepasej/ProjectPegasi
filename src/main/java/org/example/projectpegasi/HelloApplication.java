@@ -27,7 +27,7 @@ public class HelloApplication extends Application
         //Loads our MainView.fxml as our first Scene
         FXMLLoader MainViewLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
         Parent MainViewPane = MainViewLoader.load();
-        Scene overViewScene = new Scene(MainViewPane, 1000, 800);
+        Scene overViewScene = new Scene(MainViewPane, 1000, 600);
 
         //Adds our scenes to the UI when needed
         scenes.add(new SceneControllerPairs(
