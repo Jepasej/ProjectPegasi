@@ -10,8 +10,9 @@ public class Profile
     private String distPref;
     private String about;
     private boolean swappingStatus;
+    private int profileID;
 
-    public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref)
+    public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, int profileID, boolean swappingStatus)
     {
         this.fullName = fullName;
         this.jobTitle = jobTitle;
@@ -21,6 +22,7 @@ public class Profile
         this.distPref = distPref;
         this.about = "";
         this.swappingStatus = false;
+        this.profileID = profileID;
     }
 
     public String getFullName() {
@@ -87,4 +89,11 @@ public class Profile
         this.swappingStatus = swappingStatus;
     }
 
+    public int getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(int profileID) {
+        this.profileID = profileID;
+    }
 }
