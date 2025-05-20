@@ -25,7 +25,6 @@ public class MainViewController
     private Label wrongCredentials;
 
     private String[] credentials = new String[2];
-    private Tooltip tooltip;
 
     public void onCreateProfileButtonClick()
     {
