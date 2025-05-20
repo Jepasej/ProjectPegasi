@@ -3,6 +3,7 @@ module org.example.projectpegasi {
     requires javafx.fxml;
     requires jdk.compiler;
     requires java.sql;
+    requires jdk.httpserver;
 
 
     opens org.example.projectpegasi.Application to javafx.fxml, javafx.graphics;
