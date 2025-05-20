@@ -29,7 +29,7 @@ public class HelloApplication extends Application
         Parent MainViewPane = MainViewLoader.load();
         Scene overViewScene = new Scene(MainViewPane, 1000, 600);
 
-        //Adds our scenes to the UI when needed
+        //Adds our scenes to the UI through lazy initialization
         scenes.add(new SceneControllerPairs(
                 new Lazy<>(() -> buildScene("CreateProfileView.fxml")),
                 ControllerNames.CreateProfileView
@@ -74,7 +74,7 @@ public class HelloApplication extends Application
     }
 
     /**
-     * changes between the different Scenes
+     * Changes between different Scenes
      *
      * @param sceneName What scene is chosen from our enum list
      */

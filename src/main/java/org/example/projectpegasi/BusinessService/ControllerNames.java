@@ -1,7 +1,8 @@
 package org.example.projectpegasi.BusinessService;
 
 /**
- * Enum that holds all the names of our views (FXML-files) for easier and more secure references in our program.
+ * Enum that holds all names of views (FXML-files)
+ * for easier and more secure references in source code.
  */
 public enum ControllerNames
 {

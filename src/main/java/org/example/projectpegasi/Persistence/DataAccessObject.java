@@ -37,6 +37,11 @@ public class DataAccessObject implements DAO
 
     }
 
+    /**
+     * Method for verification of a user against the database records.
+     * @param user object holding a username and a password.
+     * @return true if username and password match, false if not.
+     */
     @Override
     public boolean verifyUser(User user)
     {
@@ -52,6 +57,8 @@ public class DataAccessObject implements DAO
 
             rs.next();
             String result = rs.getString(1);
+
+            conn.close();
 
             if(result.equalsIgnoreCase("true"))
                 return true;

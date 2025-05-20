@@ -1,8 +1,9 @@
 package org.example.projectpegasi.BusinessService;
 
 /**
- *  A helper class that delays the creation of an object of type T
- *  until it is actually needed by the user. The object is created only once and then reused.
+ *  A helper class that delays the creation of an object of type T until it is actually
+ *  needed by the user. The object is created only once and then reused.
+ *
  * @param <T> The type of object this class creates and returns - scenes in our case.
  */
 public class Lazy<T>

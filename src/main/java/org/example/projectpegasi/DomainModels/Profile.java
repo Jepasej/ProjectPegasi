@@ -1,5 +1,8 @@
 package org.example.projectpegasi.DomainModels;
 
+/**
+ * Class modelling the profile of a user
+ */
 public class Profile
 {
     private String fullName;
