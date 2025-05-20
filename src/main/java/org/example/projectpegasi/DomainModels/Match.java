@@ -2,6 +2,9 @@ package org.example.projectpegasi.DomainModels;
 
 import java.sql.Date;
 
+/**
+ * Represents a match between 2 user profiles retrieved from the database
+ */
 public class Match
 {
     private int matchID;

@@ -5,7 +5,8 @@ import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
 /**
- *
+ * Creates a swaprequest when one user has accepted a match
+ * Gets match data and saves the request using the DataAccessObject.
  */
 public class SwapRequestManager {
 

@@ -12,7 +12,12 @@ import org.example.projectpegasi.Foundation.DBConnection;
 
 public class DataAccessObject implements DAO
 {
-    //Hent data fra match via matchId
+    /**
+     * Retrieved a match from our database based on the given match ID
+     * @param AmatchID ID of the match to retrieve
+     * @return a match object if found or null if none found.
+     * @throws Exception if a database access error occurs.
+     */
     public Match getAMatchID(int AmatchID) throws Exception
     {
         int matchID = 0;
@@ -49,9 +54,9 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Saves match in DB when one profil has accepted
-     * @param request
-     * @throws Exception
+     * Saves a swap request as a new entry in our database when a profile has accepted a match
+     * @param request The swap request to be saved
+     * @throws Exception if database connection fails
      */
     public void saveSwapRequest(SwapRequest request) throws Exception
     {

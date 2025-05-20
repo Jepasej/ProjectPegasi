@@ -3,7 +3,7 @@ package org.example.projectpegasi.DomainModels;
 import java.sql.Date;
 
 /**
- *
+ * Represents a swaprequest when a user has accepted a match
  */
 public class SwapRequest
 {
