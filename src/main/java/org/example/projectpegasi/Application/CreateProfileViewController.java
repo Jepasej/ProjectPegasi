@@ -25,4 +25,16 @@ public class CreateProfileViewController
     private Button saveButton;
     @FXML
     private Button cancelButton;
+
+    @FXML
+    public void onSaveClick()
+    {
+
+    }
+
+    @FXML
+    public void onCancelClick()
+    {
+
+    }
 }

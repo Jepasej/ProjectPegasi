@@ -103,8 +103,7 @@ public class HelloApplication extends Application
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 1000, 800);
-            return scene;
+            return new Scene(root, 1000, 800);
         }
         catch (IOException e)
         {
