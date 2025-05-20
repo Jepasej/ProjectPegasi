@@ -29,8 +29,17 @@ public class OutgoingRequestViewController
     private Button deleteButton;
 
     @FXML
-    public void initialize()
+    private Button mainProfileButton;
+
+    @FXML
+    private void onDeleteButtonClick()
     {
-        //Funktionalitet tilføjes her
+        //Hent valgt request fra tabellen og slet den
+    }
+
+    @FXML
+    private void onMainProfileClick()
+    {
+        //Navigér tilbage til profilsiden
     }
 }
