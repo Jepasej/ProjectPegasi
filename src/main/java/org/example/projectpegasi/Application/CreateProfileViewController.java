@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.User;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
 import org.example.projectpegasi.Persistence.DataAccessObject;
@@ -59,27 +60,14 @@ public class CreateProfileViewController
         isCorrect = checkMandatoryFields();
         isUnique = checkUniqueness(usernameField.getText());
 
-        if (isCorrect)
+        if (isCorrect && isUnique)
         {
             User user = setupUser();
 
+            createUser(user);
+
+            HelloApplication.changeScene(ControllerNames.MainView);
         }
-
-        //HelloApplication.changeScene(ControllerNames.MainView);
-    }
-
-    private User setupUser()
-    {
-        User user = new User();
-
-        if(isUnique)
-        {
-            user.setUserName(usernameField.getText());
-            user.setPassword(passwordField.getText());
-        }
-
-
-        return user;
     }
 
     /**
@@ -120,6 +108,42 @@ public class CreateProfileViewController
         DAO dao = new DataAccessObject();
         dao.checkUsernameIsUnique(name);
         return false;
+    }
+
+    private User setupUser()
+    {
+        User user = new User();
+
+        user.setUserName(usernameField.getText());
+        user.setPassword(passwordField.getText());
+
+        Profile profile = setupProfile();
+
+        user.setProfile(profile);
+
+        return user;
+    }
+
+    private Profile setupProfile()
+    {
+        Profile profile = new Profile();
+
+        profile.setFullName(fullNameField.getText());
+        profile.setJobTitle(jobTitleField.getText());
+        profile.setHomeAddress(homeAddressField.getText());
+        profile.setWage(Integer.parseInt(minSalaryComboBox.getValue()));
+        profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
+        profile.setDistPref(distancePrefComboBox.getValue());
+        profile.setSwappingStatus(true);
+
+        return profile;
+    }
+
+    private void createUser(User user)
+    {
+        DAO dao = new DataAccessObject();
+
+        dao.createUser(user);
     }
 
     /**

@@ -10,6 +10,7 @@ public interface DAO
     void readALl(Object object);
     void update(Object object);
     void delete(Object object);
+    void createUser(User user);
     boolean checkUsernameIsUnique(String name);
     boolean verifyUser(User user);
 }
