@@ -36,6 +36,11 @@ public class HelloApplication extends Application
         ));
 
         scenes.add(new SceneControllerPairs(
+                new Lazy<>(() -> buildScene("EditProfileView.fxml")),
+                ControllerNames.EditProfileView
+        ));
+
+        scenes.add(new SceneControllerPairs(
                 new Lazy<>(() -> buildScene("HRView.fxml")),
                 ControllerNames.HRView
         ));

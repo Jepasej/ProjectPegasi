@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500" prefWidth="400" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.EditProfileViewController">
+
+    <VBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Edit Profile" />
+
+      <VBox prefHeight="0.0" prefWidth="360.0" spacing="5.0">
+         <children>
+            <Label text="Change Password" />
+            <TextField fx:id="OldPasswordEdit" promptText="Enter old Password" />
+            <TextField fx:id="NewPasswordEdit" promptText="Enter new Password" />
+            <TextField fx:id="RepeatNewPasswordEdit" promptText="Repeat new Password" />
+            <Button mnemonicParsing="false" text="Save Password" />
+         </children></VBox>
+
+        <!-- Full Name -->
+        <VBox>
+            <Label text="Full Name" />
+            <TextField fx:id="fullNameFieldEdit" promptText="Enter full name" />
+        </VBox>
+
+        <!-- Job Title -->
+        <VBox>
+            <Label text="Job Title" />
+            <TextField fx:id="jobTitleFieldEdit" promptText="Enter job title" />
+        </VBox>
+
+        <!-- Job Function -->
+        <VBox>
+            <Label text="Job Function" />
+            <ComboBox fx:id="jobFunctionComboBoxEdit" promptText="Select job function" />
+        </VBox>
+
+        <!-- Company -->
+        <VBox>
+            <Label text="Company" />
+            <ComboBox fx:id="companyComboBoxEdit" promptText="Select company" />
+        </VBox>
+
+        <!-- Home Address -->
+        <VBox>
+            <Label text="Home Address" />
+            <TextField fx:id="homeAddressFieldEdit" promptText="Enter address" />
+        </VBox>
+
+        <!-- Min Salary -->
+        <VBox>
+            <Label text="Min Salary (before taxes)" />
+            <ComboBox fx:id="minSalaryComboBoxEdit" promptText="Select salary" />
+        </VBox>
+
+        <!-- Distance Preference -->
+        <VBox>
+            <Label text="Distance Pref from Home" />
+            <ComboBox fx:id="distancePrefComboBoxEdit" promptText="Select distance" />
+        </VBox>
+
+        <!-- Buttons -->
+        <HBox alignment="CENTER" spacing="20">
+            <Button fx:id="saveButtonEdit" onAction="#onSaveButtonClick" text="Save" />
+            <Button fx:id="cancelButtonEdit" onAction="#onCancelButtonClick" text="Cancel" />
+        </HBox>
+    </VBox>
+</AnchorPane>

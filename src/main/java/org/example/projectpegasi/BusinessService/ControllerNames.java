@@ -12,6 +12,6 @@ public enum ControllerNames
     MatchView,
     IncomingRequestView,
     OutgoingRequestView,
-    UpdateProfileView,
+    EditProfileView,
     HRView
 }
