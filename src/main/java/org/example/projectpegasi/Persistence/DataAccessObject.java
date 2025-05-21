@@ -1,5 +1,7 @@
 package org.example.projectpegasi.Persistence;
 
+import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.Foundation.DBConnection;
 
