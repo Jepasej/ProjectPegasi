@@ -25,7 +25,7 @@ public class SwapRequestManager {
             swapRequest.setMatchDateResponse(match.getMatchDate());
             swapRequest.setMatchDate(match.getMatchResponseDate());
             dao.saveSwapRequest(swapRequest);
-
+            //Skal her skifte state i DB til Request
         }
         else{
             System.out.println("Match not found");
@@ -39,5 +39,15 @@ public class SwapRequestManager {
     public void declineMatch (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
         dao.declineMatch( matchID);
+        //Skal ikke slette entry, men gemme det i DB med state Denied
     }
+
+    // Her skal laves metoder til hvad der skal ske når man i
+    // Incoming requests:
+    // 1. Trykker på accept request - Hent MatchID fra tblMatches i DB og sørg for det bliver opdateret til
+    // et jobswap - Ændre state til Swap? Sendes til HR?
+    // 2. Trykker på Decline request - Hent MatchID fra tbl Matches i DB og gem entry i DB med state Denied.
+    //
+    // Outgoing Requests:
+    // 1. Trykker på delete request - Hent MatchID fra tbl Matches i DB og slet entry i DB.
 }
