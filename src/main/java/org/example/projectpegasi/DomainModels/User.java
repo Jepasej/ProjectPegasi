@@ -8,6 +8,7 @@ public class User
     private String userName;
     private String password;
     private Profile profile;
+    private int userID;
 
     public User(String userName, String password, Profile profile)
     {
@@ -56,5 +57,16 @@ public class User
     {
         this.profile = profile;
     }
+
+    public int getUserID()
+    {
+        return userID;
+    }
+
+    public void setUserID(int userID)
+    {
+        this.userID = userID;
+    }
+
     //endregion
 }

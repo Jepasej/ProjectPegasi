@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.Foundation.DBConnection;
@@ -104,6 +105,60 @@ public class DataAccessObject implements DAO
     {
 
     }
+
+    @Override
+    public void createUser(User u)
+    {
+        String sql = " { call NewUser(?,?) } ";
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, u.getUserName());
+            cs.setString(2, u.getPassword());
+            cs.executeQuery();
+
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+   //     createUserProfile(u.getProfile());
+    }
+
+//    private void createUserProfile(Profile p)
+//    {
+//        String sql = " { call NewUserProfile(?,?,?,?,?,?,?) } ";
+//
+//        try
+//        {
+//            Connection conn = DBConnection.getInstance().getConnection();
+//
+//            CallableStatement cs = conn.prepareCall(sql);
+//            cs.setString(1, );
+//            cs.setString(2, );
+//            cs.executeQuery();
+//
+//            conn.close();
+//        }
+//        catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//        catch(ClassNotFoundException e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public boolean checkUsernameIsUnique(String name)
