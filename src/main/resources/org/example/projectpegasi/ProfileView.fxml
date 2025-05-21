@@ -103,7 +103,7 @@
                         <Insets right="200.0" />
                      </VBox.margin>
                   </ListView>
-                  <Button fx:id="showMoreMatchesButt" mnemonicParsing="false" text="Show More">
+                  <Button fx:id="showMoreMatchesButt" mnemonicParsing="false" onAction="#onShowMoreMatchesButtonClick" text="Show More">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
