@@ -10,10 +10,7 @@ import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.Foundation.DBConnection;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DataAccessObject implements DAO
 {
@@ -108,17 +105,15 @@ public class DataAccessObject implements DAO
 
     }
 
+    /**
+     * Method for verification of a user against the database records.
+     * @param user object holding a username and a password.
+     * @return true if username and password match, false if not.
+     */
     @Override
     public boolean verifyUser(User user)
     {
-        //TO BE IMPLEMENTED
-        //take user
-        //run stored provedure
-        //return whether input matches record. CheckPassword
-
-        //SKAL OPDATERES TIL VORES SINGLETON CONNECTION.
-
-        String sql = "{call CheckPassword(?,?)}";
+        String sql = " { call CheckPassword(?,?) } ";
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
@@ -127,7 +122,18 @@ public class DataAccessObject implements DAO
             cs.setString(1, user.getUserName());
             cs.setString(2, user.getPassword());
             ResultSet rs = cs.executeQuery();
-            return rs.next();
+
+            rs.next();
+            String result = rs.getString(1);
+
+            conn.close();
+
+            if(result.equalsIgnoreCase("true"))
+                return true;
+            else if(result.equalsIgnoreCase("false"))
+                return false;
+
+
         }
         catch (SQLException e)
         {

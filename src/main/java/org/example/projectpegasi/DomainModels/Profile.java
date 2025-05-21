@@ -1,5 +1,8 @@
 package org.example.projectpegasi.DomainModels;
 
+/**
+ * Class modelling the profile of a user
+ */
 public class Profile
 {
     private String fullName;
@@ -23,6 +26,11 @@ public class Profile
         this.about = "";
         this.swappingStatus = false;
         this.profileID = profileID;
+    }
+
+    public Profile()
+    {
+
     }
 
     public String getFullName() {

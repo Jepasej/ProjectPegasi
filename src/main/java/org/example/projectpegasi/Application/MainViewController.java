@@ -26,11 +26,21 @@ public class MainViewController
 
     private String[] credentials = new String[2];
 
+    /**
+     * Method tied to MainView.fxml's CreateProfileButton.
+     * Sends the user to the CreateProfileView
+     */
     public void onCreateProfileButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.CreateProfileView);
     }
 
+    /**
+     * Method tied to MainView.fxml's LoginButton
+     * Retrieves Username and Password from respective TextFields,
+     * validates login and either sends user to ProfileView or
+     * notifies user of wrong credentials.
+     */
     @FXML
     public void onLoginButtonClick()
     {
