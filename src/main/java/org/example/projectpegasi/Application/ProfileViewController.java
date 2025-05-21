@@ -5,8 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.Foundation.DBConnection;
+import org.example.projectpegasi.HelloApplication;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -110,10 +112,12 @@ public class ProfileViewController
     }
 
 
-    public void onShowMoreMatchesButtonClick(ActionEvent actionEvent) 
+    public void onShowMoreMatchesButtonClick()
     {
+        HelloApplication.changeScene(ControllerNames.MatchView);
     }
 
     public void onShowMoreRequestButtonClick(ActionEvent actionEvent) {
+        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
     }
 }
