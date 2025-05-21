@@ -15,11 +15,6 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Controller for the CreateProfileView in the JavaFX application.
- * Handles user input for creating a new user and profile.
- * Validates required fields and checks for unique usernames before saving to the database.
- */
 public class CreateProfileViewController
 {
     @FXML
