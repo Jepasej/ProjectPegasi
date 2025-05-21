@@ -15,36 +15,22 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Controller for the CreateProfileView in the JavaFX application.
+ * Handles user input for creating a new user and profile.
+ * Validates required fields and checks for unique usernames before saving to the database.
+ */
 public class CreateProfileViewController
 {
     @FXML
-    private TextField usernameField;
+    private TextField usernameField, passwordField, repeatPasswordField, fullNameField, jobTitleField, companyField, homeAddressField;
     @FXML
-    private TextField passwordField;
-    @FXML
-    private TextField repeatPasswordField;
-    @FXML
-    private TextField fullNameField;
-    @FXML
-    private TextField jobTitleField;
-    @FXML
-    private ComboBox<String> jobFunctionComboBox;
+    private ComboBox<String> jobFunctionComboBox, companyComboBox, minSalaryComboBox, distancePrefComboBox;
     @FXML
     private TextArea jobFunctionArea;
     @FXML
-    private ComboBox<String> companyComboBox;
-    @FXML
-    private TextField companyField;
-    @FXML
-    private TextField homeAddressField;
-    @FXML
-    private ComboBox<String> minSalaryComboBox;
-    @FXML
-    private ComboBox<String> distancePrefComboBox;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Button cancelButton;
+    private Button saveButton, cancelButton;
+
 
     private boolean isUnique = false;
     private boolean isCorrect = false;
