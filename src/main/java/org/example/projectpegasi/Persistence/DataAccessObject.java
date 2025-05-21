@@ -105,6 +105,40 @@ public class DataAccessObject implements DAO
 
     }
 
+    @Override
+    public boolean checkUsernameIsUnique(String name)
+    {
+        String sql = " { call UserNameUniqeness(?) } ";
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, name);
+            ResultSet rs = cs.executeQuery();
+
+            rs.next();
+            String result = rs.getString(1);
+
+            conn.close();
+
+            if(result.equalsIgnoreCase("true"))
+                return true;
+            else if(result.equalsIgnoreCase("false"))
+                return false;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /**
      * Method for verification of a user against the database records.
      * @param user object holding a username and a password.

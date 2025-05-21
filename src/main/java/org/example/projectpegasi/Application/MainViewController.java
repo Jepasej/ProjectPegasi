@@ -62,10 +62,14 @@ public class MainViewController
 
     private boolean validateLogin()
     {
-        User user = new User(usernameField.getText(), passwordField.getText());
+        if(!usernameField.getText().isEmpty() || !passwordField.getText().isEmpty())
+        {
+            User user = new User(usernameField.getText(), passwordField.getText());
 
-        DAO dao = new DataAccessObject();
+            DAO dao = new DataAccessObject();
 
-        return dao.verifyUser(user);
+            return dao.verifyUser(user);
+        }
+        return false;
     }
 }

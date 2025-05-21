@@ -3,65 +3,73 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="500" prefWidth="400"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.projectpegasi.Application.CreateProfileViewController">
+<AnchorPane prefHeight="500" prefWidth="400" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.CreateProfileViewController">
 
     <VBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Profile" />
       <VBox prefHeight="0.0" prefWidth="360.0">
          <children>
-            <Label text="Username" />
+            <Label text="Username (Mandatory)" />
             <TextField fx:id="usernameField" promptText="Enter desired username" />
          </children>
       </VBox>
       <VBox prefHeight="0.0" prefWidth="360.0">
          <children>
-            <Label text="Password" />
+            <Label text="Password (Mandatory)" />
             <TextField fx:id="passwordFIeld" promptText="Enter desired password" />
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="101.0" prefHeight="0.0" prefWidth="360.0">
+         <children>
+            <Label text="Repeat Password (Mandatory)" />
+            <TextField fx:id="passwordFIeld1" promptText="Enter desired password" />
          </children>
       </VBox>
 
         <!-- Full Name -->
         <VBox>
-            <Label text="Full Name" />
+            <Label text="Full Name (Mandatory)" />
             <TextField fx:id="fullNameField" promptText="Enter full name" />
         </VBox>
 
         <!-- Job Title -->
         <VBox>
-            <Label text="Job Title" />
+            <Label text="Job Title  (Mandatory)" />
             <TextField fx:id="jobTitleField" promptText="Enter job title" />
         </VBox>
 
         <!-- Job Function -->
         <VBox>
-            <Label text="Job Function" />
-            <ComboBox fx:id="jobFunctionComboBox" promptText="Select job function" />
+            <Label text="Job Function (Optional)" />
+         <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+                  <ComboBox fx:id="jobFunctionComboBox" promptText="Select job function" />
+               <TextArea prefHeight="100.0" prefWidth="219.0" />
+            </children>
+         </HBox>
         </VBox>
 
         <!-- Company -->
         <VBox>
-            <Label text="Company" />
+            <Label text="Company (Mandatory)" />
             <ComboBox fx:id="companyComboBox" promptText="Select company" />
         </VBox>
 
         <!-- Home Address -->
         <VBox>
-            <Label text="Home Address" />
+            <Label text="Home Address  (Mandatory)" />
             <TextField fx:id="homeAddressField" promptText="Enter address" />
         </VBox>
 
         <!-- Min Salary -->
         <VBox>
-            <Label text="Min Salary (before taxes)" />
+            <Label text="Min Salary (before taxes) (Optional)" />
             <ComboBox fx:id="minSalaryComboBox" promptText="Select salary" />
         </VBox>
 
         <!-- Distance Preference -->
         <VBox>
-            <Label text="Distance Pref from Home" />
+            <Label text="Distance Preference From Home (Optional)" />
             <ComboBox fx:id="distancePrefComboBox" promptText="Select distance" />
         </VBox>
 

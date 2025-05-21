@@ -5,7 +5,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.Persistence.DAO;
+import org.example.projectpegasi.Persistence.DataAccessObject;
 
 public class CreateProfileViewController
 {
@@ -32,13 +35,34 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
+    private boolean isUnique = false;
+
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
      */
     @FXML
     public void onSaveButtonClick()
     {
+        User user = new User(usernameField.getText(), passwordField.getText());
+
+        isUnique = checkUniqueness(user.getUserName());
+        if (isUnique)
+        {
+            checkMandatoryFields();
+        }
+
         HelloApplication.changeScene(ControllerNames.ProfileView);
+    }
+
+    private void checkMandatoryFields()
+    {
+    }
+
+    private boolean checkUniqueness(String name)
+    {
+        DAO dao = new DataAccessObject();
+        dao.checkUsernameIsUnique(name);
+        return false;
     }
 
     /**
@@ -47,6 +71,6 @@ public class CreateProfileViewController
     @FXML
     public void onCancelButtonClick()
     {
-
+        HelloApplication.changeScene(ControllerNames.MainView);
     }
 }
