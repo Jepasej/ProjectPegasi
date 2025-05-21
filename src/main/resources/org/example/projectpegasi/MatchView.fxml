@@ -9,23 +9,23 @@
       <VBox prefHeight="600.0" prefWidth="1007.0" />
       <AnchorPane layoutX="7.0" prefHeight="600.0" prefWidth="1000.0">
          <children>
-            <Label fx:id="matchTitleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="432.0" layoutY="37.0" text="Your matches" textAlignment="CENTER" AnchorPane.topAnchor="37.0">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="432.0" layoutY="37.0" text="Your matches" textAlignment="CENTER" AnchorPane.topAnchor="37.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
             <TableView layoutY="132.0" prefHeight="368.0" prefWidth="1000.0">
               <columns>
-                <TableColumn fx:id="JobTitleColumnMatch" prefWidth="393.6666717529297" text="Jobtitle" />
-                <TableColumn fx:id="CompanyColumnMatch" minWidth="0.0" prefWidth="357.0" text="Company" />
-                  <TableColumn fx:id="RequestSwapColumnMatch" prefWidth="128.3333740234375" text="Request swap" />
-                  <TableColumn fx:id="DeclineMatchColumnMatch" prefWidth="123.33331298828125" text="Decline match" />
+                <TableColumn fx:id="jobTitleColumnMatch" prefWidth="393.6666717529297" text="Jobtitle" />
+                <TableColumn fx:id="companyColumnMatch" minWidth="0.0" prefWidth="357.0" text="Company" />
+                  <TableColumn fx:id="requestSwapColumnMatch" prefWidth="128.3333740234375" text="Request swap" />
+                  <TableColumn fx:id="declineMatchColumnMatch" prefWidth="123.33331298828125" text="Decline match" />
               </columns>
             </TableView>
-            <Button layoutX="113.0" layoutY="83.0" mnemonicParsing="false" text="Matches" />
-            <Button layoutX="441.0" layoutY="83.0" mnemonicParsing="false" text="Outgoing Requests" />
-            <Button layoutX="782.0" layoutY="83.0" mnemonicParsing="false" text="Incoming Requests" />
-            <Button layoutX="888.0" layoutY="527.0" mnemonicParsing="false" text="Back to Profile" />
+            <Button fx:id="goToMatchesButton" layoutX="113.0" layoutY="83.0" mnemonicParsing="false" text="Matches" />
+            <Button fx:id="outgoingRequestButton" layoutX="441.0" layoutY="83.0" mnemonicParsing="false" text="Outgoing Requests" />
+            <Button fx:id="incomingRequestButton" layoutX="782.0" layoutY="83.0" mnemonicParsing="false" text="Incoming Requests" />
+            <Button fx:id="backToProfileButton" layoutX="888.0" layoutY="527.0" mnemonicParsing="false" text="Back to Profile" />
          </children>
       </AnchorPane>
    </children>
