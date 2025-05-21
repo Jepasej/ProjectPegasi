@@ -65,7 +65,7 @@ public class CreateProfileViewController
 
         }
 
-        //HelloApplication.changeScene(ControllerNames.ProfileView);
+        //HelloApplication.changeScene(ControllerNames.MainView);
     }
 
     private User setupUser()
