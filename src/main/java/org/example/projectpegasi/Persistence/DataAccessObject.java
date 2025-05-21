@@ -1,9 +1,12 @@
 package org.example.projectpegasi.Persistence;
 
+import javafx.fxml.FXML;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.Foundation.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataAccessObject implements DAO
 {
@@ -77,6 +80,69 @@ public class DataAccessObject implements DAO
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<String> getProfileInformation(int profileID)
+    {
+        List<String> profileInfo = new ArrayList<>();
+        String query = "{call ReadProfileByID(?)}"; // JDBC Escape Syntax
+
+        StringBuilder jobFunctions = new StringBuilder();
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setInt(1, profileID);
+
+            ResultSet rs = clStmt.executeQuery();
+
+            while (rs.next())
+            {
+                // Get data from result set
+                String fullName = rs.getString("fldFullName");
+                String jobTitle = rs.getString("fldJobTitle");
+                String jobFunction = rs.getString("fldFunction");
+                String companyName = rs.getString("fldCompanyName");
+                String homeAddress = rs.getString("fldHomeAddress");
+                String wage = rs.getString("fldWage");
+                String payPref = rs.getString("fldPayPref");
+                String distPref = rs.getString("fldDistPref");
+                String swappingStatus = rs.getString("fldSwappingStatus");
+
+                // Set data from result set into the labels
+                profileInfo.add(fullName);
+                profileInfo.add(jobTitle);
+                profileInfo.add(jobFunction);
+                profileInfo.add(companyName);
+                profileInfo.add(homeAddress);
+                profileInfo.add(wage);
+                profileInfo.add(payPref);
+                profileInfo.add(distPref);
+                profileInfo.add(swappingStatus);
+            }
+            conn.close();
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return profileInfo;
+    }
+
+    @Override
+    public int getUserID(String userName)
+    {
+        return 0;
+    }
+
+    @Override
+    public int getProfileID(int userID)
+    {
+        String query = "{call ReadProfileByID(?)}";
+        return 0;
     }
 
 }
