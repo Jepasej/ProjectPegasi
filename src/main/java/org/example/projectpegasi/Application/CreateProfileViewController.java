@@ -3,12 +3,16 @@ package org.example.projectpegasi.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
 import org.example.projectpegasi.Persistence.DataAccessObject;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class CreateProfileViewController
 {
@@ -17,13 +21,19 @@ public class CreateProfileViewController
     @FXML
     private TextField passwordField;
     @FXML
+    private TextField repeatPasswordField;
+    @FXML
     private TextField fullNameField;
     @FXML
     private TextField jobTitleField;
     @FXML
     private ComboBox<String> jobFunctionComboBox;
     @FXML
+    private TextArea jobFunctionArea;
+    @FXML
     private ComboBox<String> companyComboBox;
+    @FXML
+    private TextField companyField;
     @FXML
     private TextField homeAddressField;
     @FXML
@@ -36,6 +46,9 @@ public class CreateProfileViewController
     private Button cancelButton;
 
     private boolean isUnique = false;
+    private boolean isCorrect = false;
+
+    private String errorColour = "-fx-background-color: red;";
 
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
@@ -43,21 +56,65 @@ public class CreateProfileViewController
     @FXML
     public void onSaveButtonClick()
     {
-        User user = new User(usernameField.getText(), passwordField.getText());
+        isCorrect = checkMandatoryFields();
+        isUnique = checkUniqueness(usernameField.getText());
 
-        isUnique = checkUniqueness(user.getUserName());
-        if (isUnique)
+        if (isCorrect)
         {
-            checkMandatoryFields();
+            User user = setupUser();
+
         }
 
-        HelloApplication.changeScene(ControllerNames.ProfileView);
+        //HelloApplication.changeScene(ControllerNames.ProfileView);
     }
 
-    private void checkMandatoryFields()
+    private User setupUser()
     {
+        User user = new User();
+
+        if(isUnique)
+        {
+            user.setUserName(usernameField.getText());
+            user.setPassword(passwordField.getText());
+        }
+
+
+        return user;
     }
 
+    /**
+     * Verifies whether fields denoted as Mandatory in UI have been filled out.
+     */
+    private boolean checkMandatoryFields()
+    {
+        //Create LinkedList of mandatory inputs.
+        List<TextField> mandatoryInput = new LinkedList<>();
+        mandatoryInput.add(usernameField);
+        mandatoryInput.add(passwordField);
+        mandatoryInput.add(repeatPasswordField);
+        mandatoryInput.add(fullNameField);
+        mandatoryInput.add(jobTitleField);
+        mandatoryInput.add(companyField);
+        mandatoryInput.add(homeAddressField);
+
+        boolean check = true;
+        for(TextField t : mandatoryInput)
+        {
+            if(t.getText().isBlank())
+            {
+                t.setStyle(errorColour);
+                check = false;
+            }
+        }
+
+        return check;
+    }
+
+    /**
+     * Verifies uniqueness of entered username
+     * @param name userinput of requested username.
+     * @return true if username does not exist in database. False if it does.
+     */
     private boolean checkUniqueness(String name)
     {
         DAO dao = new DataAccessObject();
