@@ -1,11 +1,14 @@
 package org.example.projectpegasi.Application;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.HelloApplication;
 
 public class MatchViewController
 {
@@ -30,4 +33,18 @@ public class MatchViewController
         });
     }
 
+    public void onOutgoingRequestButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
+    }
+
+    public void onIncomingRequestButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+    }
+
+    public void onBackToProfileButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.ProfileView);
+    }
 }
