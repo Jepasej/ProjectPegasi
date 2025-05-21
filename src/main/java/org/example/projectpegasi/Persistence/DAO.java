@@ -2,6 +2,8 @@ package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.User;
 
+import java.util.List;
+
 public interface DAO
 {
     //TO BE UPDATED!
@@ -13,4 +15,9 @@ public interface DAO
     void createUser(User user);
     boolean checkUsernameIsUnique(String name);
     boolean verifyUser(User user);
+
+    int getUserID(String userName);
+    int getProfileID(int userID);
+
+    List<String> getProfileInformation(int profileID);
 }

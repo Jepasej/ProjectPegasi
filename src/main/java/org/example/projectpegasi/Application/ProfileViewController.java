@@ -9,11 +9,14 @@ import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.Foundation.DBConnection;
 import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.Persistence.DAO;
+import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public class ProfileViewController
@@ -34,6 +37,7 @@ public class ProfileViewController
 
     //endregion
 
+    private int userID;
 
     @FXML
     protected void editProfileButtOnAction()
@@ -46,6 +50,12 @@ public class ProfileViewController
     public void swapStatusButtOnAction()
     {
         //Change the Swapping Status to true/false depending on what it is currently set to
+    }
+
+    public void setUserID()
+    {
+        this.userID = userID;
+        getProfileInformation();
     }
 
     private void loadRecentMatchesInListView()
@@ -62,63 +72,29 @@ public class ProfileViewController
 
     /**
      * Reads the profile information from our database with a Callable statement
-     *
+     * the script joins job function and company tables to get all the information
      */
-    private void getProfileInformation()
-    {
-        Profile profile = new Profile();
+    private void getProfileInformation() {
+        DAO dao = new DataAccessObject();
 
-        int profileID = profile.getProfileID(); // get profile ID from profile model
+        int profileID = dao.getProfileID(userID);
+        List<String> profileInfo = dao.getProfileInformation(profileID);
 
-        String query = "{call ReadProfileByID(?)}"; // JDBC Escape Syntax
-
-        try{
-            Connection conn = DBConnection.getInstance().getConnection();
-            CallableStatement stmt = conn.prepareCall(query);
-
-            stmt.setInt(1, profileID);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next())
-            {
-                // Get data from result set
-                String fullName = rs.getString("fldFullName");
-                String jobTitle = rs.getString("fldJobTitle");
-                String jobFunction = rs.getString("fldJobFunction");
-                String companyName = rs.getString("fldCompanyName");
-                String homeAddress = rs.getString("fldHomeAddress");
-                String wage = rs.getString("fldWage");
-                String payPref = rs.getString("fldPayPref");
-                String distPref = rs.getString("fldDistPref");
-                String swappingStatus = rs.getString("fldSwappingStatus");
-
-                // Set data from result set in labels
-                profileNameLbl.setText(fullName);
-                jobTitleLbl.setText(jobTitle);
-                jobFunctionLbl.setText(jobFunction);
-                companyNameLbl.setText(companyName);
-                homeAddressLbl.setText(homeAddress);
-                wageLbl.setText(wage);
-                payPrefLbl.setText(payPref);
-                distPrefLbl.setText(distPref);
-                swappingStatusLbl.setText(swappingStatus);
-            }
-
-        }catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+        if (!profileInfo.isEmpty()) {
+            // Set data from the list into the labels
+            profileNameLbl.setText(profileInfo.get(0));
+            jobTitleLbl.setText(profileInfo.get(1));
+            jobFunctionLbl.setText(profileInfo.get(2));
+            companyNameLbl.setText(profileInfo.get(3));
+            homeAddressLbl.setText(profileInfo.get(4));
+            wageLbl.setText(profileInfo.get(5));
+            payPrefLbl.setText(profileInfo.get(6));
+            distPrefLbl.setText(profileInfo.get(7));
+            swappingStatusLbl.setText(profileInfo.get(8));
         }
 
     }
 
 
-    public void onShowMoreMatchesButtonClick()
-    {
-        HelloApplication.changeScene(ControllerNames.MatchView);
-    }
 
-    public void onShowMoreRequestButtonClick()
-    {
-        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
-    }
 }
