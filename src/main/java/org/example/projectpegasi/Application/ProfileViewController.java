@@ -71,18 +71,25 @@ public class ProfileViewController
      * Reads the profile information from our database with a Callable statement
      * the script joins job function and company tables to get all the information
      */
-    private void getProfileInformation()
-    {
+    private void getProfileInformation() {
         DAO dao = new DataAccessObject();
-        String query = "{call ReadProfileByID(?)}"; // JDBC Escape Syntax
 
-        try{
-            List<String> profileInfo = dao.getProfileInformation(userID);
+        int profileID = dao.getProfileID(userID);
+        List<String> profileInfo = dao.getProfileInformation(profileID);
 
-        }catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
+        if (!profileInfo.isEmpty()) {
+            // Set data from the list into the labels
+            profileNameLbl.setText(profileInfo.get(0));
+            jobTitleLbl.setText(profileInfo.get(1));
+            jobFunctionLbl.setText(profileInfo.get(2));
+            companyNameLbl.setText(profileInfo.get(3));
+            homeAddressLbl.setText(profileInfo.get(4));
+            wageLbl.setText(profileInfo.get(5));
+            payPrefLbl.setText(profileInfo.get(6));
+            distPrefLbl.setText(profileInfo.get(7));
+            swappingStatusLbl.setText(profileInfo.get(8));
         }
+
     }
 
 

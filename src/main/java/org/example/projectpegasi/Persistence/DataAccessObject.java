@@ -88,8 +88,6 @@ public class DataAccessObject implements DAO
         List<String> profileInfo = new ArrayList<>();
         String query = "{call ReadProfileByID(?)}"; // JDBC Escape Syntax
 
-        StringBuilder jobFunctions = new StringBuilder();
-
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
