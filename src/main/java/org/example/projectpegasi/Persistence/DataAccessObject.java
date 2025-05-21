@@ -75,6 +75,20 @@ public class DataAccessObject implements DAO
         conn.close();
     }
 
+    /**
+     * Deletes a match entry from the database based on the given match ID
+     * @param matchID the ID match to delete
+     * @throws Exception if database access happens
+     */
+    public void declineMatch(int matchID) throws Exception{
+        String sql = "DELETE FROM tblMatches WHERE fldMatchID=?";
+        Connection conn = DBConnection.getInstance().getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+        pstm.setInt(1, matchID);
+        pstm.executeUpdate();
+        conn.close();
+    }
+
     @Override
     public void create(Object object)
     {

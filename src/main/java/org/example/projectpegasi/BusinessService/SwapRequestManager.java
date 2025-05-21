@@ -4,12 +4,12 @@ import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
-/**
- * Creates a swaprequest when one user has accepted a match
- * Gets match data and saves the request using the DataAccessObject.
- */
-public class SwapRequestManager {
 
+public class SwapRequestManager {
+    /**
+     * Creates a swaprequest when a user has accepted a match
+     * Gets match data and saves the request using the DataAccessObject.
+     */
     public void createSwapRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
         Match match = dao.readAMatchID(matchID);
@@ -30,5 +30,14 @@ public class SwapRequestManager {
         else{
             System.out.println("Match not found");
         }
+    }
+
+    /**
+     * Deletes a swaprequest when a user has declined a match
+     * Gets match data and deletes the match using the DataAccessObject.
+     */
+    public void declineMatch (int matchID) throws Exception {
+        DataAccessObject dao = new DataAccessObject();
+        dao.declineMatch( matchID);
     }
 }
