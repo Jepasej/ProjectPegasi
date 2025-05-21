@@ -2,4 +2,20 @@ package org.example.projectpegasi.DomainModels;
 
 public enum JobFunction
 {
+    CARPENTER,
+    PEDAGOGUE,
+    IT_SUPPORTER,
+    NURSE,
+    SOCIAL_AND_HEALTH_CARE_ASSISTANT,
+    ELECTRICIAN,
+    PLUMBER,
+    MECHANIC,
+    TEACHER,
+    CHILD_CARE_ASSISTANT,
+    CHEF,
+    WAREHOUSE_WORKER,
+    CLEANER,
+    ADMINISTRATIVE_ASSISTANT,
+    CONSTRUCTION_WORKER,
+    DRIVER
 }

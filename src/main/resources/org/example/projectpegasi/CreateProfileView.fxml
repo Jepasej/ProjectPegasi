@@ -16,13 +16,13 @@
       <VBox prefHeight="0.0" prefWidth="360.0">
          <children>
             <Label text="Password (Mandatory)" />
-            <TextField fx:id="passwordFIeld" promptText="Enter desired password" />
+            <TextField fx:id="passwordField" promptText="Enter desired password" />
          </children>
       </VBox>
       <VBox layoutX="10.0" layoutY="101.0" prefHeight="0.0" prefWidth="360.0">
          <children>
             <Label text="Repeat Password (Mandatory)" />
-            <TextField fx:id="passwordFIeld1" promptText="Enter desired password" />
+            <TextField fx:id="repeatPasswordField" promptText="Enter desired password" />
          </children>
       </VBox>
 
@@ -52,6 +52,7 @@
         <!-- Company -->
         <VBox>
             <Label text="Company (Mandatory)" />
+         <TextField fx:id="companyField" editable="false" />
             <ComboBox fx:id="companyComboBox" promptText="Select company" />
         </VBox>
 
@@ -66,6 +67,12 @@
             <Label text="Min Salary (before taxes) (Optional)" />
             <ComboBox fx:id="minSalaryComboBox" promptText="Select salary" />
         </VBox>
+      <VBox layoutX="10.0" layoutY="576.0">
+         <children>
+            <Label text="Current Salary (before taxes)" />
+            <TextField fx:id="currentSalaryField" promptText="Enter current salary before tax" />
+         </children>
+      </VBox>
 
         <!-- Distance Preference -->
         <VBox>

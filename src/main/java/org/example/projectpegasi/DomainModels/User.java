@@ -7,6 +7,14 @@ public class User
 {
     private String userName;
     private String password;
+    private Profile profile;
+    private int userID;
+
+    public User(String userName, String password, Profile profile)
+    {
+        this.userName = userName;
+        this.password = password;
+    }
 
     public User(String userName, String password)
     {
@@ -19,6 +27,7 @@ public class User
 
     }
 
+    //region GettersSetters
     public String getUserName()
     {
         return userName;
@@ -38,4 +47,26 @@ public class User
     {
         this.password = password;
     }
+
+    public Profile getProfile()
+    {
+        return profile;
+    }
+
+    public void setProfile(Profile profile)
+    {
+        this.profile = profile;
+    }
+
+    public int getUserID()
+    {
+        return userID;
+    }
+
+    public void setUserID(int userID)
+    {
+        this.userID = userID;
+    }
+
+    //endregion
 }

@@ -11,7 +11,6 @@ public class Profile
     private int wage;
     private int payPref;
     private String distPref;
-    private String about;
     private boolean swappingStatus;
     private int profileID;
 
@@ -23,7 +22,6 @@ public class Profile
         this.wage = wage;
         this.payPref = payPref;
         this.distPref = distPref;
-        this.about = "";
         this.swappingStatus = false;
         this.profileID = profileID;
     }
@@ -79,14 +77,6 @@ public class Profile
 
     public void setDistPref(String distPref) {
         this.distPref = distPref;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
     }
 
     public boolean isSwappingStatus() {
