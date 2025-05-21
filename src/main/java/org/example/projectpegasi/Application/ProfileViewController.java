@@ -110,5 +110,10 @@ public class ProfileViewController
     }
 
 
+    public void onShowMoreMatchesButtonClick(ActionEvent actionEvent) 
+    {
+    }
 
+    public void onShowMoreRequestButtonClick(ActionEvent actionEvent) {
+    }
 }
