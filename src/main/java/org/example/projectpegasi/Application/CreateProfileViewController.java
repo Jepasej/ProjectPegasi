@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.HelloApplication;
 
 public class CreateProfileViewController
 {
@@ -30,14 +32,20 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
+    /**
+     * Method tied to CreateProfileView.fxml's SaveButton
+     */
     @FXML
-    public void onSaveClick()
+    public void onSaveButtonClick()
     {
-
+        HelloApplication.changeScene(ControllerNames.ProfileView);
     }
 
+    /**
+     * Method tied to CreateProfileView.fxml's CancelButton
+     */
     @FXML
-    public void onCancelClick()
+    public void onCancelButtonClick()
     {
 
     }

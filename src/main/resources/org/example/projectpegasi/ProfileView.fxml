@@ -1,10 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.projectpegasi.Application.ProfileViewController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.ProfileViewController">
+   <top>
+      <Label alignment="CENTER" prefHeight="95.0" prefWidth="248.0" text="Welcome to your Profile" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="20.0" />
+         </font>
+      </Label>
+   </top>
+   <bottom>
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="290.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" minWidth="120.0" prefHeight="290.0" prefWidth="300.0" spacing="15.0">
+               <children>
+                  <Label text="Name:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="10.0" text="Jobtitle:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="28.0" text="Job Function:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="28.0" text="Company:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="10.0" text="Home Address:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="80.0" text="Wage:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="98.0" text="Pay Preference:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="98.0" text="Distance Preference:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="133.0" text="Swapping Status:">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="290.0" prefWidth="898.0" spacing="15.0">
+               <children>
+                  <Label fx:id="profileNameLbl" />
+                  <Label fx:id="jobTitleLbl" layoutX="10.0" layoutY="10.0" />
+                  <Label fx:id="jobFunctionLbl" layoutX="10.0" layoutY="28.0" />
+                  <Label fx:id="companyNameLbl" layoutX="10.0" layoutY="28.0" />
+                  <Label fx:id="homeAddressLbl" layoutX="10.0" layoutY="10.0" />
+                  <Label fx:id="wageLbl" layoutX="10.0" layoutY="80.0" />
+                  <Label fx:id="payPrefLbl" layoutX="10.0" layoutY="98.0" />
+                  <Label fx:id="distPrefLbl" layoutX="10.0" layoutY="98.0" />
+                  <Label fx:id="swappingStatusLbl" layoutX="10.0" layoutY="133.0" />
+               </children>
+            </VBox>
+            <VBox alignment="BOTTOM_RIGHT" minWidth="80.0" prefHeight="290.0" prefWidth="100.0" spacing="7.0">
+               <children>
+                  <Button fx:id="swapStatusButt" maxHeight="25.0" maxWidth="75.0" minHeight="25.0" minWidth="80.0" mnemonicParsing="false" onAction="#swapStatusButtOnAction" prefHeight="25.0" prefWidth="75.0" text="Swap Status" />
+                  <Button fx:id="editProfileViewButt" maxHeight="25.0" maxWidth="75.0" minHeight="25.0" minWidth="80.0" mnemonicParsing="false" onAction="#editProfileButtOnAction" prefHeight="25.0" prefWidth="75.0" text="Edit Profile">
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="30.0" right="30.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
+   <center>
+      <HBox prefHeight="155.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="30.0" right="30.0" />
+         </BorderPane.margin>
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="1000.0">
+               <children>
+                  <Label text="Recent Matches">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="recentMatchesLV" editable="true" maxHeight="80.0" maxWidth="300.0" prefHeight="200.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets right="200.0" />
+                     </VBox.margin>
+                  </ListView>
+                  <Button fx:id="showMoreMatchesButt" mnemonicParsing="false" text="Show More">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="1000.0">
+               <children>
+                  <Label text="Recent Requests">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="recentRequestLV" editable="true" maxHeight="80.0" maxWidth="300.0" prefHeight="200.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets left="200.0" />
+                     </VBox.margin>
+                  </ListView>
+                  <Button fx:id="showMoreRequestButt" mnemonicParsing="false" text="Show More">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </center>
+</BorderPane>

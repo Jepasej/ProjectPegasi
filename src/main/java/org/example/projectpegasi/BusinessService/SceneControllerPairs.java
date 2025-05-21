@@ -22,6 +22,11 @@ public class SceneControllerPairs
         return name;
     }
 
+    /**
+     * Method to pair up Scene and ControllerName
+     * @param scene
+     * @param name
+     */
     public SceneControllerPairs(Lazy<Scene> scene, ControllerNames name)
     {
         this.lazyscene = scene;

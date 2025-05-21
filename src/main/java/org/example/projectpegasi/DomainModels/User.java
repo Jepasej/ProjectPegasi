@@ -1,5 +1,8 @@
 package org.example.projectpegasi.DomainModels;
 
+/**
+ * Class modelling a User of the system.
+ */
 public class User
 {
     private String userName;
@@ -9,6 +12,11 @@ public class User
     {
         this.userName = userName;
         this.password = password;
+    }
+
+    public User()
+    {
+
     }
 
     public String getUserName()

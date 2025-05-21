@@ -37,8 +37,9 @@ public class MainViewController
 
     /**
      * Method tied to MainView.fxml's LoginButton
-     * Retrieves Username and Password from respective TextFields, validates login and
-     * either sends the user to ProfileView or runs wrongLogin method.
+     * Retrieves Username and Password from respective TextFields,
+     * validates login and either sends user to ProfileView or
+     * notifies user of wrong credentials.
      */
     @FXML
     public void onLoginButtonClick()
