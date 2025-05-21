@@ -9,15 +9,15 @@ public class IncomingRequestViewController
 {
 
 
+
     public void onOutgoingRequestsButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
     }
+
     public void onMatchesButtonClick(ActionEvent actionEvent) {
     }
 
-    public void onOutgoingRequestsButtonClick(ActionEvent actionEvent) {
-    }
 
     public void onIncomingRequestsButtonClick(ActionEvent actionEvent) {
     }
