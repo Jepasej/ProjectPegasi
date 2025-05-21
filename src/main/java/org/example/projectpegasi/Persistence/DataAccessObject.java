@@ -82,6 +82,11 @@ public class DataAccessObject implements DAO
         return false;
     }
 
+    /**
+     * Method for getting a profiles information from the profileID
+     * @param profileID associated to existing profiles
+     * @return a List of all the desired records
+     */
     @Override
     public List<String> getProfileInformation(int profileID)
     {
@@ -130,17 +135,66 @@ public class DataAccessObject implements DAO
         return profileInfo;
     }
 
+    /**
+     * Method for getting the users ID through the username
+     * @param userName reads the inputted username
+     * @return the userID
+     */
     @Override
     public int getUserID(String userName)
     {
-        return 0;
+        String query = "{call GetUserID(?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setString(1, userName);
+
+            ResultSet rs = clStmt.executeQuery();
+
+            if(rs.next())
+            {
+                return rs.getInt("fldUserID");
+            }
+
+        } catch (SQLException| ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
+
+    /**
+     * Method for getting the ProfileID from the userID
+     * @param userID takes the userID
+     * @return the profileID
+     */
     @Override
     public int getProfileID(int userID)
     {
-        String query = "{call ReadProfileByID(?)}";
-        return 0;
+        String query = "{call GetProfileID(?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setInt(1, userID);
+
+            ResultSet rs = clStmt.executeQuery();
+
+            if(rs.next())
+            {
+                return rs.getInt("fldUserID");
+            }
+
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 }
