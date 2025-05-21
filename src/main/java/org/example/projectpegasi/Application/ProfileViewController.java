@@ -112,5 +112,12 @@ public class ProfileViewController
     }
 
 
+    public void onShowMoreMatchesButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.MatchView);
+    }
 
+    public void onShowMoreRequestButtonClick(ActionEvent actionEvent) {
+        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+    }
 }
