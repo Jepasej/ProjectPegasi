@@ -20,7 +20,7 @@ public class DataAccessObject implements DAO
      * @return a match object if found or null if none found.
      * @throws Exception if a database access error occurs.
      */
-    public Match getAMatchID(int AmatchID) throws Exception
+    public Match readAMatchID(int AmatchID) throws Exception
     {
         int matchID = 0;
 

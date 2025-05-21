@@ -22,10 +22,10 @@
                         <TableColumn fx:id="declineMatchColumnMatch" prefWidth="123.33331298828125" text="Decline Request" />
                     </columns>
                 </TableView>
-                <Button fx:id="goToMatchesButton" layoutX="113.0" layoutY="83.0" mnemonicParsing="false" text="Matches" />
-                <Button fx:id="outgoingRequestButton" layoutX="441.0" layoutY="83.0" mnemonicParsing="false" text="Outgoing Requests" />
+                <Button fx:id="goToMatchesButton" layoutX="113.0" layoutY="83.0" mnemonicParsing="false" onAction="#onMatchesButtonClick" text="Matches" />
+                <Button fx:id="outgoingRequestButton" layoutX="441.0" layoutY="83.0" mnemonicParsing="false" onAction="#onOutgoingRequestsButtonClick" text="Outgoing Requests" />
                 <Button fx:id="incomingRequestButton" layoutX="782.0" layoutY="83.0" mnemonicParsing="false" text="Incoming Requests" />
-                <Button fx:id="backToProfileButton" layoutX="888.0" layoutY="527.0" mnemonicParsing="false" text="Back to Profile" />
+                <Button fx:id="backToProfileButton" layoutX="888.0" layoutY="527.0" mnemonicParsing="false" onAction="#onBackToProfileButtonClick" text="Back to Profile" />
             </children>
         </AnchorPane>
     </children>

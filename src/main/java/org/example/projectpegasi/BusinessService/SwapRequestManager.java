@@ -12,7 +12,7 @@ public class SwapRequestManager {
 
     public void createSwapRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
-        Match match = dao.getAMatchID(matchID);
+        Match match = dao.readAMatchID(matchID);
 
         if( match!= null)
         {
