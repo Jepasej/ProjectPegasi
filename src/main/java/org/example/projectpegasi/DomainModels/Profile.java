@@ -25,6 +25,11 @@ public class Profile
         this.profileID = profileID;
     }
 
+    public Profile()
+    {
+
+    }
+
     public String getFullName() {
         return fullName;
     }

@@ -1,9 +1,11 @@
 package org.example.projectpegasi.Application;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.Foundation.DBConnection;
 
 import java.sql.CallableStatement;
@@ -20,7 +22,7 @@ public class ProfileViewController
     private Button exitProfileViewButt, showMoreMatchesButt, showMoreRequestButt;
 
     @FXML
-    private Label profileNameLbl, jobTitleLbl, jobFunctionLbl, companyNameLbl, homeAddressLbl, wageLbl, payPrefLbl, distPrefLbl, swappingStatusLbl;
+    private Label profileNameLbl, jobTitleLbl, companyNameLbl, jobFunctionLbl, homeAddressLbl, wageLbl, payPrefLbl, distPrefLbl, swappingStatusLbl;
 
     @FXML
     private ListView<String> recentMatchesLV;
@@ -32,12 +34,17 @@ public class ProfileViewController
 
 
     @FXML
-    protected void exitProfileButtOnAction()
+    protected void editProfileButtOnAction()
     {
         //Go back to main view
 
     }
 
+    @FXML
+    public void swapStatusButtOnAction()
+    {
+        //Change the Swapping Status to true/false depending on what it is currently set to
+    }
 
     private void loadRecentMatchesInListView()
     {
@@ -51,13 +58,17 @@ public class ProfileViewController
 
     }
 
+    /**
+     * Reads the profile information from our database with a Callable statement
+     *
+     */
     private void getProfileInformation()
     {
-        //Use stored procedure to fill labels with database information
+        Profile profile = new Profile();
 
-        int profileID = getProfileID(); // get profile ID from profile model
+        int profileID = profile.getProfileID(); // get profile ID from profile model
 
-        String query = "{call ReadProfileByID(?)}";
+        String query = "{call ReadProfileByID(?)}"; // JDBC Escape Syntax
 
         try{
             Connection conn = DBConnection.getInstance().getConnection();
@@ -70,7 +81,7 @@ public class ProfileViewController
             if (rs.next())
             {
                 // Get data from result set
-                String profileName = rs.getString("fldProfileName");
+                String fullName = rs.getString("fldFullName");
                 String jobTitle = rs.getString("fldJobTitle");
                 String jobFunction = rs.getString("fldJobFunction");
                 String companyName = rs.getString("fldCompanyName");
@@ -81,7 +92,7 @@ public class ProfileViewController
                 String swappingStatus = rs.getString("fldSwappingStatus");
 
                 // Set data from result set in labels
-                profileNameLbl.setText(profileName);
+                profileNameLbl.setText(fullName);
                 jobTitleLbl.setText(jobTitle);
                 jobFunctionLbl.setText(jobFunction);
                 companyNameLbl.setText(companyName);
@@ -97,6 +108,7 @@ public class ProfileViewController
         }
 
     }
+
 
 
 }
