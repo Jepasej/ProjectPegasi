@@ -36,7 +36,7 @@ public class CreateProfileViewController
     @FXML
     private TextField companyField;
     @FXML
-    private TextField homeAddressField;
+    private TextField homeAddressField, currentSalaryField;
     @FXML
     private ComboBox<String> minSalaryComboBox;
     @FXML

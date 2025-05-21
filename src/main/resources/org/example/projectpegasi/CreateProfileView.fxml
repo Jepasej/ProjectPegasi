@@ -67,6 +67,12 @@
             <Label text="Min Salary (before taxes) (Optional)" />
             <ComboBox fx:id="minSalaryComboBox" promptText="Select salary" />
         </VBox>
+      <VBox layoutX="10.0" layoutY="576.0">
+         <children>
+            <Label text="Current Salary (before taxes)" />
+            <TextField fx:id="currentSalaryField" promptText="Enter current salary before tax" />
+         </children>
+      </VBox>
 
         <!-- Distance Preference -->
         <VBox>
