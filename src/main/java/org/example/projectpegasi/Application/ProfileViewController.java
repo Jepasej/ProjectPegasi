@@ -117,7 +117,8 @@ public class ProfileViewController
         HelloApplication.changeScene(ControllerNames.MatchView);
     }
 
-    public void onShowMoreRequestButtonClick(ActionEvent actionEvent) {
+    public void onShowMoreRequestButtonClick()
+    {
         HelloApplication.changeScene(ControllerNames.IncomingRequestView);
     }
 }
