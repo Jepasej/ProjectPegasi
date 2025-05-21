@@ -4,8 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.example.projectpegasi.Application.OutgoingRequestViewController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.OutgoingRequestViewController">
     <children>
         <VBox prefHeight="600.0" prefWidth="1007.0" />
         <AnchorPane layoutX="7.0" prefHeight="600.0" prefWidth="1000.0">
@@ -19,13 +18,13 @@
                     <columns>
                         <TableColumn fx:id="jobTitleColumnMatch" prefWidth="393.6666717529297" text="Jobtitle" />
                         <TableColumn fx:id="companyColumnMatch" minWidth="0.0" prefWidth="357.0" text="Company" />
-                        <TableColumn fx:id="declineMatchColumnMatch" prefWidth="247.20001220703125" text="Delete your request?" />
+                        <TableColumn fx:id="deleteRequestColumn" prefWidth="247.20001220703125" text="Delete your request?" />
                     </columns>
                 </TableView>
-                <Button fx:id="goToMatchesButton" layoutX="113.0" layoutY="83.0" mnemonicParsing="false" text="Matches" />
+                <Button fx:id="goToMatchesButton" layoutX="113.0" layoutY="83.0" mnemonicParsing="false" onAction="#onMatchesButtonClick" text="Matches" />
                 <Button fx:id="outgoingRequestButton" layoutX="441.0" layoutY="83.0" mnemonicParsing="false" text="Outgoing Requests" />
-                <Button fx:id="incomingRequestButton" layoutX="782.0" layoutY="83.0" mnemonicParsing="false" text="Incoming Requests" />
-                <Button fx:id="backToProfileButton" layoutX="888.0" layoutY="527.0" mnemonicParsing="false" text="Back to Profile" />
+                <Button fx:id="incomingRequestButton" layoutX="782.0" layoutY="83.0" mnemonicParsing="false" onAction="#onIncomingRequestButtonClick" text="Incoming Requests" />
+                <Button fx:id="backToProfileButton" layoutX="888.0" layoutY="527.0" mnemonicParsing="false" onAction="#onBackToProfileButtonClick" text="Back to Profile" />
             </children>
         </AnchorPane>
     </children>
