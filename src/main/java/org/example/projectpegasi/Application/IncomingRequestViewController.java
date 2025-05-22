@@ -76,6 +76,7 @@ public class IncomingRequestViewController
         });
         incomingRequestTable.getColumns().add(declineRequestcolumnMatch); // Add the column to table
 
+        //Testkode for at tjekke om knapper duer, skal fjernes når view matches virker
         ObservableList<Match> testMatches = FXCollections.observableArrayList();
 
         Match testMatch = new Match();
