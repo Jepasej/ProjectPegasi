@@ -35,7 +35,7 @@ public class SwapRequestManager {
      * Declines a match by updating its state to 'Declined' (state ID = 4) in the database.
      * Gets match data and updates the declined match using DataAccessObject.
      */
-    public void declineMatch (int matchID) throws Exception {
+    public void declineMatchAndRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
         dao.declineMatchAndRequest(matchID);
     }
@@ -64,15 +64,6 @@ public class SwapRequestManager {
         else{
             System.out.println("Request not found");
         }
-    }
-
-    /**
-     * Declines an incoming SwapRequest by updating its state to 'Denied' (state ID = 4) in the database.
-     * Gets match data and updates the declined request using DataAccessObject.
-     */
-    public void declineSwapRequest (int matchID) throws Exception {
-        DataAccessObject dao = new DataAccessObject();
-        dao.declineMatchAndRequest(matchID);
     }
 
     // Outgoing Requests:

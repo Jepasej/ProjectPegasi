@@ -43,7 +43,7 @@ public class IncomingRequestViewController
                 acceptRequestButton.setOnAction(event -> {
                     Match match = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.createSwapRequest(match.getMatchID());
+                        srManager.acceptSwapRequest(match.getMatchID());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -53,7 +53,7 @@ public class IncomingRequestViewController
         });
         incomingRequestTable.getColumns().add(acceptRequestColumnMatch); // Add the column to table
 
-        // Creates a column with a "✘" button that allows the user to decline a match.
+        // Creates a column with a "✘" button that allows the user to decline a request.
         // When clicked, the match is removed from the UI, but remains in the database and
         // changes it's state to "denied".
         TableColumn<Match, Void> declineRequestcolumnMatch = new TableColumn<>("Decline Request");
@@ -64,7 +64,7 @@ public class IncomingRequestViewController
                 declineRequestButton.setOnAction(event -> {
                     Match match = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.declineMatch(match.getMatchID());
+                        srManager.declineMatchAndRequest(match.getMatchID());
                         incomingRequestTable.getItems().remove(match);
                     } catch (Exception e) {
                         e.printStackTrace();

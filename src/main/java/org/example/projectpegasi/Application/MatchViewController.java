@@ -58,7 +58,7 @@ public class MatchViewController
                 declineMatchButton.setOnAction(event -> {
                     Match match = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.declineMatch(match.getMatchID());
+                        srManager.declineMatchAndRequest(match.getMatchID());
                         matchTable.getItems().remove(match);
                     } catch (Exception e) {
                         e.printStackTrace();
