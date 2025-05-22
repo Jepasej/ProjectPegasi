@@ -1,24 +1,16 @@
 package org.example.projectpegasi.DomainModels;
 
-/**
- * Enum representing predefined jobfunctions
- */
-public enum JobFunction
+public class JobFunction
 {
-    CARPENTER,
-    PEDAGOGUE,
-    IT_SUPPORTER,
-    NURSE,
-    SOCIAL_AND_HEALTH_CARE_ASSISTANT,
-    ELECTRICIAN,
-    PLUMBER,
-    MECHANIC,
-    TEACHER,
-    CHILD_CARE_ASSISTANT,
-    CHEF,
-    WAREHOUSE_WORKER,
-    CLEANER,
-    ADMINISTRATIVE_ASSISTANT,
-    CONSTRUCTION_WORKER,
-    DRIVER
+    private String jobFunction;
+
+    public String getJobFunction()
+    {
+        return jobFunction;
+    }
+
+    public void setJobFunction(String jobFunction)
+    {
+        this.jobFunction = jobFunction;
+    }
 }

@@ -1,5 +1,7 @@
 package org.example.projectpegasi.Application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -7,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.Company;
+import org.example.projectpegasi.DomainModels.JobFunction;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.HelloApplication;
@@ -52,8 +55,59 @@ public class CreateProfileViewController
 
     private String errorColour = "-fx-background-color: red;";
 
+    @FXML
+    public void initialize()
+    {
+        populateMinSalaryBox();
+        populateDistanceBox();
+        loadJobFunctionBox();
+        loadCompanyBox();
+    }
+
+    private void loadCompanyBox()
+    {
+        DAO dao = new DataAccessObject();
+        List<Company> companyFromDB = dao.readAll(new Company());
+
+        for(Company c : companyFromDB)
+        {
+            companyComboBox.getItems().add(c.getName());
+        }
+    }
+
+    private void loadJobFunctionBox()
+    {
+        DAO dao = new DataAccessObject();
+        List<JobFunction> jobFunctFromDB = dao.readAll(new JobFunction());
+
+        for(JobFunction jf : jobFunctFromDB)
+        {
+            jobFunctionComboBox.getItems().add(jf.getJobFunction());
+        }
+
+    }
+
+    private void populateDistanceBox()
+    {
+        for(int i = 0; i < 20; i++)
+        {
+            int dist = i*5;
+            distancePrefComboBox.getItems().add(dist + " km");
+        }
+    }
+
+    private void populateMinSalaryBox()
+    {
+        for(int i = 0; i < 50; i++)
+        {
+            int sal = i*1000;
+            minSalaryComboBox.getItems().add(String.valueOf(sal));
+        }
+    }
+
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
+     * Creates a User and a Profile from user input.
      */
     @FXML
     public void onSaveButtonClick()
@@ -65,7 +119,7 @@ public class CreateProfileViewController
 //        createUser(u);
 
 
-        isFormCorrect = checkMandatoryFields();
+        isFormCorrect = checkFields();
         isUsernameUnique = checkUniqueness(usernameField.getText());
 
         if (isFormCorrect && isUsernameUnique)
@@ -81,7 +135,7 @@ public class CreateProfileViewController
     /**
      * Verifies whether fields denoted as Mandatory in UI have been filled out.
      */
-    private boolean checkMandatoryFields()
+    private boolean checkFields()
     {
         //Create LinkedList of mandatory inputs.
         List<TextField> mandatoryInput = new LinkedList<>();
@@ -95,6 +149,7 @@ public class CreateProfileViewController
         mandatoryInput.add(currentSalaryField);
 
         boolean check = true;
+
         for(TextField t : mandatoryInput)
         {
             if(t.getText().isBlank())
@@ -112,6 +167,13 @@ public class CreateProfileViewController
 
         //HER SKAL VAERE VALIDERING AF MIN SALARY og DIST PREF I SAMME STIL SOM OVENSTAAENDE
 
+        if(!passwordField.getText().equals(repeatPasswordField.getText()))
+        {
+            passwordField.setStyle(errorColour);
+            passwordField.clear();
+            repeatPasswordField.setStyle(errorColour);
+            repeatPasswordField.clear();
+        }
 
         return check;
     }
@@ -137,6 +199,7 @@ public class CreateProfileViewController
 
         Profile profile = setupProfile();
 
+        
         user.setProfile(profile);
 
         return user;

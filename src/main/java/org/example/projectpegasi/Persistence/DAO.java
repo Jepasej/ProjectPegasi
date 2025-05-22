@@ -2,6 +2,7 @@ package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface DAO
@@ -9,7 +10,7 @@ public interface DAO
     //TO BE UPDATED!
     void create(Object object);
     void read(Object object);
-    void readALl(Object object);
+    ArrayList readAll(Object object);
     void update(Object object);
     void delete(Object object);
     void createUser(User user);
