@@ -27,7 +27,9 @@ public class ProfileViewController
     private Button exitProfileViewButt, showMoreMatchesButt, showMoreRequestButt;
 
     @FXML
-    private Label profileNameLbl, jobTitleLbl, companyNameLbl, jobFunctionLbl, homeAddressLbl, wageLbl, payPrefLbl, distPrefLbl, swappingStatusLbl;
+    private Label profileNameLbl, jobTitleLbl, companyNameLbl,
+            jobFunctionLbl, homeAddressLbl, wageLbl,
+            payPrefLbl, distPrefLbl, swappingStatusLbl;
 
     @FXML
     private ListView<String> recentMatchesLV;
@@ -37,7 +39,15 @@ public class ProfileViewController
 
     //endregion
 
-    private int userID;
+    @FXML
+    public void initialize()
+    {
+        int userID = MainViewController.getCurrentUserID();
+        if(userID != 0)
+        {
+            getProfileInformation(userID);
+        }
+    }
 
     @FXML
     protected void editProfileButtOnAction()
@@ -50,12 +60,6 @@ public class ProfileViewController
     public void swapStatusButtOnAction()
     {
         //Change the Swapping Status to true/false depending on what it is currently set to
-    }
-
-    public void setUserID()
-    {
-        this.userID = userID;
-        getProfileInformation();
     }
 
     private void loadRecentMatchesInListView()
@@ -74,7 +78,8 @@ public class ProfileViewController
      * Reads the profile information from our database with a Callable statement
      * the script joins job function and company tables to get all the information
      */
-    private void getProfileInformation() {
+    private void getProfileInformation(int userID)
+    {
         DAO dao = new DataAccessObject();
 
         int profileID = dao.getProfileID(userID);
@@ -90,10 +95,14 @@ public class ProfileViewController
             wageLbl.setText(profileInfo.get(5));
             payPrefLbl.setText(profileInfo.get(6));
             distPrefLbl.setText(profileInfo.get(7));
-            swappingStatusLbl.setText(profileInfo.get(8));
-        }
 
+            int swappingStatusBit = Integer.parseInt(profileInfo.get(8));
+            //Shorthand notation If-else statement - (Condition) ? If : Else
+            String swappingStatusText = (swappingStatusBit == 1) ? "Interested" : "Not Interested";
+            swappingStatusLbl.setText(swappingStatusText);
+        }
     }
+
     /**
      * Change scene to incoming view
      */
