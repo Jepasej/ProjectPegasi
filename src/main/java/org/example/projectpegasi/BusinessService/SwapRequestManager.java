@@ -41,8 +41,9 @@ public class SwapRequestManager {
     }
 
     /**
-     * Accepts an incoming jobSwapRequest when a user has accepted a swap
-     * Gets match data and saves the request using the DataAccessObject.
+     * Accepts an incoming SwapRequest and makes it into a jobswap.
+     * Updating it's state to "swap" (state = 3) in the database.
+     * Gets match data and saves the jobswap using the DataAccessObject.
      */
     public void acceptSwapRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
@@ -66,7 +67,7 @@ public class SwapRequestManager {
     }
 
     /**
-     * Declines an incoming jobSwapRequest by updating its state to 'Denied' (state ID = 4) in the database.
+     * Declines an incoming SwapRequest by updating its state to 'Denied' (state ID = 4) in the database.
      * Gets match data and updates the declined request using DataAccessObject.
      */
     public void declineSwapRequest (int matchID) throws Exception {
