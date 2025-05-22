@@ -362,22 +362,20 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Retrieves the two most recent matches from the database using a stored procedure.
-     * Calls the stored procedure: {@code GetTwoNewestMatches}.
-     * Returns a list of {@code Match} objects sorted by match date in descending order.
-     *
-     * @return a list containing the two most recent {@code Match} objects,
+     * Retrieves the two most recent matches from the database using the stored procedure: GetTwoNewestMatches
+     * @return a list containing the two most recent Match objects,
      * or an empty list if no matches are found.
      */
-    public List<Match> getTwoNewestMatches()
+    public List<Match> getTwoNewestMatchesByProfileID(int profileID)
     {
         List<Match> matches = new ArrayList<>();
-        String query = "{call GetTwoNewestMatches(?)}";
+        String query = "{call GetTwoNewestMatchesByProfileID(?)}";
 
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
             ResultSet rs = clStmt.executeQuery();
 
             while(rs.next())
@@ -401,9 +399,9 @@ public class DataAccessObject implements DAO
 
     /**
      * Retrieves the job title of a profile based on the given profile ID.
-     * Calls the stored procedure: {@code GetJobTitleByProfileID}.
+     * Calls the stored procedure: GetJobTitleByProfileID
      * @param profileID the ID of the profile whose job title should be retrieved
-     * @return the job title as a {@code String}, or {@code null} if no job title is found
+     * @return the job title as a String, or null if no job title is found
      */
     public String getJobTitleByProfileID(int profileID){
         String jobTitle = null;
@@ -426,5 +424,45 @@ public class DataAccessObject implements DAO
             e.printStackTrace();
         }
         return jobTitle;
+    }
+
+    /**
+     * Retrieves the two most recent match requests for the given profile ID.
+     * A match request is typically a match in an unconfirmed state (e.g., awaiting response).
+     *
+     * @param profileID The ID of the profile for which to retrieve recent match requests.
+     * @return A list containing up to two most recent Match objects representing incoming requests.
+     */
+    public List<Match>getTwoNewestRequestsByProfileID(int profileID)
+    {
+        List<Match> requests = new ArrayList<>();
+        String query = "{call GetTwoNewestRequestsByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            // Process the result set and build Match object
+            while (rs.next())
+            {
+                Match match = new Match();
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                requests.add(match);
+            }
+            conn.close();
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return requests;
     }
 }

@@ -59,6 +59,7 @@ public class ProfileViewController
         this.userID = userID;
         getProfileInformation();
         loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 
     private List<Match> recentMatchesList = new ArrayList<>();
@@ -70,7 +71,7 @@ public class ProfileViewController
     {
         // Use stored procedure to get 2 most recent matches
         DataAccessObject dao = new DataAccessObject();
-        recentMatchesList = dao.getTwoNewestMatches();
+        recentMatchesList = dao.getTwoNewestMatchesByProfileID(userID);
 
         recentMatchesLV.getItems().clear();
 
@@ -82,10 +83,23 @@ public class ProfileViewController
         }
     }
 
+    /**
+     * Loads the two most recent requests and displays their job titles in the ListView.
+     */
     private void loadRecentRequestsInListView()
     {
-        //Use stored procedure to sort by requested date and show the 2 most recent
+        // Use stored procedure to get 2 most recent requests
+        DataAccessObject dao = new DataAccessObject();
+        List<Match> recentRequestsList = dao.getTwoNewestRequestsByProfileID(userID);
 
+        recentRequestLV.getItems().clear();
+
+        // Get job title for each request and add it to the ListView
+        for(Match match : recentRequestsList)
+        {
+            String jobTitle = dao.getJobTitleByProfileID(match.getProfileAID());
+            recentRequestLV.getItems().add(jobTitle);
+        }
     }
 
     /**
