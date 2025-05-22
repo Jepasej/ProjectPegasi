@@ -16,6 +16,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public class ProfileViewController
@@ -93,12 +94,19 @@ public class ProfileViewController
         }
 
     }
-
-
-
+    /**
+     * Change scene to incoming view
+     */
     public void onShowMoreRequestButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.IncomingRequestView);
     }
 
+    /**
+     * Change scene to match view
+     */
+    public void onShowMoreMatchesButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.MatchView);
+    }
 }
