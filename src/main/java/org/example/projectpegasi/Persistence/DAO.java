@@ -2,6 +2,8 @@ package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.User;
 
+import java.sql.SQLException;
+
 public interface DAO
 {
     //TO BE UPDATED!
@@ -11,5 +13,11 @@ public interface DAO
     void update(Object object);
     void delete(Object object);
     boolean checkUsernameIsUnique(String name);
+
+
+    String getPassword(int UserID);
+
+    void changePassword(String string, int UserID) throws SQLException, ClassNotFoundException;
+
     boolean verifyUser(User user);
 }

@@ -139,6 +139,69 @@ public class DataAccessObject implements DAO
         return false;
     }
 
+    @Override
+    public String getPassword(int UserID)
+    {
+        String sql = " { call sp_GetUserPasswordByID(?,?) } ";
+        String password = null;
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, UserID);
+            cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
+
+            cs.execute();
+
+            password = cs.getString(2);
+
+            return password;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    @Override
+    public void changePassword(String text, int UserID) throws SQLException, ClassNotFoundException
+    {
+        try
+        {
+            String query = "{call spUpdatePassword(?,?)}";
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement stmt = conn.prepareCall(query);
+            System.out.println("Connected to change");
+
+            stmt.setString(1, text);
+            System.out.println("Change password to " + text);
+            stmt.setInt(2, UserID);
+            System.out.println("Change password from " + UserID);
+            stmt.execute();
+
+            System.out.println("Executed statement");
+
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    
+
+
     /**
      * Method for verification of a user against the database records.
      * @param user object holding a username and a password.

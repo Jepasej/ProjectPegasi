@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="500" prefWidth="400" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.EditProfileViewController">
+<AnchorPane minHeight="-Infinity" prefHeight="1000" prefWidth="400" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.EditProfileViewController">
 
     <VBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Edit Profile" />
@@ -14,7 +14,8 @@
             <TextField fx:id="OldPasswordEdit" promptText="Enter old Password" />
             <TextField fx:id="NewPasswordEdit" promptText="Enter new Password" />
             <TextField fx:id="RepeatNewPasswordEdit" promptText="Repeat new Password" />
-            <Button mnemonicParsing="false" text="Save Password" />
+            <Label fx:id="WrongPasswordLabel" />
+            <Button fx:id="SaveNewPassword" mnemonicParsing="false" onAction="#OnSafePasswordButtonClick" text="Save Password" />
          </children></VBox>
 
         <!-- Full Name -->
@@ -31,8 +32,13 @@
 
         <!-- Job Function -->
         <VBox>
-            <Label text="Job Function" />
-            <ComboBox fx:id="jobFunctionComboBoxEdit" promptText="Select job function" />
+            <Label text="Job Function (Optional)" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <children>
+                    <ComboBox fx:id="jobFunctionComboBox" promptText="Select job function" />
+                    <TextArea prefHeight="100.0" prefWidth="219.0" />
+                </children>
+            </HBox>
         </VBox>
 
         <!-- Company -->
@@ -61,8 +67,8 @@
 
         <!-- Buttons -->
         <HBox alignment="CENTER" spacing="20">
-            <Button fx:id="saveButtonEdit" onAction="#onSaveButtonClick" text="Save" />
-            <Button fx:id="cancelButtonEdit" onAction="#onCancelButtonClick" text="Cancel" />
+            <Button fx:id="saveButtonEdit" onAction="#onSaveButtonClickEdit" text="Save" />
+            <Button fx:id="cancelButtonEdit" onAction="#onCancelButtonClickEdit" text="Cancel" />
         </HBox>
     </VBox>
 </AnchorPane>
