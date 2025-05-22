@@ -1,5 +1,8 @@
 package org.example.projectpegasi.DomainModels;
 
+/**
+ * Enum representing predefined jobfunctions
+ */
 public enum JobFunction
 {
     CARPENTER,
