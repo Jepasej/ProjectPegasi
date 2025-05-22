@@ -50,7 +50,8 @@ public class MatchViewController
         matchTable.getColumns().add(requestSwapColumnMatch); // Add the column to table
 
         // Creates a column with a "✘" button that allows the user to decline a match.
-        // When clicked, the match is removed from the database.
+        // When clicked, the match is removed from the UI, but remains in the database and
+        // changes it's state to "denied".
         TableColumn<Match, Void> declineMatchcolumnMatch = new TableColumn<>("Decline match");
         declineMatchcolumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button declineMatchButton = new Button("✘");
@@ -59,6 +60,7 @@ public class MatchViewController
                     Match match = getTableView().getItems().get(getIndex());
                     try {
                         srManager.declineMatch(match.getMatchID());
+                        matchTable.getItems().remove(match);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

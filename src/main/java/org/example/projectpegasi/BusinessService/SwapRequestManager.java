@@ -33,13 +33,12 @@ public class SwapRequestManager {
     }
 
     /**
-     * Deletes a swaprequest when a user has declined a match
-     * Gets match data and deletes the match using the DataAccessObject.
+     * Deletes a swaprequest from UI when a user has declined a match
+     * Gets match data and saves the declined match usind DataAccessObject.
      */
     public void declineMatch (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
         dao.declineMatch( matchID);
-        //Skal ikke slette entry, men gemme det i DB med state Denied
     }
 
     // Her skal laves metoder til hvad der skal ske når man i

@@ -12,21 +12,18 @@ import java.util.List;
 public class DataAccessObject implements DAO
 {
     /**
-     * Retrieved a match from our database based on the given match ID
-     * @param AmatchID ID of the match to retrieve
+     * Retrieves a match from our database based on the given match ID
+     * @param matchID ID of the match to retrieve
      * @return a match object if found or null if none found.
      * @throws Exception if a database access error occurs.
      */
-    public Match readAMatchID(int AmatchID) throws Exception
+    public Match readAMatchID(int matchID) throws Exception
     {
-        int matchID = 0;
-
-        // SQL query to retrieve the match ID info based on the match ID
-        String sql = "SELECT * FROM tblMatches WHERE fldMatchID=?";
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, AmatchID);
-        ResultSet rs = pstm.executeQuery();
+        CallableStatement stmt = conn.prepareCall("{call readAMatchID(?)}");
+        stmt.setInt(1, matchID);
+        stmt.setInt(2, 1);
+        ResultSet rs = stmt.executeQuery();
 
         boolean hasMatch = false;
         Match match = null;
@@ -59,16 +56,15 @@ public class DataAccessObject implements DAO
      */
     public void saveSwapRequest(SwapRequest request) throws Exception
     {
-        String sql = "Insert into tblMatches (fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) values(?,?,?,?,?,?)";
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, request.getMatchId());
-        pstm.setInt(2, request.getProfileAId());
-        pstm.setInt(3, request.getProfileBId());
-        pstm.setInt(4, request.getStateId());
-        pstm.setDate(5, request.getMatchDate());
-        pstm.setDate(6, request.getMatchDateResponse());
-        pstm.executeUpdate();
+        CallableStatement stmt = conn.prepareCall("{call saveSwapRequest(?,?,?,?,?,?)}");
+        stmt.setInt(1, request.getMatchId());
+        stmt.setInt(2, request.getProfileAId());
+        stmt.setInt(3, request.getProfileBId());
+        stmt.setInt(4, 2);
+        stmt.setDate(5, request.getMatchDate());
+        stmt.setDate(6, request.getMatchDateResponse());
+        stmt.executeUpdate();
         conn.close();
     }
 
@@ -78,11 +74,11 @@ public class DataAccessObject implements DAO
      * @throws Exception if database access happens
      */
     public void declineMatch(int matchID) throws Exception{
-        String sql = "DELETE FROM tblMatches WHERE fldMatchID=?";
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, matchID);
-        pstm.executeUpdate();
+        CallableStatement stmt = conn.prepareCall("{call DeclineMatchByID(?)}");
+        stmt.setInt(1, 4);
+        stmt.setInt(2, matchID);
+        stmt.executeUpdate();
         conn.close();
     }
 
