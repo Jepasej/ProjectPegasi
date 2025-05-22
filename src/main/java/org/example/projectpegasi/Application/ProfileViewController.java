@@ -16,7 +16,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 public class ProfileViewController
@@ -96,5 +95,10 @@ public class ProfileViewController
     }
 
 
+
+    public void onShowMoreRequestButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+    }
 
 }
