@@ -24,8 +24,6 @@ public class MainViewController
     @FXML
     private Label wrongCredentials;
 
-    //private String[] credentials = new String[2];
-
     private static int currentUserID; // Static variable to store the users ID
 
     /**
@@ -58,7 +56,6 @@ public class MainViewController
 
         if(isVerified)
         {
-            System.out.println("User ID: " + currentUserID);
             HelloApplication.changeScene(ControllerNames.ProfileView);
         }
         else
