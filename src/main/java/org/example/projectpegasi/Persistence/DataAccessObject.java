@@ -21,7 +21,7 @@ public class DataAccessObject implements DAO
     public Match readAMatchID(int matchID) throws Exception
     {
         Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call readAMatchID(?)}");
+        CallableStatement stmt = conn.prepareCall("{call ReadMatchByID(?)}");
         stmt.setInt(1, matchID);
         ResultSet rs = stmt.executeQuery();
 
@@ -57,7 +57,7 @@ public class DataAccessObject implements DAO
     public void saveSwapRequestAndSwapAccept(SwapRequest request) throws Exception
     {
         Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call saveSwapRequest(?,?,?,?,?)}");
+        CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?)}");
         stmt.setInt(1, request.getMatchId());
         stmt.setInt(2, request.getProfileAId());
         stmt.setInt(3, request.getProfileBId());

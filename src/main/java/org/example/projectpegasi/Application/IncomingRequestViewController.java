@@ -17,7 +17,7 @@ import org.example.projectpegasi.HelloApplication;
 public class IncomingRequestViewController
 {
     @FXML
-    private TableView incomingRequestTable;
+    private TableView<Match> incomingRequestTable;
 
     @FXML
     private TableColumn<Match, String> jobTitleColumnMatch, companyColumnMatch;

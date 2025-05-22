@@ -15,7 +15,7 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TableView layoutY="132.0" prefHeight="368.0" prefWidth="1000.0">
+                <TableView fx:id="incomingRequestTable" layoutY="132.0" prefHeight="368.0" prefWidth="1000.0">
                     <columns>
                         <TableColumn fx:id="jobTitleColumnMatch" prefWidth="393.6666717529297" text="Jobtitle" />
                         <TableColumn fx:id="companyColumnMatch" minWidth="0.0" prefWidth="357.0" text="Company" />
