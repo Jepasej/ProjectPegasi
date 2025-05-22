@@ -68,4 +68,12 @@ public class SwapRequestManager {
 
     // Outgoing Requests:
     // 1. Trykker på delete request - Hent MatchID fra tbl Matches i DB og slet entry i DB.
+    /**
+     * Deletes an entry from tbl Matches when a user deletes their own outgoing requests
+     * Gets request data and deletes it using the DataAccessObject.
+     */
+    public void deleteSwapRequest (int matchID) throws Exception {
+        DataAccessObject dao = new DataAccessObject();
+        dao.deleteRequest(matchID);
+    }
 }

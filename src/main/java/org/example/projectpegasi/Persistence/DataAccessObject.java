@@ -78,6 +78,15 @@ public class DataAccessObject implements DAO
     }
 
 
+    public void deleteRequest(int matchID) throws Exception{
+        Connection conn = DBConnection.getInstance().getConnection();
+        CallableStatement stmt = conn.prepareCall("{call DeleteRequestByMatchID(?)}");
+        stmt.setInt(1, matchID);
+        stmt.executeUpdate();
+        conn.close();
+    }
+
+
     @Override
     public void create(Object object)
     {
