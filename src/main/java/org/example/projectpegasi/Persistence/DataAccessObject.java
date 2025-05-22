@@ -67,7 +67,7 @@ public class DataAccessObject implements DAO
     /**
      * Deletes a match entry or jobSwapRequest from the UI based on the given match ID
      * @param matchID the ID match to decline
-     * @throws Exception if database access happens
+     * @throws Exception if database access error happens
      */
     public void declineMatchAndRequest(int matchID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
@@ -77,13 +77,61 @@ public class DataAccessObject implements DAO
         conn.close();
     }
 
-
+    /**
+     * Deletes a request from the database based on the given matchID
+     * @param matchID The ID match to be deleted
+     * @throws Exception if data access error happens
+     */
     public void deleteRequest(int matchID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
         CallableStatement stmt = conn.prepareCall("{call DeleteRequestByMatchID(?)}");
         stmt.setInt(1, matchID);
         stmt.executeUpdate();
         conn.close();
+    }
+
+    /**
+     * Gets all matches for the logged in profile
+     * @param profileID The profile for which to get matches for
+     * @return all the matches for this profile
+     * @throws Exception if data aceess error happens
+     */
+    public List<Match> getMatchesForProfile(int profileID) throws Exception{
+        List<Match> matches = new ArrayList<>();
+        Connection conn = DBConnection.getInstance().getConnection();
+        CallableStatement stmt = conn.prepareCall("{call GetMatchesForProfile(?)}");
+        stmt.setInt(1, profileID);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()){
+            Match match = new Match();
+            match.setMatchID(rs.getInt(1));
+            match.setProfileAID(rs.getInt(2));
+            match.setProfileBID(rs.getInt(3));
+            match.setStateID(rs.getInt(4));
+            matches.add(match);
+
+        }
+        conn.close();
+        return matches;
+    }
+
+    public Profile getAttributesForMatchView(int profileID) throws Exception{
+        Connection conn = DBConnection.getInstance().getConnection();
+        CallableStatement stmt = conn.prepareCall("{call GetAttributesForMatchView(?)}");
+        stmt.setInt(1, profileID);
+        ResultSet rs = stmt.executeQuery();
+        Profile profile = null;
+        while (rs.next()){
+            profile = new Profile();
+            profile.setJobTitle(rs.getString(1));
+
+            int companyID = rs.getInt(2);
+            Company company = new Company();
+            company.setID(companyID);
+            profile.setCompany(company);
+        }
+        return profile;
     }
 
 

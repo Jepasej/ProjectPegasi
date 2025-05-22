@@ -9,10 +9,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.BusinessService.LoginCredentialsSession;
 import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.Persistence.DataAccessObject;
+
+import java.util.List;
 
 public class MatchViewController
 {
@@ -26,7 +30,7 @@ public class MatchViewController
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
 
     @FXML
-    public void initialize(){
+    public void initialize() throws Exception {
         SwapRequestManager srManager = new SwapRequestManager();
 
         // Creates a column with a "✔" button that allows the user to accept a match.
@@ -70,17 +74,21 @@ public class MatchViewController
         });
         matchTable.getColumns().add(declineMatchcolumnMatch); // Add the column to table
 
-        //Testkode for at tjekke om knapper duer, skal fjernes når view matches virker
-        ObservableList<Match> testMatches = FXCollections.observableArrayList();
+        //Loads all matches for th elooged-in user
+        //Finds the other profiles that matches with logged-in user and prepares to show it in UI
+        int LoginProfileID = LoginCredentialsSession.getProfileID();
+        DataAccessObject dao = new DataAccessObject();
+        List<Match> matches = dao.getMatchesForProfile(LoginProfileID);
+        for (Match match : matches) {
+            int profileID;
 
-        Match testMatch = new Match();
-        testMatch.setMatchID(123);
-        testMatch.setProfileAID(2);
-        testMatch.setProfileBID(3);
-        testMatch.setStateID(1);
-        testMatches.add(testMatch);
-        matchTable.setItems(testMatches);
-
+            if(match.getProfileAID() == LoginProfileID) {
+                profileID = match.getProfileBID();
+            }
+            else {
+                profileID = match.getProfileAID();
+            }
+        }
     }
 
 
