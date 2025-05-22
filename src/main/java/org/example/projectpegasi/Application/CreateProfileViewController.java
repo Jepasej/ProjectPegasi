@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.DomainModels.Company;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.HelloApplication;
@@ -57,6 +58,13 @@ public class CreateProfileViewController
     @FXML
     public void onSaveButtonClick()
     {
+
+        Company c = new Company("Novo Nordisk", "Novo Allé 1, 2880 Bagsværd");
+        Profile p = new Profile("ErikErik", "Finanser", "Lillegade 8", 24000, 18000,"20km", c);
+        User u = new User("Erik", "ErikdenRode", p);
+        createUser(u);
+
+
         isCorrect = checkMandatoryFields();
         isUnique = checkUniqueness(usernameField.getText());
 
@@ -84,6 +92,7 @@ public class CreateProfileViewController
         mandatoryInput.add(jobTitleField);
         mandatoryInput.add(companyField);
         mandatoryInput.add(homeAddressField);
+        mandatoryInput.add(currentSalaryField);
 
         boolean check = true;
         for(TextField t : mandatoryInput)
@@ -94,6 +103,15 @@ public class CreateProfileViewController
                 check = false;
             }
         }
+
+        if(jobFunctionArea.getText().isBlank())
+        {
+            jobFunctionArea.setStyle(errorColour);
+            check = false;
+        }
+
+        //HER SKAL VAERE VALIDERING AF MIN SALARY og DIST PREF I SAMME STIL SOM OVENSTAAENDE
+
 
         return check;
     }

@@ -13,6 +13,18 @@ public class Profile
     private String distPref;
     private boolean swappingStatus;
     private int profileID;
+    private Company company;
+
+    public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, Company company)
+    {
+        this.fullName = fullName;
+        this.jobTitle = jobTitle;
+        this.homeAddress = homeAddress;
+        this.wage = wage;
+        this.payPref = payPref;
+        this.distPref = distPref;
+        this.company = company;
+    }
 
     public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, int profileID, boolean swappingStatus)
     {
@@ -22,13 +34,23 @@ public class Profile
         this.wage = wage;
         this.payPref = payPref;
         this.distPref = distPref;
-        this.swappingStatus = false;
+        this.swappingStatus = swappingStatus;
         this.profileID = profileID;
     }
 
     public Profile()
     {
 
+    }
+
+    public Company getCompany()
+    {
+        return company;
+    }
+
+    public void setCompany(Company company)
+    {
+        this.company = company;
     }
 
     public String getFullName() {
