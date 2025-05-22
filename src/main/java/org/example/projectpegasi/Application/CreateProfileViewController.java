@@ -50,6 +50,8 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
+    List<Company> companies;
+
     private boolean isUsernameUnique = false;
     private boolean isFormCorrect = false;
 
@@ -67,9 +69,9 @@ public class CreateProfileViewController
     private void loadCompanyBox()
     {
         DAO dao = new DataAccessObject();
-        List<Company> companyFromDB = dao.readAll(new Company());
+        companies = dao.readAll(new Company());
 
-        for(Company c : companyFromDB)
+        for(Company c : companies)
         {
             companyComboBox.getItems().add(c.getName());
         }
@@ -105,6 +107,17 @@ public class CreateProfileViewController
         }
     }
 
+    @FXML
+    public void onCompanySelected()
+    {
+        for(Company c : companies)
+        {
+            if(c.getName().equals(companyComboBox.getValue()))
+            {
+                companyField.setText(c.getName() + ", " + c.getAddress());
+            }
+        }
+    }
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
      * Creates a User and a Profile from user input.

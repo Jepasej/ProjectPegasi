@@ -24,7 +24,7 @@ public class ProfileViewController
 
     //region FX Containers/Controls
     @FXML
-    private Button exitProfileViewButt, showMoreMatchesButt, showMoreRequestButt;
+    private Button exitProfileViewButt, showMoreMatchesButt, showMoreRequestButt, swapStatusButt;
 
     @FXML
     private Label profileNameLbl, jobTitleLbl, companyNameLbl,
@@ -60,6 +60,23 @@ public class ProfileViewController
     public void swapStatusButtOnAction()
     {
         //Change the Swapping Status to true/false depending on what it is currently set to
+        DAO dao = new DataAccessObject();
+        int userID = MainViewController.getCurrentUserID();
+        int profileID = dao.getProfileID(userID);
+
+        boolean currentSwappingStatus = swappingStatusLbl.getText().equals("Interested");
+        boolean newSwappingStatus = !currentSwappingStatus;
+
+        boolean isUpdated = dao.updateSwappingStatus(profileID, newSwappingStatus);
+
+        if(isUpdated)
+        {
+            swappingStatusLbl.setText(newSwappingStatus ? "Interested" : "Not Interested");
+        }
+        else
+        {
+            System.out.println("Failed to update swapping status");
+        }
     }
 
     private void loadRecentMatchesInListView()

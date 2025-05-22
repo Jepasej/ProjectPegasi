@@ -128,7 +128,7 @@ public class DataAccessObject implements DAO
         }
         if(object instanceof Company)
         {
-            String sql = " { call spReadAllCompanyNames() } ";
+            String sql = " { call spReadAllCompanies() } ";
             try
             {
                 Connection conn = DBConnection.getInstance().getConnection();
@@ -139,7 +139,10 @@ public class DataAccessObject implements DAO
                 while(rs.next())
                 {
                     Company c = new Company();
-                    c.setName(rs.getString(1));
+                    c.setID(rs.getInt(1));
+                    c.setName(rs.getString(2));
+                    c.setAddress(rs.getString(3));
+
                     list.add(c);
                 }
 
@@ -270,6 +273,69 @@ public class DataAccessObject implements DAO
         }
         return false;
     }
+
+    @Override
+    public String getPassword(int UserID)
+    {
+        String sql = " { call sp_GetUserPasswordByID(?,?) } ";
+        String password = null;
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, UserID);
+            cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
+
+            cs.execute();
+
+            password = cs.getString(2);
+
+            return password;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    @Override
+    public void changePassword(String text, int UserID) throws SQLException, ClassNotFoundException
+    {
+        try
+        {
+            String query = "{call spUpdatePassword(?,?)}";
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement stmt = conn.prepareCall(query);
+            System.out.println("Connected to change");
+
+            stmt.setInt(1, UserID);
+            System.out.println("Change password from " + UserID);
+            stmt.setString(2, text);
+            System.out.println("Change password to " + text);
+            stmt.execute();
+
+            System.out.println("Executed statement");
+
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    
+
 
     /**
      * Method for verification of a user against the database records.
@@ -460,5 +526,29 @@ public class DataAccessObject implements DAO
             e.printStackTrace();
         }
         return -1;
+    }
+
+    @Override
+    public boolean updateSwappingStatus(int profileID, Boolean swappingStatus)
+    {
+        String query = "{call UpdateSwappingStatus(?,?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setInt(1, profileID);
+            clStmt.setBoolean(2, swappingStatus);
+
+            int rowsAffected = clStmt.executeUpdate();
+            conn.close();
+            return rowsAffected > 0;
+
+
+        }catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
