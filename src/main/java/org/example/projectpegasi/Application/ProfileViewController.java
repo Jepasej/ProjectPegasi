@@ -1,14 +1,23 @@
 package org.example.projectpegasi.Application;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.DomainModels.Profile;
+import org.example.projectpegasi.Foundation.DBConnection;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
 import org.example.projectpegasi.Persistence.DataAccessObject;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class ProfileViewController
 {
@@ -86,5 +95,21 @@ public class ProfileViewController
             distPrefLbl.setText(profileInfo.get(7));
             swappingStatusLbl.setText(profileInfo.get(8));
         }
+
+    }
+    /**
+     * Change scene to incoming view
+     */
+    public void onShowMoreRequestButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+    }
+
+    /**
+     * Change scene to match view
+     */
+    public void onShowMoreMatchesButtonClick()
+    {
+        HelloApplication.changeScene(ControllerNames.MatchView);
     }
 }

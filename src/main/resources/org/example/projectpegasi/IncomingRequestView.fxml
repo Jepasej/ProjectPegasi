@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -7,7 +8,7 @@
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.IncomingRequestViewController">
     <children>
         <VBox prefHeight="600.0" prefWidth="1007.0" />
-        <AnchorPane layoutX="7.0" prefHeight="600.0" prefWidth="1000.0">
+        <AnchorPane layoutX="7.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #EDE6D6;">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" layoutX="432.0" layoutY="37.0" text="Incoming Requests" textAlignment="CENTER" AnchorPane.topAnchor="37.0">
                     <font>
@@ -18,8 +19,8 @@
                     <columns>
                         <TableColumn fx:id="jobTitleColumnMatch" prefWidth="393.6666717529297" text="Jobtitle" />
                         <TableColumn fx:id="companyColumnMatch" minWidth="0.0" prefWidth="357.0" text="Company" />
-                        <TableColumn fx:id="requestSwapColumnMatch" prefWidth="128.3333740234375" text="Accept Request" />
-                        <TableColumn fx:id="declineMatchColumnMatch" prefWidth="123.33331298828125" text="Decline Request" />
+                        <TableColumn prefWidth="128.3333740234375" text="Accept Request" />
+                        <TableColumn prefWidth="123.33331298828125" text="Decline Request" />
                     </columns>
                 </TableView>
                 <Button fx:id="goToMatchesButton" layoutX="113.0" layoutY="83.0" mnemonicParsing="false" onAction="#onMatchesButtonClick" text="Matches" />
@@ -27,6 +28,9 @@
                 <Button fx:id="incomingRequestButton" layoutX="782.0" layoutY="83.0" mnemonicParsing="false" text="Incoming Requests" />
                 <Button fx:id="backToProfileButton" layoutX="888.0" layoutY="527.0" mnemonicParsing="false" onAction="#onBackToProfileButtonClick" text="Back to Profile" />
             </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
         </AnchorPane>
     </children>
 </AnchorPane>
