@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.ProfileViewController">
+<BorderPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #EDE6D6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.ProfileViewController">
    <top>
       <Label alignment="CENTER" prefHeight="95.0" prefWidth="248.0" text="Welcome to your Profile" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
@@ -132,4 +132,7 @@
          </children>
       </HBox>
    </center>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </BorderPane>
