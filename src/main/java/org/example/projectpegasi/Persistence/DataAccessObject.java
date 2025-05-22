@@ -23,7 +23,6 @@ public class DataAccessObject implements DAO
         Connection conn = DBConnection.getInstance().getConnection();
         CallableStatement stmt = conn.prepareCall("{call readAMatchID(?)}");
         stmt.setInt(1, matchID);
-        stmt.setInt(2, 1);
         ResultSet rs = stmt.executeQuery();
 
         boolean hasMatch = false;
@@ -40,7 +39,6 @@ public class DataAccessObject implements DAO
             match.setMatchDate(rs.getDate(5));
             match.setMatchResponseDate(rs.getDate(6));
         }
-
         //If match not found
         if (!hasMatch)
         {
@@ -51,18 +49,18 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Saves a swap request as a new entry in our database when a profile has accepted a match
+     * Saves a swap request or a swap accept as a new entry in our database
+     * when a profile has accepted a match
      * @param request The swap request to be saved
      * @throws Exception if database connection fails
      */
-    public void saveSwapRequest(SwapRequest request) throws Exception
+    public void saveSwapRequestAndSwapAccept(SwapRequest request) throws Exception
     {
         Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call saveSwapRequest(?,?,?,?,?,?)}");
+        CallableStatement stmt = conn.prepareCall("{call saveSwapRequest(?,?,?,?,?)}");
         stmt.setInt(1, request.getMatchId());
         stmt.setInt(2, request.getProfileAId());
         stmt.setInt(3, request.getProfileBId());
-        stmt.setInt(4, 2);
         stmt.setDate(5, request.getMatchDate());
         stmt.setDate(6, request.getMatchDateResponse());
         stmt.executeUpdate();
@@ -70,18 +68,18 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Deletes a match entry from the database based on the given match ID
-     * @param matchID the ID match to delete
+     * Deletes a match entry or jobSwapRequest from the UI based on the given match ID
+     * @param matchID the ID match to decline
      * @throws Exception if database access happens
      */
-    public void declineMatch(int matchID) throws Exception{
+    public void declineMatchAndRequest(int matchID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
         CallableStatement stmt = conn.prepareCall("{call DeclineMatchByID(?)}");
-        stmt.setInt(1, 4);
-        stmt.setInt(2, matchID);
+        stmt.setInt(1, matchID);
         stmt.executeUpdate();
         conn.close();
     }
+
 
     @Override
     public void create(Object object)
