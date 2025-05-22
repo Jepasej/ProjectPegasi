@@ -320,7 +320,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetUserID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement clStmt = conn.prepareCall(query);
 
@@ -332,8 +333,9 @@ public class DataAccessObject implements DAO
             {
                 return rs.getInt("fldUserID");
             }
-
-        } catch (SQLException| ClassNotFoundException e)
+            conn.close();
+        }
+        catch (SQLException| ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -381,7 +383,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetProfileID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement clStmt = conn.prepareCall(query);
 
@@ -391,9 +394,10 @@ public class DataAccessObject implements DAO
 
             if(rs.next())
             {
-                return rs.getInt("fldUserID");
+                int profileID = rs.getInt("fldProfileID");
+                return profileID;
             }
-
+            conn.close();
         }
         catch (SQLException | ClassNotFoundException e)
         {
@@ -401,5 +405,4 @@ public class DataAccessObject implements DAO
         }
         return -1;
     }
-
 }
