@@ -10,26 +10,26 @@
         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Profile" />
       <VBox prefHeight="0.0" prefWidth="360.0">
          <children>
-            <Label text="Username (Mandatory)" />
+            <Label text="Username" />
             <TextField fx:id="usernameField" promptText="Enter desired username" />
          </children>
       </VBox>
       <VBox prefHeight="0.0" prefWidth="360.0">
          <children>
-            <Label text="Password (Mandatory)" />
+            <Label text="Password" />
             <TextField fx:id="passwordField" promptText="Enter desired password" />
          </children>
       </VBox>
       <VBox layoutX="10.0" layoutY="101.0" prefHeight="0.0" prefWidth="360.0">
          <children>
-            <Label text="Repeat Password (Mandatory)" />
+            <Label text="Repeat Password" />
             <TextField fx:id="repeatPasswordField" promptText="Enter desired password" />
          </children>
       </VBox>
 
         <!-- Full Name -->
         <VBox>
-            <Label text="Full Name (Mandatory)" />
+            <Label text="Full Name" />
             <TextField fx:id="fullNameField" promptText="Enter full name" />
         </VBox>
 
@@ -54,7 +54,7 @@
         <VBox>
             <Label text="Company" />
          <TextField fx:id="companyField" editable="false" />
-            <ComboBox fx:id="companyComboBox" editable="true" promptText="Select company" />
+            <ComboBox fx:id="companyComboBox" editable="true" onAction="#onCompanySelected" onMouseClicked="#onCompanySelected" promptText="Select company" />
         </VBox>
 
         <!-- Home Address -->
@@ -65,7 +65,7 @@
 
         <!-- Min Salary -->
         <VBox>
-            <Label text="Min Salary (before taxes) (Optional)" />
+            <Label text="Min Salary" />
             <ComboBox fx:id="minSalaryComboBox" promptText="Select salary" />
         </VBox>
       <VBox layoutX="10.0" layoutY="576.0">

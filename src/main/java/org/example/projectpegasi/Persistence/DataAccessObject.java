@@ -134,7 +134,7 @@ public class DataAccessObject implements DAO
         }
         if(object instanceof Company)
         {
-            String sql = " { call spReadAllCompanyNames() } ";
+            String sql = " { call spReadAllCompanies() } ";
             try
             {
                 Connection conn = DBConnection.getInstance().getConnection();
@@ -145,7 +145,10 @@ public class DataAccessObject implements DAO
                 while(rs.next())
                 {
                     Company c = new Company();
-                    c.setName(rs.getString(1));
+                    c.setID(rs.getInt(1));
+                    c.setName(rs.getString(2));
+                    c.setAddress(rs.getString(3));
+
                     list.add(c);
                 }
 

@@ -6,6 +6,7 @@ package org.example.projectpegasi.DomainModels;
 public class Company
 {
     private String name, address;
+    private int ID;
 
     public Company(String name)
     {
@@ -40,5 +41,15 @@ public class Company
     public void setAddress(String address)
     {
         this.address = address;
+    }
+
+    public int getID()
+    {
+        return ID;
+    }
+
+    public void setID(int ID)
+    {
+        this.ID = ID;
     }
 }
