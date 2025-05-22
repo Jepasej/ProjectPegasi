@@ -17,6 +17,9 @@ public interface DAO
     boolean verifyUser(User user);
 
     int getUserID(String userName);
+
+    int getCompanyID(String companyName);
+
     int getProfileID(int userID);
 
     List<String> getProfileInformation(int profileID);

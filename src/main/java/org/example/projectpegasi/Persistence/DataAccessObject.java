@@ -1,6 +1,7 @@
 package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.Foundation.DBConnection;
@@ -123,7 +124,7 @@ public class DataAccessObject implements DAO
             CallableStatement cs = conn.prepareCall(sql);
             cs.setString(1, u.getUserName());
             cs.setString(2, u.getPassword());
-            cs.executeQuery();
+            cs.execute();
 
             conn.close();
         }
@@ -137,39 +138,49 @@ public class DataAccessObject implements DAO
             e.printStackTrace();
         }
 
-   //     createUserProfile(u.getProfile());
+        createUserProfile(u);
     }
 
-//    private void createUserProfile(Profile p)
-//    {
-//        String sql = " { call NewUserProfile(?,?,?,?,?,?,?) } ";
-//
-//        try
-//        {
-//            Connection conn = DBConnection.getInstance().getConnection();
-//
-//            CallableStatement cs = conn.prepareCall(sql);
-//            cs.setString(1, );
-//            cs.setString(2, );
-//            cs.executeQuery();
-//
-//            conn.close();
-//        }
-//        catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//            throw new RuntimeException(e);
-//        }
-//        catch(ClassNotFoundException e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
+    private void createUserProfile(User u)
+    {
+        Profile p = u.getProfile();
+        int userID = getUserID(u.getUserName());
+        int companyID = getCompanyID(p.getCompany().getName());
+
+        String sql = " { call spCreateProfile(?,?,?,?,?,?,?,?) } ";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, p.getFullName());
+            cs.setString(2, p.getJobTitle());
+            cs.setString(3, p.getJobTitle());
+            cs.setInt(4, companyID);
+            cs.setInt(5, p.getWage());
+            cs.setInt(6, p.getPayPref());
+            cs.setString(7, p.getDistPref());
+            cs.setInt(8, userID);
+            cs.execute();
+
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean checkUsernameIsUnique(String name)
     {
-        String sql = " { call UserNameUniqeness(?) } ";
+        String sql = " { call UserNameUniqueness(?) } ";
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
@@ -316,6 +327,36 @@ public class DataAccessObject implements DAO
             if(rs.next())
             {
                 return rs.getInt("fldUserID");
+            }
+
+        } catch (SQLException| ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * Method for getting the company's ID through the company's name
+     * @param companyName reads the inputted company name
+     * @return the companyID
+     */
+    @Override
+    public int getCompanyID(String companyName)
+    {
+        String query = "{call GetCompanyID(?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+
+            cs.setString(1, companyName);
+
+            ResultSet rs = cs.executeQuery();
+
+            if(rs.next())
+            {
+                return rs.getInt("fldCompanyID");
             }
 
         } catch (SQLException| ClassNotFoundException e)

@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.DomainModels.Company;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.HelloApplication;
@@ -46,8 +47,8 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
-    private boolean isUnique = false;
-    private boolean isCorrect = false;
+    private boolean isUsernameUnique = false;
+    private boolean isFormCorrect = false;
 
     private String errorColour = "-fx-background-color: red;";
 
@@ -57,10 +58,17 @@ public class CreateProfileViewController
     @FXML
     public void onSaveButtonClick()
     {
-        isCorrect = checkMandatoryFields();
-        isUnique = checkUniqueness(usernameField.getText());
 
-        if (isCorrect && isUnique)
+//        Company c = new Company("Novo Nordisk", "Novo Allé 1, 2880 Bagsværd");
+//        Profile p = new Profile("ErikErik", "Finanser", "Lillegade 8", 24000, 18000,"20km", c);
+//        User u = new User("Erik", "ErikdenRode", p);
+//        createUser(u);
+
+
+        isFormCorrect = checkMandatoryFields();
+        isUsernameUnique = checkUniqueness(usernameField.getText());
+
+        if (isFormCorrect && isUsernameUnique)
         {
             User user = setupUser();
 
@@ -84,6 +92,7 @@ public class CreateProfileViewController
         mandatoryInput.add(jobTitleField);
         mandatoryInput.add(companyField);
         mandatoryInput.add(homeAddressField);
+        mandatoryInput.add(currentSalaryField);
 
         boolean check = true;
         for(TextField t : mandatoryInput)
@@ -94,6 +103,15 @@ public class CreateProfileViewController
                 check = false;
             }
         }
+
+        if(jobFunctionArea.getText().isBlank())
+        {
+            jobFunctionArea.setStyle(errorColour);
+            check = false;
+        }
+
+        //HER SKAL VAERE VALIDERING AF MIN SALARY og DIST PREF I SAMME STIL SOM OVENSTAAENDE
+
 
         return check;
     }
@@ -131,10 +149,10 @@ public class CreateProfileViewController
         profile.setFullName(fullNameField.getText());
         profile.setJobTitle(jobTitleField.getText());
         profile.setHomeAddress(homeAddressField.getText());
-        profile.setWage(Integer.parseInt(minSalaryComboBox.getValue()));
+        profile.setWage(Integer.parseInt(currentSalaryField.getText()));
         profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
         profile.setDistPref(distancePrefComboBox.getValue());
-        profile.setSwappingStatus(true);
+        profile.setCompany(new Company(companyField.getText()));
 
         return profile;
     }
