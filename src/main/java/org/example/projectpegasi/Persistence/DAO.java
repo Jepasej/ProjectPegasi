@@ -23,4 +23,6 @@ public interface DAO
     int getProfileID(int userID);
 
     List<String> getProfileInformation(int profileID);
+
+    boolean updateSwappingStatus(int profileID, Boolean swappingStatus);
 }

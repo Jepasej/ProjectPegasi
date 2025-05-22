@@ -68,6 +68,15 @@ public class ProfileViewController
         boolean newSwappingStatus = !currentSwappingStatus;
 
         boolean isUpdated = dao.updateSwappingStatus(profileID, newSwappingStatus);
+
+        if(isUpdated)
+        {
+            swappingStatusLbl.setText(newSwappingStatus ? "Interested" : "Not Interested");
+        }
+        else
+        {
+            System.out.println("Failed to update swapping status");
+        }
     }
 
     private void loadRecentMatchesInListView()

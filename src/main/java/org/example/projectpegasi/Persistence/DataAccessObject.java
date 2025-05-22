@@ -405,4 +405,28 @@ public class DataAccessObject implements DAO
         }
         return -1;
     }
+
+    @Override
+    public boolean updateSwappingStatus(int profileID, Boolean swappingStatus)
+    {
+        String query = "{call UpdateSwappingStatus(?,?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setInt(1, profileID);
+            clStmt.setBoolean(2, swappingStatus);
+
+            int rowsAffected = clStmt.executeUpdate();
+            conn.close();
+            return rowsAffected > 0;
+
+
+        }catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
