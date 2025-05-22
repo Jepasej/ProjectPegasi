@@ -1,9 +1,6 @@
 package org.example.projectpegasi.Persistence;
 
-import org.example.projectpegasi.DomainModels.Match;
-import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.DomainModels.SwapRequest;
-import org.example.projectpegasi.DomainModels.User;
+import org.example.projectpegasi.DomainModels.*;
 import org.example.projectpegasi.Foundation.DBConnection;
 
 import java.sql.*;
@@ -100,9 +97,74 @@ public class DataAccessObject implements DAO
     }
 
     @Override
-    public void readALl(Object object)
+    public ArrayList readAll(Object object)
     {
+        ArrayList list = new ArrayList();
 
+        if(object instanceof JobFunction)
+        {
+            String sql = " { call spReadAllJobFunctions() } ";
+            try
+            {
+                Connection conn = DBConnection.getInstance().getConnection();
+
+                CallableStatement cs = conn.prepareCall(sql);
+                ResultSet rs = cs.executeQuery();
+
+                while(rs.next())
+                {
+                    JobFunction jobFunction = new JobFunction();
+                    jobFunction.setJobFunction(rs.getString(1));
+                    list.add(jobFunction);
+                }
+
+                conn.close();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+        if(object instanceof Company)
+        {
+            String sql = " { call spReadAllCompanyNames() } ";
+            try
+            {
+                Connection conn = DBConnection.getInstance().getConnection();
+
+                CallableStatement cs = conn.prepareCall(sql);
+                ResultSet rs = cs.executeQuery();
+
+                while(rs.next())
+                {
+                    Company c = new Company();
+                    c.setName(rs.getString(1));
+                    list.add(c);
+                }
+
+                conn.close();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+
+        return list;
     }
 
     @Override
