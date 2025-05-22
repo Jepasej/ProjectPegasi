@@ -63,7 +63,6 @@ public class CreateProfileViewController
         populateMinSalaryBox();
         populateDistanceBox();
         loadJobFunctionBox();
-        loadCompanyBox();
     }
 
     private void loadCompanyBox()
@@ -136,6 +135,8 @@ public class CreateProfileViewController
     @FXML
     public void onCompanySelected()
     {
+        loadCompanyBox();
+
         for(Company c : companies)
         {
             if(c.getName().equals(companyComboBox.getValue()))
@@ -225,8 +226,8 @@ public class CreateProfileViewController
     private boolean checkUniqueness(String name)
     {
         DAO dao = new DataAccessObject();
-        dao.checkUsernameIsUnique(name);
-        return false;
+
+        return dao.checkUsernameIsUnique(name);
     }
 
     private User setupUser()
@@ -254,7 +255,7 @@ public class CreateProfileViewController
         profile.setWage(Integer.parseInt(currentSalaryField.getText()));
         profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
         profile.setDistPref(distancePrefComboBox.getValue());
-        profile.setCompany(new Company(companyField.getText()));
+        profile.setCompany(new Company(companyComboBox.getValue()));
         profile.setJobFunction(jobFunctionArea.getText());
 
         return profile;

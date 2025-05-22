@@ -483,7 +483,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetCompanyID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(query);
 
