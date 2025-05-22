@@ -45,7 +45,7 @@
          <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
                   <ComboBox fx:id="jobFunctionComboBox" promptText="Select job function" />
-               <TextArea prefHeight="100.0" prefWidth="219.0" />
+               <TextArea fx:id="jobFunctionArea" editable="false" prefHeight="100.0" prefWidth="219.0" />
             </children>
          </HBox>
         </VBox>

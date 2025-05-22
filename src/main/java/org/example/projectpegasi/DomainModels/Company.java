@@ -7,6 +7,10 @@ public class Company
 {
     private String name, address;
 
+    public Company(String name)
+    {
+        this.name = name;
+    }
     public Company(String name, String address)
     {
         this.name = name;

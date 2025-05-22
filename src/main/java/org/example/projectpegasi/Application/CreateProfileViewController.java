@@ -47,8 +47,8 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
-    private boolean isUnique = false;
-    private boolean isCorrect = false;
+    private boolean isUsernameUnique = false;
+    private boolean isFormCorrect = false;
 
     private String errorColour = "-fx-background-color: red;";
 
@@ -59,16 +59,16 @@ public class CreateProfileViewController
     public void onSaveButtonClick()
     {
 
-        Company c = new Company("Novo Nordisk", "Novo Allé 1, 2880 Bagsværd");
-        Profile p = new Profile("ErikErik", "Finanser", "Lillegade 8", 24000, 18000,"20km", c);
-        User u = new User("Erik", "ErikdenRode", p);
-        createUser(u);
+//        Company c = new Company("Novo Nordisk", "Novo Allé 1, 2880 Bagsværd");
+//        Profile p = new Profile("ErikErik", "Finanser", "Lillegade 8", 24000, 18000,"20km", c);
+//        User u = new User("Erik", "ErikdenRode", p);
+//        createUser(u);
 
 
-        isCorrect = checkMandatoryFields();
-        isUnique = checkUniqueness(usernameField.getText());
+        isFormCorrect = checkMandatoryFields();
+        isUsernameUnique = checkUniqueness(usernameField.getText());
 
-        if (isCorrect && isUnique)
+        if (isFormCorrect && isUsernameUnique)
         {
             User user = setupUser();
 
@@ -149,10 +149,10 @@ public class CreateProfileViewController
         profile.setFullName(fullNameField.getText());
         profile.setJobTitle(jobTitleField.getText());
         profile.setHomeAddress(homeAddressField.getText());
-        profile.setWage(Integer.parseInt(minSalaryComboBox.getValue()));
+        profile.setWage(Integer.parseInt(currentSalaryField.getText()));
         profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
         profile.setDistPref(distancePrefComboBox.getValue());
-        profile.setSwappingStatus(true);
+        profile.setCompany(new Company(companyField.getText()));
 
         return profile;
     }
