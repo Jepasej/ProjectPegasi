@@ -89,6 +89,32 @@ public class CreateProfileViewController
 
     }
 
+    /**
+     * Adds the selected job function from the ComboBox to the TextArea.
+     * Ensures the same job function is not added multiple times.
+     */
+    @FXML
+    private void onJobFunctionSelected()
+    {
+        String selected = jobFunctionComboBox.getValue();
+        // Check if the selection is valid
+        if (selected != null && !selected.isBlank())
+        {
+            String currentText = jobFunctionArea.getText();
+
+            // Avoid adding duplicates
+            if (!currentText.contains(selected))
+            {
+                if (!currentText.isBlank())
+                {
+                    jobFunctionArea.appendText("\n" + selected);
+                } else {
+                    jobFunctionArea.setText(selected);
+                }
+            }
+        }
+    }
+
     private void populateDistanceBox()
     {
         for(int i = 0; i < 20; i++)
@@ -229,6 +255,7 @@ public class CreateProfileViewController
         profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
         profile.setDistPref(distancePrefComboBox.getValue());
         profile.setCompany(new Company(companyField.getText()));
+        profile.setJobFunction(jobFunctionArea.getText());
 
         return profile;
     }

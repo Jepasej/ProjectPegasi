@@ -44,7 +44,9 @@
             <Label text="Job Function" />
          <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                  <ComboBox fx:id="jobFunctionComboBox" editable="true" promptText="Select job function" />
+                  <ComboBox fx:id="jobFunctionComboBox" editable="true"
+                            promptText="Select job function"
+                            onAction="#onJobFunctionSelected" />
                <TextArea fx:id="jobFunctionArea" editable="false" prefHeight="100.0" prefWidth="219.0" />
             </children>
          </HBox>
