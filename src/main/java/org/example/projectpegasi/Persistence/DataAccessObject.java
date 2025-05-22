@@ -180,10 +180,10 @@ public class DataAccessObject implements DAO
             CallableStatement stmt = conn.prepareCall(query);
             System.out.println("Connected to change");
 
-            stmt.setString(1, text);
-            System.out.println("Change password to " + text);
-            stmt.setInt(2, UserID);
+            stmt.setInt(1, UserID);
             System.out.println("Change password from " + UserID);
+            stmt.setString(2, text);
+            System.out.println("Change password to " + text);
             stmt.execute();
 
             System.out.println("Executed statement");
