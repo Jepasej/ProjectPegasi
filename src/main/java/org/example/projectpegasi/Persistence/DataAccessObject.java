@@ -353,7 +353,8 @@ public class DataAccessObject implements DAO
 
             if(rs.next())
             {
-                return rs.getInt("fldUserID");
+                int profileID = rs.getInt("fldProfileID");
+                return profileID;
             }
             conn.close();
         }

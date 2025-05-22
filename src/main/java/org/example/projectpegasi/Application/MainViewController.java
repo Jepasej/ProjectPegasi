@@ -24,7 +24,7 @@ public class MainViewController
     @FXML
     private Label wrongCredentials;
 
-    private String[] credentials = new String[2];
+    //private String[] credentials = new String[2];
 
     private static int currentUserID; // Static variable to store the users ID
 
@@ -52,12 +52,15 @@ public class MainViewController
     public void onLoginButtonClick()
     {
         boolean isVerified = false;
-        credentials[0] = usernameField.getText();
-        credentials[1] = passwordField.getText();
-        isVerified = validateLogin();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        isVerified = validateLogin(username, password);
 
         if(isVerified)
+        {
+            System.out.println("User ID: " + currentUserID);
             HelloApplication.changeScene(ControllerNames.ProfileView);
+        }
         else
             wrongLogin();
     }
@@ -67,13 +70,18 @@ public class MainViewController
         wrongCredentials.setVisible(true);
     }
 
-    private boolean validateLogin()
+    private boolean validateLogin(String username, String password)
     {
         if(!usernameField.getText().isEmpty() || !passwordField.getText().isEmpty())
         {
             User user = new User(usernameField.getText(), passwordField.getText());
             DAO dao = new DataAccessObject();
-            return dao.verifyUser(user);
+            boolean isVerified = dao.verifyUser(user);
+            if(isVerified)
+            {
+                currentUserID = dao.getUserID(username);
+            }
+            return isVerified;
         }
         return false;
     }
