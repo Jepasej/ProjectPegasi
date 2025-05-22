@@ -1,5 +1,7 @@
 package org.example.projectpegasi.Application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -7,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.Company;
+import org.example.projectpegasi.DomainModels.JobFunction;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.HelloApplication;
@@ -63,10 +66,25 @@ public class CreateProfileViewController
 
     private void loadCompanyBox()
     {
+        DAO dao = new DataAccessObject();
+        List<Company> companyFromDB = dao.readAll(new Company());
+
+        for(Company c : companyFromDB)
+        {
+            companyComboBox.getItems().add(c.getName());
+        }
     }
 
     private void loadJobFunctionBox()
     {
+        DAO dao = new DataAccessObject();
+        List<JobFunction> jobFunctFromDB = dao.readAll(new JobFunction());
+
+        for(JobFunction jf : jobFunctFromDB)
+        {
+            jobFunctionComboBox.getItems().add(jf.getJobFunction());
+        }
+
     }
 
     private void populateDistanceBox()
