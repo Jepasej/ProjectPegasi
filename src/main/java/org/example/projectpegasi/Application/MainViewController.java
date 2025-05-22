@@ -26,6 +26,8 @@ public class MainViewController
 
     private String[] credentials = new String[2];
 
+    private static int currentUserID; // Static variable to store the users ID
+
     /**
      * Method tied to MainView.fxml's CreateProfileButton.
      * Sends the user to the CreateProfileView
@@ -33,6 +35,11 @@ public class MainViewController
     public void onCreateProfileButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.CreateProfileView);
+    }
+
+    public static int getCurrentUserID()
+    {
+        return currentUserID;
     }
 
     /**
@@ -65,9 +72,7 @@ public class MainViewController
         if(!usernameField.getText().isEmpty() || !passwordField.getText().isEmpty())
         {
             User user = new User(usernameField.getText(), passwordField.getText());
-
             DAO dao = new DataAccessObject();
-
             return dao.verifyUser(user);
         }
         return false;

@@ -45,7 +45,7 @@ public class ProfileViewController
         //Change the Swapping Status to true/false depending on what it is currently set to
     }
 
-    public void setUserID()
+    public void setUserID(int userID)
     {
         this.userID = userID;
         getProfileInformation();
@@ -67,7 +67,8 @@ public class ProfileViewController
      * Reads the profile information from our database with a Callable statement
      * the script joins job function and company tables to get all the information
      */
-    private void getProfileInformation() {
+    private void getProfileInformation()
+    {
         DAO dao = new DataAccessObject();
 
         int profileID = dao.getProfileID(userID);
@@ -85,9 +86,5 @@ public class ProfileViewController
             distPrefLbl.setText(profileInfo.get(7));
             swappingStatusLbl.setText(profileInfo.get(8));
         }
-
     }
-
-
-
 }
