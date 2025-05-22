@@ -52,8 +52,44 @@ public class CreateProfileViewController
 
     private String errorColour = "-fx-background-color: red;";
 
+    @FXML
+    public void initialize()
+    {
+        populateMinSalaryBox();
+        populateDistanceBox();
+        loadJobFunctionBox();
+        loadCompanyBox();
+    }
+
+    private void loadCompanyBox()
+    {
+    }
+
+    private void loadJobFunctionBox()
+    {
+    }
+
+    private void populateDistanceBox()
+    {
+        for(int i = 0; i < 20; i++)
+        {
+            int dist = i*5;
+            distancePrefComboBox.getItems().add(dist + " km");
+        }
+    }
+
+    private void populateMinSalaryBox()
+    {
+        for(int i = 0; i < 50; i++)
+        {
+            int sal = i*1000;
+            minSalaryComboBox.getItems().add(String.valueOf(sal));
+        }
+    }
+
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
+     * Creates a User and a Profile from user input.
      */
     @FXML
     public void onSaveButtonClick()
@@ -65,7 +101,7 @@ public class CreateProfileViewController
 //        createUser(u);
 
 
-        isFormCorrect = checkMandatoryFields();
+        isFormCorrect = checkFields();
         isUsernameUnique = checkUniqueness(usernameField.getText());
 
         if (isFormCorrect && isUsernameUnique)
@@ -81,7 +117,7 @@ public class CreateProfileViewController
     /**
      * Verifies whether fields denoted as Mandatory in UI have been filled out.
      */
-    private boolean checkMandatoryFields()
+    private boolean checkFields()
     {
         //Create LinkedList of mandatory inputs.
         List<TextField> mandatoryInput = new LinkedList<>();
@@ -95,6 +131,7 @@ public class CreateProfileViewController
         mandatoryInput.add(currentSalaryField);
 
         boolean check = true;
+
         for(TextField t : mandatoryInput)
         {
             if(t.getText().isBlank())
@@ -112,6 +149,13 @@ public class CreateProfileViewController
 
         //HER SKAL VAERE VALIDERING AF MIN SALARY og DIST PREF I SAMME STIL SOM OVENSTAAENDE
 
+        if(!passwordField.getText().equals(repeatPasswordField.getText()))
+        {
+            passwordField.setStyle(errorColour);
+            passwordField.clear();
+            repeatPasswordField.setStyle(errorColour);
+            repeatPasswordField.clear();
+        }
 
         return check;
     }
@@ -137,6 +181,7 @@ public class CreateProfileViewController
 
         Profile profile = setupProfile();
 
+        
         user.setProfile(profile);
 
         return user;
