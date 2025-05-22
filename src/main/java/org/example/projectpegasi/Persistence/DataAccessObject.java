@@ -361,4 +361,70 @@ public class DataAccessObject implements DAO
         return -1;
     }
 
+    /**
+     * Retrieves the two most recent matches from the database using a stored procedure.
+     * Calls the stored procedure: {@code GetTwoNewestMatches}.
+     * Returns a list of {@code Match} objects sorted by match date in descending order.
+     *
+     * @return a list containing the two most recent {@code Match} objects,
+     * or an empty list if no matches are found.
+     */
+    public List<Match> getTwoNewestMatches()
+    {
+        List<Match> matches = new ArrayList<>();
+        String query = "{call GetTwoNewestMatches(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+            ResultSet rs = clStmt.executeQuery();
+
+            while(rs.next())
+            {
+                Match match = new Match();
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                matches.add(match);
+            }
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return matches;
+    }
+
+    /**
+     * Retrieves the job title of a profile based on the given profile ID.
+     * Calls the stored procedure: {@code GetJobTitleByProfileID}.
+     * @param profileID the ID of the profile whose job title should be retrieved
+     * @return the job title as a {@code String}, or {@code null} if no job title is found
+     */
+    public String getJobTitleByProfileID(int profileID){
+        String jobTitle = null;
+        String query = "{call GetJobTitleByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            if(rs.next()) {
+                jobTitle = rs.getString("fldJobTitle");
+            }
+            conn.close();
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return jobTitle;
+    }
 }
