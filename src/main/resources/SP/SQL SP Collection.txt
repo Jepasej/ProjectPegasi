@@ -403,3 +403,95 @@ AS
         FROM tblProfile
         WHERE fldUserID = @UserID
     END
+
+GO
+
+CREATE OR ALTER PROCEDURE GetAttributesForMatchView
+    @profileID INT
+AS
+BEGIN
+    SELECT
+        p.fldJobTitle,
+        c.fldCompanyID,
+        c.fldCompanyName
+    FROM tblProfile p
+    JOIN tblCompany c ON p.fldCompanyID = c.fldCompanyID
+    WHERE p.fldProfileID = @profileID;
+END
+
+
+GO
+
+CREATE OR ALTER PROCEDURE GetMatchesForProfile
+    @profileID INT
+AS
+BEGIN
+    SELECT *
+    FROM tblMatches
+    WHERE fldProfileAID = @profileID OR fldProfileBID = @profileID AND fldStateID = 1;
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE GetProfileID
+    @userID INT
+AS
+BEGIN
+    SELECT fldProfileID
+    FROM tblProfile
+    WHERE fldUserID = @userID;
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE GetProfileInfo
+    @profileID INT
+AS
+BEGIN
+    SELECT fldJobTitle, fldCompanyID
+    FROM tblProfile
+    WHERE fldProfileID = @profileID;
+END
+
+go
+
+CREATE OR ALTER PROCEDURE ReadMatchByID (@matchID int)
+as
+begin
+select *
+from tblMatches
+where fldMatchID = @matchID
+end
+
+GO
+
+CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profileBID INT, @stateID INT, @matchDate DATE, @matchResponseDate DATE)
+AS
+BEGIN
+UPDATE tblMatches
+SET
+fldStateID = @stateID,
+fldMatchDate = @matchDate,
+fldMatchResponseDate = @matchResponseDate
+WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
+OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
+END
+
+go
+
+CREATE OR ALTER PROCEDURE DeclineMatchByID (@matchID int)
+as
+begin
+Update tblMatches
+set fldStateID = 4
+where fldMatchID = @matchID
+end
+
+go
+
+CREATE OR ALTER PROCEDURE DeleteRequestByMatchID (@matchID int)
+as
+begin
+delete from tblMatches where fldMatchID = @matchID
+end
+

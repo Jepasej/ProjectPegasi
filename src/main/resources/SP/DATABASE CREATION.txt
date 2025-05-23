@@ -170,3 +170,11 @@ VALUES
         (1, 2, 1, '2025-05-22', NULL, NULL, NULL)
 
 GO
+
+INSERT INTO tblMatches (fldProfileAID, fldProfileBID, fldStateID, fldMatchDate)
+VALUES
+(2, 5, 1, GETDATE()),  -- Frederik Hansen ↔ Emilie Jensen
+(3, 6, 1, GETDATE()),  -- Kasper Nielsen ↔ Lukas Madsen
+(4, 7, 1, GETDATE()),  -- Sofie Sørensen ↔ Mathilde Lauritsen
+(8, 10, 1, GETDATE()), -- Oscar Thomsen ↔ Magnus Bro
+(2, 9, 1, GETDATE());  -- Mads Kristensen ↔ Ida Holm
