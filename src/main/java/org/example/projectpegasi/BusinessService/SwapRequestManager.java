@@ -4,6 +4,8 @@ import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
+import java.time.LocalDate;
+
 /**
  * A class that handles logic related to swap, requests anf matches based on user interaction in the UI
  */
@@ -19,13 +21,12 @@ public class SwapRequestManager {
         if( match!= null)
         {
             SwapRequest swapRequest = new SwapRequest();
-
-            swapRequest.setMatchId(matchID);
+            swapRequest.setMatchId(match.getMatchID());
             swapRequest.setProfileAId(match.getProfileAID());
             swapRequest.setProfileBId(match.getProfileBID());
             swapRequest.setStateId(2);
             swapRequest.setMatchDate(match.getMatchDate());
-            swapRequest.setMatchDateResponse(match.getMatchResponseDate());
+            swapRequest.setMatchDateResponse(java.sql.Date.valueOf(LocalDate.now()));
             dao.saveSwapRequestAndSwapAccept(swapRequest);
         }
         else{

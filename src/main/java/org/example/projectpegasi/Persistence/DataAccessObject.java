@@ -54,12 +54,13 @@ public class DataAccessObject implements DAO
     public void saveSwapRequestAndSwapAccept(SwapRequest request) throws Exception
     {
         Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?)}");
-        stmt.setInt(1, request.getProfileAId());
-        stmt.setInt(2, request.getProfileBId());
-        stmt.setInt(3, request.getStateId());
-        stmt.setDate(4, request.getMatchDate());
-        stmt.setDate(5, request.getMatchDateResponse());
+        CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?,?)}");
+        stmt.setInt(1, request.getMatchId());
+        stmt.setInt(2, request.getProfileAId());
+        stmt.setInt(3, request.getProfileBId());
+        stmt.setInt(4, request.getStateId());
+        stmt.setDate(5, request.getMatchDate());
+        stmt.setDate(6, request.getMatchDateResponse());
         stmt.executeUpdate();
         conn.close();
     }

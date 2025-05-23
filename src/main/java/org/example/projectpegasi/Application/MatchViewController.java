@@ -20,6 +20,7 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MatchViewController {
     @FXML
@@ -31,6 +32,11 @@ public class MatchViewController {
     @FXML
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
 
+    /**
+     * Initializes the MatchView.
+     * Loads all matches for the logged-in user and populates the TableView.
+     * Adds buttons for accepting or declining matches with proper event handling.
+     */
     @FXML
     public void initialize() throws Exception {
         System.out.println("LoginProfileID: " + LoginCredentialsSession.getProfileID());
@@ -85,6 +91,11 @@ public class MatchViewController {
         int LoginProfileID = LoginCredentialsSession.getProfileID();
         DataAccessObject dao = new DataAccessObject();
         List<Match> matches = dao.getMatchesForProfile(LoginProfileID);
+
+        // Filter out matches where state is not 1 (match-State = 1 in database)
+        matches = matches.stream()
+                .filter(match -> match.getStateID() == 1)
+                .collect(Collectors.toList());
         List<MatchDetails> matchDetails = new ArrayList<>();
 
         for (Match match : matches) {
