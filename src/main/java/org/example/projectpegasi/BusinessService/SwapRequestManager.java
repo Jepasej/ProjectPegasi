@@ -4,7 +4,9 @@ import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
-
+/**
+ * A class that handles logic related to swap, requests anf matches based on user interaction in the UI
+ */
 public class SwapRequestManager {
     /**
      * Creates a swaprequest when a user has accepted a match and sets state to "Request" (State = 2) in database

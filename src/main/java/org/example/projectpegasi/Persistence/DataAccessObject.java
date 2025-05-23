@@ -116,19 +116,28 @@ public class DataAccessObject implements DAO
         return matches;
     }
 
+    /**
+     * Retrieves attributes for a profile.
+     * Only job title, company ID and company name which are ready to be shown in matchView.
+     * @param profileID the ID of the profile to get attributes for
+     * @return a Profile object containing job title and company reference (with company ID) and company name.
+     * @throws Exception if the database connection or stored procedure call fails
+     */
     public Profile getAttributesForMatchView(int profileID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
         CallableStatement stmt = conn.prepareCall("{call GetAttributesForMatchView(?)}");
         stmt.setInt(1, profileID);
         ResultSet rs = stmt.executeQuery();
+        // Creates a Profile object and links a Company object with only its ID set
         Profile profile = null;
         while (rs.next()){
             profile = new Profile();
             profile.setJobTitle(rs.getString(1));
-
             int companyID = rs.getInt(2);
+            String companyName = rs.getString(3);
             Company company = new Company();
             company.setID(companyID);
+            company.setName(companyName);
             profile.setCompany(company);
         }
         return profile;
