@@ -260,7 +260,6 @@ CREATE OR ALTER PROCEDURE spUpdateProfile
     @Wage INT,
     @PayPref INT,
     @DistPref NVARCHAR(255),
-    @About NVARCHAR(255),
     @UserID INT
 AS
 BEGIN
@@ -273,7 +272,6 @@ BEGIN
         fldWage = @Wage,
         fldPayPref = @PayPref,
         fldDistPref = @DistPref,
-        fldAbout = @About,
         fldUserID = @UserID
     WHERE fldProfileID = @ProfileID;
 END;
