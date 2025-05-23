@@ -35,31 +35,31 @@
 
         <!-- Job Title -->
         <VBox>
-            <Label text="Job Title  (Mandatory)" />
+            <Label text="Job Title " />
             <TextField fx:id="jobTitleField" promptText="Enter job title" />
         </VBox>
 
         <!-- Job Function -->
         <VBox>
-            <Label text="Job Function (Optional)" />
+            <Label text="Job Function" />
          <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                  <ComboBox fx:id="jobFunctionComboBox" promptText="Select job function" />
-               <TextArea prefHeight="100.0" prefWidth="219.0" />
+                  <ComboBox fx:id="jobFunctionComboBox" editable="true" promptText="Select job function" />
+               <TextArea fx:id="jobFunctionArea" editable="false" prefHeight="100.0" prefWidth="219.0" />
             </children>
          </HBox>
         </VBox>
 
         <!-- Company -->
         <VBox>
-            <Label text="Company (Mandatory)" />
+            <Label text="Company" />
          <TextField fx:id="companyField" editable="false" />
-            <ComboBox fx:id="companyComboBox" promptText="Select company" />
+            <ComboBox fx:id="companyComboBox" editable="true" promptText="Select company" />
         </VBox>
 
         <!-- Home Address -->
         <VBox>
-            <Label text="Home Address  (Mandatory)" />
+            <Label text="Home Address " />
             <TextField fx:id="homeAddressField" promptText="Enter address" />
         </VBox>
 
@@ -77,7 +77,7 @@
 
         <!-- Distance Preference -->
         <VBox>
-            <Label text="Distance Preference From Home (Optional)" />
+            <Label text="Max Distance From Home" />
             <ComboBox fx:id="distancePrefComboBox" promptText="Select distance" />
         </VBox>
 

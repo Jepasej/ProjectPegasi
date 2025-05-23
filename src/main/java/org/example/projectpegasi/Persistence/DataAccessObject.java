@@ -1,8 +1,6 @@
 package org.example.projectpegasi.Persistence;
 
-import org.example.projectpegasi.DomainModels.Match;
-import org.example.projectpegasi.DomainModels.SwapRequest;
-import org.example.projectpegasi.DomainModels.User;
+import org.example.projectpegasi.DomainModels.*;
 import org.example.projectpegasi.Foundation.DBConnection;
 
 import java.sql.*;
@@ -99,9 +97,74 @@ public class DataAccessObject implements DAO
     }
 
     @Override
-    public void readALl(Object object)
+    public ArrayList readAll(Object object)
     {
+        ArrayList list = new ArrayList();
 
+        if(object instanceof JobFunction)
+        {
+            String sql = " { call spReadAllJobFunctions() } ";
+            try
+            {
+                Connection conn = DBConnection.getInstance().getConnection();
+
+                CallableStatement cs = conn.prepareCall(sql);
+                ResultSet rs = cs.executeQuery();
+
+                while(rs.next())
+                {
+                    JobFunction jobFunction = new JobFunction();
+                    jobFunction.setJobFunction(rs.getString(1));
+                    list.add(jobFunction);
+                }
+
+                conn.close();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+        if(object instanceof Company)
+        {
+            String sql = " { call spReadAllCompanyNames() } ";
+            try
+            {
+                Connection conn = DBConnection.getInstance().getConnection();
+
+                CallableStatement cs = conn.prepareCall(sql);
+                ResultSet rs = cs.executeQuery();
+
+                while(rs.next())
+                {
+                    Company c = new Company();
+                    c.setName(rs.getString(1));
+                    list.add(c);
+                }
+
+                conn.close();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+
+        return list;
     }
 
     @Override
@@ -127,7 +190,7 @@ public class DataAccessObject implements DAO
             CallableStatement cs = conn.prepareCall(sql);
             cs.setString(1, u.getUserName());
             cs.setString(2, u.getPassword());
-            cs.executeQuery();
+            cs.execute();
 
             conn.close();
         }
@@ -141,39 +204,49 @@ public class DataAccessObject implements DAO
             e.printStackTrace();
         }
 
-   //     createUserProfile(u.getProfile());
+        createUserProfile(u);
     }
 
-//    private void createUserProfile(Profile p)
-//    {
-//        String sql = " { call NewUserProfile(?,?,?,?,?,?,?) } ";
-//
-//        try
-//        {
-//            Connection conn = DBConnection.getInstance().getConnection();
-//
-//            CallableStatement cs = conn.prepareCall(sql);
-//            cs.setString(1, );
-//            cs.setString(2, );
-//            cs.executeQuery();
-//
-//            conn.close();
-//        }
-//        catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//            throw new RuntimeException(e);
-//        }
-//        catch(ClassNotFoundException e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
+    private void createUserProfile(User u)
+    {
+        Profile p = u.getProfile();
+        int userID = getUserID(u.getUserName());
+        int companyID = getCompanyID(p.getCompany().getName());
+
+        String sql = " { call spCreateProfile(?,?,?,?,?,?,?,?) } ";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setString(1, p.getFullName());
+            cs.setString(2, p.getJobTitle());
+            cs.setString(3, p.getJobTitle());
+            cs.setInt(4, companyID);
+            cs.setInt(5, p.getWage());
+            cs.setInt(6, p.getPayPref());
+            cs.setString(7, p.getDistPref());
+            cs.setInt(8, userID);
+            cs.execute();
+
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean checkUsernameIsUnique(String name)
     {
-        String sql = " { call UserNameUniqeness(?) } ";
+        String sql = " { call UserNameUniqueness(?) } ";
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
@@ -309,7 +382,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetUserID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement clStmt = conn.prepareCall(query);
 
@@ -320,6 +394,37 @@ public class DataAccessObject implements DAO
             if(rs.next())
             {
                 return rs.getInt("fldUserID");
+            }
+            conn.close();
+        }
+        catch (SQLException| ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * Method for getting the company's ID through the company's name
+     * @param companyName reads the inputted company name
+     * @return the companyID
+     */
+    @Override
+    public int getCompanyID(String companyName)
+    {
+        String query = "{call GetCompanyID(?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+
+            cs.setString(1, companyName);
+
+            ResultSet rs = cs.executeQuery();
+
+            if(rs.next())
+            {
+                return rs.getInt("fldCompanyID");
             }
 
         } catch (SQLException| ClassNotFoundException e)
@@ -340,7 +445,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetProfileID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement clStmt = conn.prepareCall(query);
 
@@ -350,9 +456,10 @@ public class DataAccessObject implements DAO
 
             if(rs.next())
             {
-                return rs.getInt("fldUserID");
+                int profileID = rs.getInt("fldProfileID");
+                return profileID;
             }
-
+            conn.close();
         }
         catch (SQLException | ClassNotFoundException e)
         {
@@ -361,6 +468,29 @@ public class DataAccessObject implements DAO
         return -1;
     }
 
+    @Override
+    public boolean updateSwappingStatus(int profileID, Boolean swappingStatus)
+    {
+        String query = "{call UpdateSwappingStatus(?,?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setInt(1, profileID);
+            clStmt.setBoolean(2, swappingStatus);
+
+            int rowsAffected = clStmt.executeUpdate();
+            conn.close();
+            return rowsAffected > 0;
+
+
+        }catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
     /**
      * Retrieves the two most recent matches from the database using the stored procedure: GetTwoNewestMatches
      * @return a list containing the two most recent Match objects,
