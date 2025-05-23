@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public class DBConnection
 {
-    private static final String DATABASEURL = "jdbc:sqlserver://localhost;database=DBJobSwapSystem";
+    private static final String DATABASEURL = "jdbc:sqlserver://localhost;database=DBJobSwapSystem;encrypt=true;trustServerCertificate=true";
     private static final String USERNAME = "sa";
     private static final String PASSWORD = "123456";
 
