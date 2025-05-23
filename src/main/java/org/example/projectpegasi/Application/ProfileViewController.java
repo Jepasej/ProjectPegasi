@@ -106,8 +106,8 @@ public class ProfileViewController
             // Set data from the list into the labels
             profileNameLbl.setText(profileInfo.get(0));
             jobTitleLbl.setText(profileInfo.get(1));
-            //jobFunctionLbl.setText(profileInfo.get(2));
-            //companyNameLbl.setText(profileInfo.get(3));
+            jobFunctionLbl.setText(profileInfo.get(2));
+            companyNameLbl.setText(profileInfo.get(3));
             homeAddressLbl.setText(profileInfo.get(2));
             wageLbl.setText(profileInfo.get(3));
             payPrefLbl.setText(profileInfo.get(4));
