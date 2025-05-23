@@ -217,7 +217,6 @@ BEGIN
         p.fldWage,
         p.fldPayPref,
         p.fldDistPref,
-        p.fldAbout,
         p.fldSwappingStatus,
         jf.fldFunction
     FROM
