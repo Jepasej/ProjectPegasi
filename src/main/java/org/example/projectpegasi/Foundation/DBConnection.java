@@ -59,4 +59,21 @@ public class DBConnection
     {
         return connection;
     }
+
+
+    /**
+     * Closes the current connection
+     * Accessible from other classes
+     */
+    public void closeConnection()
+    {
+        try
+        {
+            connection.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
