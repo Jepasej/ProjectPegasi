@@ -168,8 +168,24 @@ public class CreateProfileViewController
 
             createUser(user);
 
+            clearFields();
+
             HelloApplication.changeScene(ControllerNames.MainView);
         }
+    }
+
+    private void clearFields()
+    {
+        usernameField.clear();
+        passwordField.clear();
+        repeatPasswordField.clear();
+        fullNameField.clear();
+        jobTitleField.clear();
+        companyField.clear();
+        homeAddressField.clear();
+        currentSalaryField.clear();
+        jobFunctionArea.clear();
+
     }
 
     /**
@@ -187,6 +203,7 @@ public class CreateProfileViewController
         mandatoryInput.add(companyField);
         mandatoryInput.add(homeAddressField);
         mandatoryInput.add(currentSalaryField);
+
 
         boolean check = true;
 
@@ -274,6 +291,7 @@ public class CreateProfileViewController
     @FXML
     public void onCancelButtonClick()
     {
+        clearFields();
         HelloApplication.changeScene(ControllerNames.MainView);
     }
 }
