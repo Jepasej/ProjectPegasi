@@ -10,21 +10,17 @@ import java.util.List;
 public class DataAccessObject implements DAO
 {
     /**
-     * Retrieved a match from our database based on the given match ID
-     * @param AmatchID ID of the match to retrieve
+     * Retrieves a match from our database based on the given match ID
+     * @param matchID ID of the match to retrieve
      * @return a match object if found or null if none found.
      * @throws Exception if a database access error occurs.
      */
-    public Match readAMatchID(int AmatchID) throws Exception
+    public Match readAMatchID(int matchID) throws Exception
     {
-        int matchID = 0;
-
-        // SQL query to retrieve the match ID info based on the match ID
-        String sql = "SELECT * FROM tblMatches WHERE fldMatchID=?";
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, AmatchID);
-        ResultSet rs = pstm.executeQuery();
+        CallableStatement stmt = conn.prepareCall("{call ReadMatchByID(?)}");
+        stmt.setInt(1, matchID);
+        ResultSet rs = stmt.executeQuery();
 
         boolean hasMatch = false;
         Match match = null;
@@ -40,7 +36,6 @@ public class DataAccessObject implements DAO
             match.setMatchDate(rs.getDate(5));
             match.setMatchResponseDate(rs.getDate(6));
         }
-
         //If match not found
         if (!hasMatch)
         {
@@ -51,38 +46,46 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Saves a swap request as a new entry in our database when a profile has accepted a match
+     * Saves a swap request or a swap accept as a new entry in our database
+     * when a profile has accepted a match
      * @param request The swap request to be saved
      * @throws Exception if database connection fails
      */
-    public void saveSwapRequest(SwapRequest request) throws Exception
+    public void saveSwapRequestAndSwapAccept(SwapRequest request) throws Exception
     {
-        String sql = "Insert into tblMatches (fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) values(?,?,?,?,?,?)";
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, request.getMatchId());
-        pstm.setInt(2, request.getProfileAId());
-        pstm.setInt(3, request.getProfileBId());
-        pstm.setInt(4, request.getStateId());
-        pstm.setDate(5, request.getMatchDate());
-        pstm.setDate(6, request.getMatchDateResponse());
-        pstm.executeUpdate();
+        CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?)}");
+        stmt.setInt(1, request.getMatchId());
+        stmt.setInt(2, request.getProfileAId());
+        stmt.setInt(3, request.getProfileBId());
+        stmt.setDate(5, request.getMatchDate());
+        stmt.setDate(6, request.getMatchDateResponse());
+        stmt.executeUpdate();
         conn.close();
     }
 
     /**
-     * Deletes a match entry from the database based on the given match ID
-     * @param matchID the ID match to delete
+     * Deletes a match entry or jobSwapRequest from the UI based on the given match ID
+     * @param matchID the ID match to decline
      * @throws Exception if database access happens
      */
-    public void declineMatch(int matchID) throws Exception{
-        String sql = "DELETE FROM tblMatches WHERE fldMatchID=?";
+    public void declineMatchAndRequest(int matchID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, matchID);
-        pstm.executeUpdate();
+        CallableStatement stmt = conn.prepareCall("{call DeclineMatchByID(?)}");
+        stmt.setInt(1, matchID);
+        stmt.executeUpdate();
         conn.close();
     }
+
+
+    public void deleteRequest(int matchID) throws Exception{
+        Connection conn = DBConnection.getInstance().getConnection();
+        CallableStatement stmt = conn.prepareCall("{call DeleteRequestByMatchID(?)}");
+        stmt.setInt(1, matchID);
+        stmt.executeUpdate();
+        conn.close();
+    }
+
 
     @Override
     public void create(Object object)
@@ -134,7 +137,7 @@ public class DataAccessObject implements DAO
         }
         if(object instanceof Company)
         {
-            String sql = " { call spReadAllCompanyNames() } ";
+            String sql = " { call spReadAllCompanies() } ";
             try
             {
                 Connection conn = DBConnection.getInstance().getConnection();
@@ -145,7 +148,10 @@ public class DataAccessObject implements DAO
                 while(rs.next())
                 {
                     Company c = new Company();
-                    c.setName(rs.getString(1));
+                    c.setID(rs.getInt(1));
+                    c.setName(rs.getString(2));
+                    c.setAddress(rs.getString(3));
+
                     list.add(c);
                 }
 
@@ -276,6 +282,69 @@ public class DataAccessObject implements DAO
         }
         return false;
     }
+
+    @Override
+    public String getPassword(int UserID)
+    {
+        String sql = " { call sp_GetUserPasswordByID(?,?) } ";
+        String password = null;
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, UserID);
+            cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
+
+            cs.execute();
+
+            password = cs.getString(2);
+
+            return password;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    @Override
+    public void changePassword(String text, int UserID) throws SQLException, ClassNotFoundException
+    {
+        try
+        {
+            String query = "{call spUpdatePassword(?,?)}";
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement stmt = conn.prepareCall(query);
+            System.out.println("Connected to change");
+
+            stmt.setInt(1, UserID);
+            System.out.println("Change password from " + UserID);
+            stmt.setString(2, text);
+            System.out.println("Change password to " + text);
+            stmt.execute();
+
+            System.out.println("Executed statement");
+
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    
+
 
     /**
      * Method for verification of a user against the database records.
@@ -414,7 +483,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetCompanyID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(query);
 

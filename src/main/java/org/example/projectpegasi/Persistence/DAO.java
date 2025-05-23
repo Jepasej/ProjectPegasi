@@ -5,6 +5,8 @@ import org.example.projectpegasi.DomainModels.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.SQLException;
+
 public interface DAO
 {
     //TO BE UPDATED!
@@ -15,6 +17,12 @@ public interface DAO
     void delete(Object object);
     void createUser(User user);
     boolean checkUsernameIsUnique(String name);
+
+
+    String getPassword(int UserID);
+
+    void changePassword(String string, int UserID) throws SQLException, ClassNotFoundException;
+
     boolean verifyUser(User user);
 
     int getUserID(String userName);
