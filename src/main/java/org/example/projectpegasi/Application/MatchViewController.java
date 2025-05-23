@@ -56,6 +56,8 @@ public class MatchViewController {
                     MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
                         srManager.createSwapRequest(details.getMatchID());
+                        matchTable.getItems().remove(details);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
