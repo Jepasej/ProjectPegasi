@@ -7,12 +7,17 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 import java.time.LocalDate;
 
 /**
- * A class that handles logic related to swap, requests anf matches based on user interaction in the UI
+ * A class that handles logic related to swap, requests and matches based on user interaction in the UI
+ * This class calls the DAO methods to update or retrieve match data in the database,
+ * depending on whether a user accepts, declines, or deletes a request.
  */
 public class SwapRequestManager {
     /**
-     * Creates a swaprequest when a user has accepted a match and sets state to "Request" (State = 2) in database
-     * Gets match data and saves the request using the DataAccessObject.
+     * Creates a swap request when a user accepts a match.
+     * It updates the match state in the database to 'Request' (state = 2)
+     * and sets the current date as the match response date.
+     * @param matchID The ID of the match to update
+     * @throws Exception If a database error occurs
      */
     public void createSwapRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
@@ -26,6 +31,7 @@ public class SwapRequestManager {
             swapRequest.setProfileBId(match.getProfileBID());
             swapRequest.setStateId(2);
             swapRequest.setMatchDate(match.getMatchDate());
+            // Set today's date as the response date when user clicks 'accept'
             swapRequest.setMatchDateResponse(java.sql.Date.valueOf(LocalDate.now()));
             dao.saveSwapRequestAndSwapAccept(swapRequest);
         }
@@ -35,8 +41,10 @@ public class SwapRequestManager {
     }
 
     /**
-     * Declines a match by updating its state to 'Declined' (state ID = 4) in the database.
-     * Gets match data and updates the declined match using DataAccessObject.
+     * Declines a match by updating its state to 'Denied' (state = 4) in the database.
+     * Used when the user clicks '✘' to decline a suggested match.
+     * @param matchID The ID of the match to decline
+     * @throws Exception If a database error occurs
      */
     public void declineMatchAndRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
@@ -44,9 +52,9 @@ public class SwapRequestManager {
     }
 
     /**
-     * Accepts an incoming SwapRequest and makes it into a jobswap.
+     * Accepts an incoming SwapRequest and changes it into a jobswap.
      * Updating it's state to "swap" (state = 3) in the database.
-     * Gets match data and saves the jobswap using the DataAccessObject.
+     * This is when both users agree to swap jobs.
      */
     public void acceptSwapRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
@@ -70,8 +78,10 @@ public class SwapRequestManager {
     }
 
     /**
-     * Deletes an entry from tbl Matches when a user deletes their own outgoing requests
-     * Gets request data and deletes it using the DataAccessObject.
+     * Deletes an outgoing request from the system.
+     * Used when a user regrets their send request and clicks 'delete'.
+     * @param matchID The ID of the match/request to delete
+     * @throws Exception If a database error occurs
      */
     public void deleteSwapRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();

@@ -12,7 +12,7 @@ public class DataAccessObject implements DAO
     /**
      * Retrieves a match from our database based on the given match ID
      * @param matchID ID of the match to retrieve
-     * @return a match object if found or null if none found.
+     * @return a Match object if found, otherwise null.
      * @throws Exception if a database access error occurs.
      */
     public Match readAMatchID(int matchID) throws Exception
@@ -46,10 +46,10 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Saves a swap request or a swap accept as a new entry in our database
-     * when a profile has accepted a match
-     * @param request The swap request to be saved
-     * @throws Exception if database connection fails
+     * Updates an existing match or request entry in the database based on an accept has been made.
+     * Sets the match and response dates and updates the state.
+     * @param request The swapRequest with updated match info.
+     * @throws Exception if a database access error occurs.
      */
     public void saveSwapRequestAndSwapAccept(SwapRequest request) throws Exception
     {
@@ -66,9 +66,10 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Deletes a match entry or jobSwapRequest from the UI based on the given match ID
-     * @param matchID the ID match to decline
-     * @throws Exception if database access error happens
+     * Updates the match in the database to state 4 (denied) based on the given match ID.
+     * Triggered when a user declines a match in the UI.
+     * @param matchID the ID of the match that has been decline
+     * @throws Exception If a database access error occurs.
      */
     public void declineMatchAndRequest(int matchID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
@@ -79,9 +80,9 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Deletes a request from the database based on the given matchID
+     * Permanently deletes a request from the database based on the given matchID
      * @param matchID The ID match to be deleted
-     * @throws Exception if data access error happens
+     * @throws Exception if data access error occurs
      */
     public void deleteRequest(int matchID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();
@@ -92,10 +93,10 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Gets all matches for the logged in profile
-     * @param profileID The profile for which to get matches for
-     * @return all the matches for this profile
-     * @throws Exception if data aceess error happens
+     * Retrieves all matches for the logged-in profile from the database (state 1 = Match).
+     * @param profileID The ID of the logged-in profile.
+     * @return all the matches for this profile with state 1 in the database
+     * @throws Exception if data aceess error occurs
      */
     public List<Match> getMatchesForProfile(int profileID) throws Exception{
         List<Match> matches = new ArrayList<>();
@@ -118,11 +119,10 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Retrieves attributes for a profile.
-     * Only job title, company ID and company name which are ready to be shown in matchView.
-     * @param profileID the ID of the profile to get attributes for
-     * @return a Profile object containing job title and company reference (with company ID) and company name.
-     * @throws Exception if the database connection or stored procedure call fails
+     *  Retrieves job title and company information for a profile, used to display match info in the UI.
+     * @param profileID the ID of the profile to get information for
+     * @return a Profile object containing job title and associated company name.
+     * @throws Exception if database access error occurs.
      */
     public Profile getAttributesForMatchView(int profileID) throws Exception{
         Connection conn = DBConnection.getInstance().getConnection();

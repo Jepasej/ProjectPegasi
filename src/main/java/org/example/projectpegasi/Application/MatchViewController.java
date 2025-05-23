@@ -33,9 +33,12 @@ public class MatchViewController {
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
 
     /**
-     * Initializes the MatchView.
-     * Loads all matches for the logged-in user and populates the TableView.
-     * Adds buttons for accepting or declining matches with proper event handling.
+     * Initializes the MatchView scene when the view is opened.
+     * Loads all active matches (state = 1) for the currently logged-in user
+     * Retrieves job title and company name for the other profile in each match
+     * Displays match data in the table
+     * Adds a ✔ button to accept a match (creates a swap request)
+     * Adds a ✘ button to decline a match (updates state to 'denied')
      */
     @FXML
     public void initialize() throws Exception {
@@ -43,8 +46,7 @@ public class MatchViewController {
 
         SwapRequestManager srManager = new SwapRequestManager();
 
-        // Creates a column with a "✔" button that allows the user to accept a match.
-        // When clicked, it creates a swap request using the match's ID.
+        // Creates a column with a "✔" button used to accept a match
         TableColumn<MatchDetails, Void> requestSwapColumnMatch = new TableColumn<>("Request swap");
         requestSwapColumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button requestSwapButton = new Button("✔");
@@ -61,11 +63,8 @@ public class MatchViewController {
                 setGraphic(requestSwapButton); //Show button in cell
             }
         });
-        //matchTable.getColumns().add(requestSwapColumnMatch); // Add the column to table
 
-        // Creates a column with a "✘" button that allows the user to decline a match.
-        // When clicked, the match is removed from the UI, but remains in the database and
-        // changes it's state to "denied".
+        // Creates a column with a "✘" button used to decline a match
         TableColumn<MatchDetails, Void> declineMatchcolumnMatch = new TableColumn<>("Decline match");
         declineMatchcolumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button declineMatchButton = new Button("✘");
@@ -84,22 +83,21 @@ public class MatchViewController {
                 setGraphic(declineMatchButton); //Show button in cell
             }
         });
-        //matchTable.getColumns().add(declineMatchcolumnMatch); // Add the column to table
 
-        //Loads all matches for the looged-in user
-        //Finds the other profiles that matches with logged-in user and prepares to show it in UI
+        // Load all matches for the current user
         int LoginProfileID = LoginCredentialsSession.getProfileID();
         DataAccessObject dao = new DataAccessObject();
         List<Match> matches = dao.getMatchesForProfile(LoginProfileID);
 
-        // Filter out matches where state is not 1 (match-State = 1 in database)
+        // Filter matches where state = 1 (active matches)
         matches = matches.stream()
                 .filter(match -> match.getStateID() == 1)
                 .collect(Collectors.toList());
         List<MatchDetails> matchDetails = new ArrayList<>();
 
+        // Retrieve job title and company info for the other profile in each match
         for (Match match : matches) {
-            int othersProfileID= (match.getProfileAID() == LoginProfileID) ? match.getProfileBID() : match.getProfileAID();
+            int othersProfileID = (match.getProfileAID() == LoginProfileID) ? match.getProfileBID() : match.getProfileAID();
             //Get profileinformation
             Profile profile = dao.getAttributesForMatchView(othersProfileID);
             //
@@ -109,15 +107,19 @@ public class MatchViewController {
 
             matchDetails.add(details);
         }
+        // Convert list to an observable list for TableView
         ObservableList<MatchDetails> observableList = FXCollections.observableArrayList(matchDetails);
 
+        // Bind columns to MatchDetails fields
         jobTitleColumnMatch.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
         companyColumnMatch.setCellValueFactory(new PropertyValueFactory<>("companyName"));
         matchTable.setItems(observableList);
 
+        // Remove existing button columns if anyone present
         matchTable.getColumns().removeIf(col ->
                 col.getText().equals("Request swap") || col.getText().equals("Decline match"));
 
+        // Add button columns only if there are matches
         if (!observableList.isEmpty()) {
             matchTable.getColumns().addAll(requestSwapColumnMatch, declineMatchcolumnMatch);
         }

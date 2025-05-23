@@ -7,10 +7,10 @@ package org.example.projectpegasi.BusinessService;
 public class LoginCredentialsSession {
     private static final int NO_ONE_LOGGED_IN = -1;
 
-    // Stores the userID of the logged-in user
+    // Stores the userID of the logged-in user (from tblUser)
     private static int userID = NO_ONE_LOGGED_IN;
 
-    // Stores the profileID linked to the logged-in user
+    // Stores the profileID linked to the logged-in user (from tblProfile)
     private static int profileID = NO_ONE_LOGGED_IN;
 
     /**
@@ -39,7 +39,7 @@ public class LoginCredentialsSession {
 
     /**
      * Gets the profileID for the current login session.
-     * Gets matches, profile data
+     *  Used for all profile-related operations (e.g., matches, requests).
      * @return the stored profileID
      */
     public static int getProfileID() {

@@ -1,8 +1,5 @@
 package org.example.projectpegasi;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 /**
  * Holds the data to be shown in the MatchView table which contains the job title and company name
  * of the other profile in each match for the logged-in user.
