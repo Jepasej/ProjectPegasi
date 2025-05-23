@@ -15,6 +15,8 @@ public class Profile
     private int profileID;
     private Company company;
 
+    private String jobFunction; //Tilføjet her for at gemme jobfunctions man vælger
+
     public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, Company company)
     {
         this.fullName = fullName;
@@ -116,4 +118,8 @@ public class Profile
     public void setProfileID(int profileID) {
         this.profileID = profileID;
     }
+
+    public String getJobFunction() { return jobFunction; }
+
+    public void setJobFunction(String jobFunction) { this.jobFunction = jobFunction; }
 }

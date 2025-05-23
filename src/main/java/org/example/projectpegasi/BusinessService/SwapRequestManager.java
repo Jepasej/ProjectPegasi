@@ -7,7 +7,7 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 
 public class SwapRequestManager {
     /**
-     * Creates a swaprequest when a user has accepted a match
+     * Creates a swaprequest when a user has accepted a match and sets state to "Request" (State = 2) in database
      * Gets match data and saves the request using the DataAccessObject.
      */
     public void createSwapRequest (int matchID) throws Exception {
@@ -21,11 +21,10 @@ public class SwapRequestManager {
             swapRequest.setMatchId(matchID);
             swapRequest.setProfileAId(match.getProfileAID());
             swapRequest.setProfileBId(match.getProfileBID());
-            swapRequest.setStateId(match.getStateID());
-            swapRequest.setMatchDateResponse(match.getMatchDate());
-            swapRequest.setMatchDate(match.getMatchResponseDate());
-            dao.saveSwapRequest(swapRequest);
-            //Skal her skifte state i DB til Request
+            swapRequest.setStateId(2);
+            swapRequest.setMatchDate(match.getMatchDate());
+            swapRequest.setMatchDateResponse(match.getMatchResponseDate());
+            dao.saveSwapRequestAndSwapAccept(swapRequest);
         }
         else{
             System.out.println("Match not found");
@@ -33,21 +32,48 @@ public class SwapRequestManager {
     }
 
     /**
-     * Deletes a swaprequest when a user has declined a match
-     * Gets match data and deletes the match using the DataAccessObject.
+     * Declines a match by updating its state to 'Declined' (state ID = 4) in the database.
+     * Gets match data and updates the declined match using DataAccessObject.
      */
-    public void declineMatch (int matchID) throws Exception {
+    public void declineMatchAndRequest (int matchID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
-        dao.declineMatch( matchID);
-        //Skal ikke slette entry, men gemme det i DB med state Denied
+        dao.declineMatchAndRequest(matchID);
     }
 
-    // Her skal laves metoder til hvad der skal ske når man i
-    // Incoming requests:
-    // 1. Trykker på accept request - Hent MatchID fra tblMatches i DB og sørg for det bliver opdateret til
-    // et jobswap - Ændre state til Swap? Sendes til HR?
-    // 2. Trykker på Decline request - Hent MatchID fra tbl Matches i DB og gem entry i DB med state Denied.
-    //
+    /**
+     * Accepts an incoming SwapRequest and makes it into a jobswap.
+     * Updating it's state to "swap" (state = 3) in the database.
+     * Gets match data and saves the jobswap using the DataAccessObject.
+     */
+    public void acceptSwapRequest (int matchID) throws Exception {
+        DataAccessObject dao = new DataAccessObject();
+        Match match = dao.readAMatchID(matchID);
+
+        if( match!= null)
+        {
+            SwapRequest swapRequest = new SwapRequest();
+
+            swapRequest.setMatchId(matchID);
+            swapRequest.setProfileAId(match.getProfileAID());
+            swapRequest.setProfileBId(match.getProfileBID());
+            swapRequest.setStateId(3);
+            swapRequest.setMatchDate(match.getMatchDate());
+            swapRequest.setMatchDateResponse(match.getMatchResponseDate());
+            dao.saveSwapRequestAndSwapAccept(swapRequest);
+        }
+        else{
+            System.out.println("Request not found");
+        }
+    }
+
     // Outgoing Requests:
     // 1. Trykker på delete request - Hent MatchID fra tbl Matches i DB og slet entry i DB.
+    /**
+     * Deletes an entry from tbl Matches when a user deletes their own outgoing requests
+     * Gets request data and deletes it using the DataAccessObject.
+     */
+    public void deleteSwapRequest (int matchID) throws Exception {
+        DataAccessObject dao = new DataAccessObject();
+        dao.deleteRequest(matchID);
+    }
 }
