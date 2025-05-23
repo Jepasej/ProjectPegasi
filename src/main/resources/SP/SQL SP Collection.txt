@@ -385,7 +385,7 @@ END;
 
 GO
 
-CREATE PROCEDURE UserNameUniqueness (@name VARCHAR(20))
+CREATE OR ALTER PROCEDURE UserNameUniqueness (@name VARCHAR(20))
 
 AS
 
@@ -399,7 +399,7 @@ AS
 
 GO
 
-CREATE PROCEDURE spUpdatePassword
+CREATE OR ALTER PROCEDURE spUpdatePassword
     @UserID INT,
     @NewPassword NVARCHAR(20)
 AS
@@ -414,7 +414,7 @@ BEGIN
 
 GO
 
-CREATE PROCEDURE spReadAllCompanies
+CREATE OR ALTER PROCEDURE spReadAllCompanies
 AS
     BEGIN
         SELECT * FROM tblCompany
@@ -422,7 +422,7 @@ AS
 
 GO
 
-CREATE PROCEDURE GetProfileID @UserID INT
+CREATE OR ALTER PROCEDURE GetProfileID @UserID INT
 AS
     BEGIN
         SELECT fldProfileID
