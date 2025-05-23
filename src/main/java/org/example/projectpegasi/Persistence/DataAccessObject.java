@@ -366,6 +366,7 @@ public class DataAccessObject implements DAO
      * @return a list containing the two most recent Match objects,
      * or an empty list if no matches are found.
      */
+    @Override
     public List<Match> getTwoNewestMatchesByProfileID(int profileID)
     {
         List<Match> matches = new ArrayList<>();
@@ -403,6 +404,7 @@ public class DataAccessObject implements DAO
      * @param profileID the ID of the profile whose job title should be retrieved
      * @return the job title as a String, or null if no job title is found
      */
+    @Override
     public String getJobTitleByProfileID(int profileID){
         String jobTitle = null;
         String query = "{call GetJobTitleByProfileID(?)}";
@@ -433,6 +435,7 @@ public class DataAccessObject implements DAO
      * @param profileID The ID of the profile for which to retrieve recent match requests.
      * @return A list containing up to two most recent Match objects representing incoming requests.
      */
+    @Override
     public List<Match>getTwoNewestRequestsByProfileID(int profileID)
     {
         List<Match> requests = new ArrayList<>();
