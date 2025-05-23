@@ -106,14 +106,14 @@ public class ProfileViewController
             // Set data from the list into the labels
             profileNameLbl.setText(profileInfo.get(0));
             jobTitleLbl.setText(profileInfo.get(1));
-            jobFunctionLbl.setText(profileInfo.get(2));
-            companyNameLbl.setText(profileInfo.get(3));
-            homeAddressLbl.setText(profileInfo.get(4));
-            wageLbl.setText(profileInfo.get(5));
-            payPrefLbl.setText(profileInfo.get(6));
-            distPrefLbl.setText(profileInfo.get(7));
+            //jobFunctionLbl.setText(profileInfo.get(2));
+            //companyNameLbl.setText(profileInfo.get(3));
+            homeAddressLbl.setText(profileInfo.get(2));
+            wageLbl.setText(profileInfo.get(3));
+            payPrefLbl.setText(profileInfo.get(4));
+            distPrefLbl.setText(profileInfo.get(5));
 
-            int swappingStatusBit = Integer.parseInt(profileInfo.get(8));
+            int swappingStatusBit = Integer.parseInt(profileInfo.get(6));
             //Shorthand notation If-else statement - (Condition) ? If : Else
             String swappingStatusText = (swappingStatusBit == 1) ? "Interested" : "Not Interested";
             swappingStatusLbl.setText(swappingStatusText);

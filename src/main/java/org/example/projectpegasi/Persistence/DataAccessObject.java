@@ -55,11 +55,11 @@ public class DataAccessObject implements DAO
     {
         Connection conn = DBConnection.getInstance().getConnection();
         CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?)}");
-        stmt.setInt(1, request.getMatchId());
-        stmt.setInt(2, request.getProfileAId());
-        stmt.setInt(3, request.getProfileBId());
-        stmt.setDate(5, request.getMatchDate());
-        stmt.setDate(6, request.getMatchDateResponse());
+        stmt.setInt(1, request.getProfileAId());
+        stmt.setInt(2, request.getProfileBId());
+        stmt.setInt(3, request.getStateId());
+        stmt.setDate(4, request.getMatchDate());
+        stmt.setDate(5, request.getMatchDateResponse());
         stmt.executeUpdate();
         conn.close();
     }
@@ -470,8 +470,8 @@ public class DataAccessObject implements DAO
                 // Get data from result set
                 String fullName = rs.getString("fldFullName");
                 String jobTitle = rs.getString("fldJobTitle");
-                String jobFunction = rs.getString("fldFunction");
-                String companyName = rs.getString("fldCompanyName");
+                //String jobFunction = rs.getString("fldFunction");
+                //String companyName = rs.getString("fldCompanyName");
                 String homeAddress = rs.getString("fldHomeAddress");
                 String wage = rs.getString("fldWage");
                 String payPref = rs.getString("fldPayPref");
@@ -481,8 +481,8 @@ public class DataAccessObject implements DAO
                 // Set data from result set into the labels
                 profileInfo.add(fullName);
                 profileInfo.add(jobTitle);
-                profileInfo.add(jobFunction);
-                profileInfo.add(companyName);
+                //profileInfo.add(jobFunction);
+                //profileInfo.add(companyName);
                 profileInfo.add(homeAddress);
                 profileInfo.add(wage);
                 profileInfo.add(payPref);

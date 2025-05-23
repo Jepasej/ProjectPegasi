@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.BusinessService.LoginCredentialsSession;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
@@ -77,6 +78,10 @@ public class MainViewController
             if(isVerified)
             {
                 currentUserID = dao.getUserID(username);
+                LoginCredentialsSession.setUserID(currentUserID);
+
+                int profileID = dao.getProfileID(currentUserID);
+                LoginCredentialsSession.setProfileID(profileID);
             }
             return isVerified;
         }

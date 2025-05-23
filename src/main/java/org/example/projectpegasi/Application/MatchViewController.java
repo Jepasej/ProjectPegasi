@@ -21,10 +21,9 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatchViewController
-{
+public class MatchViewController {
     @FXML
-    private TableView <MatchDetails> matchTable;
+    private TableView<MatchDetails> matchTable;
 
     @FXML
     private TableColumn<MatchDetails, String> jobTitleColumnMatch, companyColumnMatch;
@@ -34,6 +33,8 @@ public class MatchViewController
 
     @FXML
     public void initialize() throws Exception {
+        System.out.println("LoginProfileID: " + LoginCredentialsSession.getProfileID());
+
         SwapRequestManager srManager = new SwapRequestManager();
 
         // Creates a column with a "✔" button that allows the user to accept a match.
@@ -41,19 +42,20 @@ public class MatchViewController
         TableColumn<MatchDetails, Void> requestSwapColumnMatch = new TableColumn<>("Request swap");
         requestSwapColumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button requestSwapButton = new Button("✔");
-                    {
-                        requestSwapButton.setOnAction(event -> {
-                            MatchDetails details = getTableView().getItems().get(getIndex());
-                            try {
-                                srManager.createSwapRequest(details.getMatchID());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        setGraphic(requestSwapButton); //Show button in cell
+
+            {
+                requestSwapButton.setOnAction(event -> {
+                    MatchDetails details = getTableView().getItems().get(getIndex());
+                    try {
+                        srManager.createSwapRequest(details.getMatchID());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                });
+                setGraphic(requestSwapButton); //Show button in cell
+            }
         });
-        matchTable.getColumns().add(requestSwapColumnMatch); // Add the column to table
+        //matchTable.getColumns().add(requestSwapColumnMatch); // Add the column to table
 
         // Creates a column with a "✘" button that allows the user to decline a match.
         // When clicked, the match is removed from the UI, but remains in the database and
@@ -61,6 +63,7 @@ public class MatchViewController
         TableColumn<MatchDetails, Void> declineMatchcolumnMatch = new TableColumn<>("Decline match");
         declineMatchcolumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button declineMatchButton = new Button("✘");
+
             {
                 declineMatchButton.setOnAction(event -> {
                     MatchDetails details = getTableView().getItems().get(getIndex());
@@ -75,7 +78,7 @@ public class MatchViewController
                 setGraphic(declineMatchButton); //Show button in cell
             }
         });
-        matchTable.getColumns().add(declineMatchcolumnMatch); // Add the column to table
+        //matchTable.getColumns().add(declineMatchcolumnMatch); // Add the column to table
 
         //Loads all matches for the looged-in user
         //Finds the other profiles that matches with logged-in user and prepares to show it in UI
@@ -85,18 +88,14 @@ public class MatchViewController
         List<MatchDetails> matchDetails = new ArrayList<>();
 
         for (Match match : matches) {
-            int othersProfileID;
-
-            if(match.getProfileAID() == LoginProfileID) {
-                othersProfileID = match.getProfileBID();
-            }
-            else {
-                othersProfileID = match.getProfileAID();
-            }
+            int othersProfileID= (match.getProfileAID() == LoginProfileID) ? match.getProfileBID() : match.getProfileAID();
             //Get profileinformation
             Profile profile = dao.getAttributesForMatchView(othersProfileID);
             //
             MatchDetails details = new MatchDetails(profile.getJobTitle(), profile.getCompany().getName(), match.getMatchID());
+            System.out.println("Jobtitle: " + profile.getJobTitle() + ", Company: " + profile.getCompany().getName());
+            System.out.println("Total matches added: " + matchDetails.size());
+
             matchDetails.add(details);
         }
         ObservableList<MatchDetails> observableList = FXCollections.observableArrayList(matchDetails);
@@ -104,23 +103,28 @@ public class MatchViewController
         jobTitleColumnMatch.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
         companyColumnMatch.setCellValueFactory(new PropertyValueFactory<>("companyName"));
         matchTable.setItems(observableList);
+
+        matchTable.getColumns().removeIf(col ->
+                col.getText().equals("Request swap") || col.getText().equals("Decline match"));
+
+        if (!observableList.isEmpty()) {
+            matchTable.getColumns().addAll(requestSwapColumnMatch, declineMatchcolumnMatch);
+        }
     }
 
 
+        public void onOutgoingRequestButtonClick ()
+        {
+            HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
+        }
 
+        public void onIncomingRequestButtonClick ()
+        {
+            HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+        }
 
-    public void onOutgoingRequestButtonClick()
-    {
-        HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
+        public void onBackToProfileButtonClick ()
+        {
+            HelloApplication.changeScene(ControllerNames.ProfileView);
+        }
     }
-
-    public void onIncomingRequestButtonClick()
-    {
-        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
-    }
-
-    public void onBackToProfileButtonClick()
-    {
-        HelloApplication.changeScene(ControllerNames.ProfileView);
-    }
-}
