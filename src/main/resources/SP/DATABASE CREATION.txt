@@ -154,3 +154,43 @@ INSERT INTO tblProfileJobFunction(
 		fldJobFunctionID)
 
 VALUES (5, 5)
+
+GO
+
+INSERT INTO tblMatches (
+            fldProfileAID,
+            fldProfileBID,
+            fldStateID,
+            fldMatchDate,
+            fldMatchResponseDate,
+            fldRequestResponseDate,
+            fldSwapResponseDate)
+
+VALUES
+        (1, 2, 1, '2025-05-22', NULL, NULL, NULL)
+
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
