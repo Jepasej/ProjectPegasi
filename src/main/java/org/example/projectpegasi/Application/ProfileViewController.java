@@ -1,23 +1,15 @@
 package org.example.projectpegasi.Application;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import org.example.projectpegasi.BusinessService.ControllerNames;
-import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.Foundation.DBConnection;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class ProfileViewController
 {
@@ -71,6 +63,7 @@ public class ProfileViewController
 
         if(isUpdated)
         {
+            //Shorthand notation If-else statement - (Condition) ? If : Else
             swappingStatusLbl.setText(newSwappingStatus ? "Interested" : "Not Interested");
         }
         else
@@ -79,17 +72,6 @@ public class ProfileViewController
         }
     }
 
-    private void loadRecentMatchesInListView()
-    {
-        //Use stored procedure to sort by match date and show the 2 most recent
-
-    }
-
-    private void loadRecentRequestsInListView()
-    {
-        //Use stored procedure to sort by requested date and show the 2 most recent
-
-    }
 
     /**
      * Reads the profile information from our database with a Callable statement
