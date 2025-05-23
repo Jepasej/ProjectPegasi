@@ -341,23 +341,26 @@ public class DataAccessObject implements DAO
         return false;
     }
 
+    /**
+     * Method to get the password from the database, gets used in EditProfile to compare the actual password with the
+     * user.
+     * @param UserID Uses this to know which user to get the data from
+     * @return password for later use.
+     */
+
     @Override
     public String getPassword(int UserID)
     {
         String sql = " { call sp_GetUserPasswordByID(?,?) } ";
         String password = null;
-
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(sql);
             cs.setInt(1, UserID);
             cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
-
             cs.execute();
-
             password = cs.getString(2);
-
             return password;
         }
         catch (SQLException e)
@@ -367,9 +370,15 @@ public class DataAccessObject implements DAO
         {
             throw new RuntimeException(e);
         }
-
     }
 
+    /**
+     * Changes the password in our database, gets used in EditProfileViewController
+     * @param text
+     * @param UserID
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
 
     @Override
     public void changePassword(String text, int UserID) throws SQLException, ClassNotFoundException
@@ -380,16 +389,13 @@ public class DataAccessObject implements DAO
             Connection conn = DBConnection.getInstance().getConnection();
 
             CallableStatement stmt = conn.prepareCall(query);
-            System.out.println("Connected to change");
-
+            //System.out.println("Connected to change");
             stmt.setInt(1, UserID);
-            System.out.println("Change password from " + UserID);
+            //System.out.println("Change password from " + UserID);
             stmt.setString(2, text);
-            System.out.println("Change password to " + text);
+            //System.out.println("Change password to " + text);
             stmt.execute();
-
-            System.out.println("Executed statement");
-
+            //System.out.println("Executed statement");
         }
         catch (SQLException e)
         {
@@ -398,10 +404,31 @@ public class DataAccessObject implements DAO
         {
             throw new RuntimeException(e);
         }
-
-
     }
-    
+
+    @Override
+    public void SafeEditProfileData(int userID, String newFullName, String jobTitle, String homeAddress, String company, String minSalary, String distancePref)
+    {
+        try
+        {
+            String query = "{call spUpdateProfileData(?,?,?,?,?,?,?)}";
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+            cs.setInt(1, userID);
+            cs.setString(2, newFullName);
+            cs.setString(3, jobTitle);
+            cs.setString(4, homeAddress);
+            cs.setString(5, company);
+            cs.setString(6, minSalary);
+            cs.setString(7, distancePref);
+            cs.execute();
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
 
     /**
@@ -431,8 +458,6 @@ public class DataAccessObject implements DAO
                 return true;
             else if(result.equalsIgnoreCase("false"))
                 return false;
-
-
         }
         catch (SQLException e)
         {
@@ -619,4 +644,6 @@ public class DataAccessObject implements DAO
         }
         return false;
     }
+
+
 }

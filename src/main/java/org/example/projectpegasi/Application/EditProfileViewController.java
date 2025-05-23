@@ -11,6 +11,8 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.sql.SQLException;
 
+import static org.example.projectpegasi.Application.MainViewController.getCurrentUserID;
+
 public class EditProfileViewController
 {
     @FXML
@@ -25,10 +27,17 @@ public class EditProfileViewController
     private Label WrongPasswordLabel;
 
 
-
+    /**
+     * Checks if the old password given in the textfield is the correct one.
+     * Then if the two match, compares both new passwords that were given through TextFields.
+     * After that connects to database again and updates the given UserID with the given password.
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public String OnSafePasswordButtonClick() throws SQLException, ClassNotFoundException
     {
-        int UserID = 1;
+        int UserID = getCurrentUserID();
 
         String OldPasswordWritten = OldPasswordEdit.getText().toString();
 
@@ -38,17 +47,16 @@ public class EditProfileViewController
     String OldPassword = DAOPassword.getPassword(UserID);
     if (OldPassword.equals(OldPasswordWritten))
     {
-        String NewPassword = NewPasswordEdit.getText().toString();
-        String RepeatNewPassword = RepeatNewPasswordEdit.getText().toString();
+        String NewPassword = NewPasswordEdit.getText();
+        String RepeatNewPassword = RepeatNewPasswordEdit.getText();
         //Check of these to are the same
         if (NewPassword.equals(RepeatNewPassword))
         {
             //Replace/UPDATE the Password on the User in database
-            String NewPasswordToUpdate = NewPasswordEdit.getText().toString();
+            String NewPasswordToUpdate = NewPasswordEdit.getText();
             DataAccessObject DAONewPassword = new DataAccessObject();
             DAONewPassword.changePassword(NewPasswordToUpdate,UserID);
-            System.out.println("Change password to" + NewPasswordToUpdate);
-
+            //System.out.println("Change password to" + NewPasswordToUpdate);
         }
         else
         {
@@ -59,13 +67,29 @@ public class EditProfileViewController
     {
         WrongPasswordLabel.setText("Wrong Password");
     }
-
-
         return OldPasswordWritten;
     }
-
-    public void onSaveButtonClickEdit()
+        //Not Tested
+    public void onSaveButtonClickEdit() throws SQLException, ClassNotFoundException
     {
+        int UserID = getCurrentUserID();
+        String newFullName = fullNameFieldEdit.getText(); //Mandatory
+        String jobTitle = jobTitleFieldEdit.getText();
+        String homeAddress = homeAddressFieldEdit.getText();
+        String company = companyComboBoxEdit.getSelectionModel().getSelectedItem();
+        String minSalary = minSalaryComboBoxEdit.getSelectionModel().getSelectedItem();
+        String distancePref = distancePrefComboBoxEdit.getSelectionModel().getSelectedItem();
+
+        if(newFullName.isEmpty())
+        {
+            WrongPasswordLabel.setText("Name is Mandatory, please state your name");
+        }
+        else
+        {
+            DataAccessObject EditProfile = new DataAccessObject();
+            EditProfile.SafeEditProfileData(UserID,newFullName,jobTitle,homeAddress,company,minSalary,distancePref);
+        }
+
 
     }
 
