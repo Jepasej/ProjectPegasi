@@ -34,6 +34,8 @@ public class ProfileViewController
 
     //endregion
 
+    private List<Match> recentMatchesList = new ArrayList<>();
+
     @FXML
     public void initialize()
     {
@@ -67,8 +69,6 @@ public class ProfileViewController
             System.out.println("Failed to update swapping status");
         }
     }
-
-    private List<Match> recentMatchesList = new ArrayList<>();
 
     /**
      * Loads the two most recent matches and displays their job titles in the ListView.
