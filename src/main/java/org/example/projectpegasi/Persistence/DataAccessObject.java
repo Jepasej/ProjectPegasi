@@ -10,79 +10,260 @@ import java.util.List;
 public class DataAccessObject implements DAO
 {
     /**
-     * Retrieved a match from our database based on the given match ID
-     * @param AmatchID ID of the match to retrieve
-     * @return a match object if found or null if none found.
+     * Retrieves a match from our database based on the given match ID
+     * @param matchID ID of the match to retrieve
+     * @return a Match object if found, otherwise null.
      * @throws Exception if a database access error occurs.
      */
-    public Match readAMatchID(int AmatchID) throws Exception
+    public Match readAMatchID(int matchID)
     {
-        int matchID = 0;
-
-        // SQL query to retrieve the match ID info based on the match ID
-        String sql = "SELECT * FROM tblMatches WHERE fldMatchID=?";
-        Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, AmatchID);
-        ResultSet rs = pstm.executeQuery();
-
-        boolean hasMatch = false;
         Match match = null;
-        //If match found
-        while (rs.next())
+        try
         {
-            match = new Match();
-            hasMatch = true;
-            match.setMatchID(rs.getInt(1));
-            match.setProfileAID(rs.getInt(2));
-            match.setProfileBID(rs.getInt(3));
-            match.setStateID(rs.getInt(4));
-            match.setMatchDate(rs.getDate(5));
-            match.setMatchResponseDate(rs.getDate(6));
-        }
+            Connection conn = null;
+            conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call ReadMatchByID(?)}");
+            stmt.setInt(1, matchID);
+            ResultSet rs = stmt.executeQuery();
 
-        //If match not found
-        if (!hasMatch)
+            boolean hasMatch = false;
+            //If match found
+            while (rs.next())
+            {
+                match = new Match();
+                hasMatch = true;
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                match.setMatchDate(rs.getDate(5));
+                match.setMatchResponseDate(rs.getDate(6));
+            }
+            //If match not found
+            if (!hasMatch)
+            {
+                System.out.println("No match found");
+            }
+        }
+        catch (SQLException | ClassNotFoundException e)
         {
-            System.out.println("No match found");
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            }
+            catch (SQLException | ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
 
         return match;
     }
 
     /**
-     * Saves a swap request as a new entry in our database when a profile has accepted a match
-     * @param request The swap request to be saved
-     * @throws Exception if database connection fails
+     * Updates an existing match or request entry in the database based on an accept has been made.
+     * Sets the match and response dates and updates the state.
+     * @param request The swapRequest with updated match info.
+     * @throws Exception if a database access error occurs.
      */
-    public void saveSwapRequest(SwapRequest request) throws Exception
+    public void saveSwapRequestAndSwapAccept(SwapRequest request)
     {
-        String sql = "Insert into tblMatches (fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) values(?,?,?,?,?,?)";
-        Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, request.getMatchId());
-        pstm.setInt(2, request.getProfileAId());
-        pstm.setInt(3, request.getProfileBId());
-        pstm.setInt(4, request.getStateId());
-        pstm.setDate(5, request.getMatchDate());
-        pstm.setDate(6, request.getMatchDateResponse());
-        pstm.executeUpdate();
-        conn.close();
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?,?)}");
+            stmt.setInt(1, request.getMatchId());
+            stmt.setInt(2, request.getProfileAId());
+            stmt.setInt(3, request.getProfileBId());
+            stmt.setInt(4, request.getStateId());
+            stmt.setDate(5, request.getMatchDate());
+            stmt.setDate(6, request.getMatchDateResponse());
+            stmt.executeUpdate();
+        }
+        catch(SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException | ClassNotFoundException e)
+            {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
-     * Deletes a match entry from the database based on the given match ID
-     * @param matchID the ID match to delete
-     * @throws Exception if database access happens
+     * Updates the match in the database to state 4 (denied) based on the given match ID.
+     * Triggered when a user declines a match in the UI.
+     * @param matchID the ID of the match that has been decline
+     * @throws Exception If a database access error occurs.
      */
-    public void declineMatch(int matchID) throws Exception{
-        String sql = "DELETE FROM tblMatches WHERE fldMatchID=?";
-        Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, matchID);
-        pstm.executeUpdate();
-        conn.close();
+    public void declineMatchAndRequest(int matchID) {
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call DeclineMatchByID(?)}");
+            stmt.setInt(1, matchID);
+            stmt.executeUpdate();
+        }
+        catch(SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
     }
+
+    /**
+     * Permanently deletes a request from the database based on the given matchID
+     * @param matchID The ID match to be deleted
+     * @throws Exception if data access error occurs
+     */
+    public void deleteRequest(int matchID) {
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call DeleteRequestByMatchID(?)}");
+            stmt.setInt(1, matchID);
+            stmt.executeUpdate();
+        }
+        catch(SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Retrieves all matches for the logged-in profile from the database (state 1 = Match).
+     * @param profileID The ID of the logged-in profile.
+     * @return all the matches for this profile with state 1 in the database
+     * @throws Exception if data aceess error occurs
+     */
+    public List<Match> getMatchesForProfile(int profileID) {
+        List<Match> matches = new ArrayList<>();
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call GetMatchesForProfile(?)}");
+            stmt.setInt(1, profileID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                Match match = new Match();
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                matches.add(match);
+
+            }
+
+        }
+        catch(SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return matches;
+    }
+
+    /**
+     *  Retrieves job title and company information for a profile, used to display match info in the UI.
+     * @param profileID the ID of the profile to get information for
+     * @return a Profile object containing job title and associated company name.
+     * @throws Exception if database access error occurs.
+     */
+    public Profile getAttributesForMatchView(int profileID) {
+        // Creates a Profile object and links a Company object with only its ID set
+        Profile profile = null;
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call GetAttributesForMatchView(?)}");
+            stmt.setInt(1, profileID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                profile = new Profile();
+                profile.setJobTitle(rs.getString(1));
+                int companyID = rs.getInt(2);
+                String companyName = rs.getString(3);
+                Company company = new Company();
+                company.setID(companyID);
+                company.setName(companyName);
+                profile.setCompany(company);
+            }
+        }
+        catch(SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return profile;
+    }
+
 
     @Override
     public void create(Object object)
@@ -118,7 +299,6 @@ public class DataAccessObject implements DAO
                     list.add(jobFunction);
                 }
 
-                conn.close();
             }
             catch (SQLException e)
             {
@@ -129,12 +309,24 @@ public class DataAccessObject implements DAO
             {
                 e.printStackTrace();
             }
-
+            finally
+            {
+                try
+                {
+                    DBConnection.getInstance().closeConnection();
+                } catch (SQLException e)
+                {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
             return list;
         }
         if(object instanceof Company)
         {
-            String sql = " { call spReadAllCompanyNames() } ";
+            String sql = " { call spReadAllCompanies() } ";
             try
             {
                 Connection conn = DBConnection.getInstance().getConnection();
@@ -145,11 +337,12 @@ public class DataAccessObject implements DAO
                 while(rs.next())
                 {
                     Company c = new Company();
-                    c.setName(rs.getString(1));
+                    c.setID(rs.getInt(1));
+                    c.setName(rs.getString(2));
+                    c.setAddress(rs.getString(3));
+
                     list.add(c);
                 }
-
-                conn.close();
             }
             catch (SQLException e)
             {
@@ -159,6 +352,19 @@ public class DataAccessObject implements DAO
             catch(ClassNotFoundException e)
             {
                 e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    DBConnection.getInstance().closeConnection();
+                } catch (SQLException e)
+                {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
 
             return list;
@@ -191,8 +397,6 @@ public class DataAccessObject implements DAO
             cs.setString(1, u.getUserName());
             cs.setString(2, u.getPassword());
             cs.execute();
-
-            conn.close();
         }
         catch (SQLException e)
         {
@@ -203,7 +407,19 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
         }
-
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
         createUserProfile(u);
     }
 
@@ -229,8 +445,6 @@ public class DataAccessObject implements DAO
             cs.setString(7, p.getDistPref());
             cs.setInt(8, userID);
             cs.execute();
-
-            conn.close();
         }
         catch (SQLException e)
         {
@@ -240,6 +454,19 @@ public class DataAccessObject implements DAO
         catch(ClassNotFoundException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -258,8 +485,6 @@ public class DataAccessObject implements DAO
             rs.next();
             String result = rs.getString(1);
 
-            conn.close();
-
             if(result.equalsIgnoreCase("true"))
                 return true;
             else if(result.equalsIgnoreCase("false"))
@@ -274,8 +499,150 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
         }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
         return false;
     }
+
+    /**
+     * Method to get the password from the database, gets used in EditProfile to compare the actual password with the
+     * user.
+     * @param UserID Uses this to know which user to get the data from
+     * @return password for later use.
+     */
+    @Override
+    public String getPassword(int UserID)
+    {
+        String sql = " { call sp_GetUserPasswordByID(?,?) } ";
+        String password = null;
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(sql);
+            cs.setInt(1, UserID);
+            cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
+            cs.execute();
+            password = cs.getString(2);
+            return password;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
+     * Changes the password in our database, gets used in EditProfileViewController
+     * @param text
+     * @param UserID
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    @Override
+    public void changePassword(String text, int UserID)
+    {
+        try
+        {
+            String query = "{call spUpdatePassword(?,?)}";
+            Connection conn = DBConnection.getInstance().getConnection();
+
+            CallableStatement stmt = conn.prepareCall(query);
+            //System.out.println("Connected to change");
+            stmt.setInt(1, UserID);
+            //System.out.println("Change password from " + UserID);
+            stmt.setString(2, text);
+            //System.out.println("Change password to " + text);
+            stmt.execute();
+            //System.out.println("Executed statement");
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public void SafeEditProfileData(int userID, String newFullName, String jobTitle, String homeAddress, String company, String minSalary, String distancePref)
+    {
+        try
+        {
+            String query = "{call spUpdateProfileData(?,?,?,?,?,?,?)}";
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+            cs.setInt(1, userID);
+            cs.setString(2, newFullName);
+            cs.setString(3, jobTitle);
+            cs.setString(4, homeAddress);
+            cs.setString(5, company);
+            cs.setString(6, minSalary);
+            cs.setString(7, distancePref);
+            cs.execute();
+        }
+        catch (SQLException | ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 
     /**
      * Method for verification of a user against the database records.
@@ -298,14 +665,10 @@ public class DataAccessObject implements DAO
             rs.next();
             String result = rs.getString(1);
 
-            conn.close();
-
             if(result.equalsIgnoreCase("true"))
                 return true;
             else if(result.equalsIgnoreCase("false"))
                 return false;
-
-
         }
         catch (SQLException e)
         {
@@ -315,6 +678,19 @@ public class DataAccessObject implements DAO
         catch(ClassNotFoundException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         return false;
     }
@@ -369,6 +745,19 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
         }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
         return profileInfo;
     }
 
@@ -395,11 +784,24 @@ public class DataAccessObject implements DAO
             {
                 return rs.getInt("fldUserID");
             }
-            conn.close();
+
         }
         catch (SQLException| ClassNotFoundException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         return -1;
     }
@@ -414,7 +816,8 @@ public class DataAccessObject implements DAO
     {
         String query = "{call GetCompanyID(?)}";
 
-        try{
+        try
+        {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(query);
 
@@ -430,6 +833,19 @@ public class DataAccessObject implements DAO
         } catch (SQLException| ClassNotFoundException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         return -1;
     }
@@ -459,11 +875,23 @@ public class DataAccessObject implements DAO
                 int profileID = rs.getInt("fldProfileID");
                 return profileID;
             }
-            conn.close();
         }
         catch (SQLException | ClassNotFoundException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         return -1;
     }
@@ -481,13 +909,25 @@ public class DataAccessObject implements DAO
             clStmt.setBoolean(2, swappingStatus);
 
             int rowsAffected = clStmt.executeUpdate();
-            conn.close();
             return rowsAffected > 0;
 
 
         }catch (SQLException | ClassNotFoundException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().closeConnection();
+            } catch (SQLException e)
+            {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
         return false;
     }

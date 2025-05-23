@@ -50,6 +50,8 @@ public class CreateProfileViewController
     @FXML
     private Button cancelButton;
 
+    List<Company> companies;
+
     private boolean isUsernameUnique = false;
     private boolean isFormCorrect = false;
 
@@ -61,15 +63,14 @@ public class CreateProfileViewController
         populateMinSalaryBox();
         populateDistanceBox();
         loadJobFunctionBox();
-        loadCompanyBox();
     }
 
     private void loadCompanyBox()
     {
         DAO dao = new DataAccessObject();
-        List<Company> companyFromDB = dao.readAll(new Company());
+        companies = dao.readAll(new Company());
 
-        for(Company c : companyFromDB)
+        for(Company c : companies)
         {
             companyComboBox.getItems().add(c.getName());
         }
@@ -85,6 +86,32 @@ public class CreateProfileViewController
             jobFunctionComboBox.getItems().add(jf.getJobFunction());
         }
 
+    }
+
+    /**
+     * Adds the selected job function from the ComboBox to the TextArea.
+     * Ensures the same job function is not added multiple times.
+     */
+    @FXML
+    private void onJobFunctionSelected()
+    {
+        String selected = jobFunctionComboBox.getValue();
+        // Check if the selection is valid
+        if (selected != null && !selected.isBlank())
+        {
+            String currentText = jobFunctionArea.getText();
+
+            // Avoid adding duplicates
+            if (!currentText.contains(selected))
+            {
+                if (!currentText.isBlank())
+                {
+                    jobFunctionArea.appendText("\n" + selected);
+                } else {
+                    jobFunctionArea.setText(selected);
+                }
+            }
+        }
     }
 
     private void populateDistanceBox()
@@ -105,6 +132,19 @@ public class CreateProfileViewController
         }
     }
 
+    @FXML
+    public void onCompanySelected()
+    {
+        loadCompanyBox();
+
+        for(Company c : companies)
+        {
+            if(c.getName().equals(companyComboBox.getValue()))
+            {
+                companyField.setText(c.getName() + ", " + c.getAddress());
+            }
+        }
+    }
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
      * Creates a User and a Profile from user input.
@@ -186,8 +226,8 @@ public class CreateProfileViewController
     private boolean checkUniqueness(String name)
     {
         DAO dao = new DataAccessObject();
-        dao.checkUsernameIsUnique(name);
-        return false;
+
+        return dao.checkUsernameIsUnique(name);
     }
 
     private User setupUser()
@@ -215,7 +255,8 @@ public class CreateProfileViewController
         profile.setWage(Integer.parseInt(currentSalaryField.getText()));
         profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
         profile.setDistPref(distancePrefComboBox.getValue());
-        profile.setCompany(new Company(companyField.getText()));
+        profile.setCompany(new Company(companyComboBox.getValue()));
+        profile.setJobFunction(jobFunctionArea.getText());
 
         return profile;
     }

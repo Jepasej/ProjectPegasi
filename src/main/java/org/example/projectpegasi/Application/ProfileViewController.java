@@ -63,6 +63,7 @@ public class ProfileViewController
 
         if (isUpdated)
         {
+            //Shorthand notation If-else statement - (Condition) ? If : Else
             swappingStatusLbl.setText(newSwappingStatus ? "Interested" : "Not Interested");
         } else
         {
@@ -119,23 +120,22 @@ public class ProfileViewController
          int profileID = dao.getProfileID(userID);
          List<String> profileInfo = dao.getProfileInformation(profileID);
 
-         if (!profileInfo.isEmpty())
-         {
-             // Set data from the list into the labels
-             profileNameLbl.setText(profileInfo.get(0));
-             jobTitleLbl.setText(profileInfo.get(1));
-             jobFunctionLbl.setText(profileInfo.get(2));
-             companyNameLbl.setText(profileInfo.get(3));
-             homeAddressLbl.setText(profileInfo.get(4));
-             wageLbl.setText(profileInfo.get(5));
-             payPrefLbl.setText(profileInfo.get(6));
-             distPrefLbl.setText(profileInfo.get(7));
+        if (!profileInfo.isEmpty()) {
+            // Set data from the list into the labels
+            profileNameLbl.setText(profileInfo.get(0));
+            jobTitleLbl.setText(profileInfo.get(1));
+            jobFunctionLbl.setText(profileInfo.get(2));
+            companyNameLbl.setText(profileInfo.get(3));
+            homeAddressLbl.setText(profileInfo.get(4));
+            wageLbl.setText(profileInfo.get(5));
+            payPrefLbl.setText(profileInfo.get(6));
+            distPrefLbl.setText(profileInfo.get(7));
 
-             int swappingStatusBit = Integer.parseInt(profileInfo.get(8));
-             //Shorthand notation If-else statement - (Condition) ? If : Else
-             String swappingStatusText = (swappingStatusBit == 1) ? "Interested" : "Not Interested";
-             swappingStatusLbl.setText(swappingStatusText);
-         }
+            int swappingStatusBit = Integer.parseInt(profileInfo.get(8));
+            //Shorthand notation If-else statement - (Condition) ? If : Else
+            String swappingStatusText = (swappingStatusBit == 1) ? "Interested" : "Not Interested";
+            swappingStatusLbl.setText(swappingStatusText);
+        }
     }
 
     /**

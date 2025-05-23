@@ -1,12 +1,13 @@
 package org.example.projectpegasi.Application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.BusinessService.SwapRequestManager;
+import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.HelloApplication;
 
@@ -18,13 +19,54 @@ import org.example.projectpegasi.HelloApplication;
 public class OutgoingRequestViewController
 {
     @FXML
-    private TableView<SwapRequest> requestTable;
+    private TableView<Match> requestTable;
 
     @FXML
     private TableColumn<SwapRequest, String> jobTitleColumnMatch, companyColumnMatch, deleteRequestColumn;
 
     @FXML
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
+
+    @FXML
+    public void initialize() {
+
+
+        SwapRequestManager srManager = new SwapRequestManager();
+
+        // Creates a column with a "✘" button that allows the user to delete a request.
+        // When clicked, the request is removed from the UI and database.
+        TableColumn<Match, Void> deleteRequestcolumnMatch = new TableColumn<>("Delete Request");
+        deleteRequestcolumnMatch.setCellFactory(col -> new TableCell<>() {
+            private final Button deleteRequestButton = new Button("✘");
+
+            {
+                deleteRequestButton.setOnAction(event -> {
+                    Match match = getTableView().getItems().get(getIndex());
+                    try {
+                        srManager.deleteSwapRequest(match.getMatchID());
+                        requestTable.getItems().remove(match);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                });
+                setGraphic(deleteRequestButton); //Show button in cell
+            }
+        });
+        requestTable.getColumns().add(deleteRequestcolumnMatch); // Add the column to table
+
+        //Testkode for at tjekke om knapper duer, skal fjernes når view matches virker
+        ObservableList<Match> testMatches = FXCollections.observableArrayList();
+
+        Match testMatch = new Match();
+        testMatch.setMatchID(123);
+        testMatch.setProfileAID(2);
+        testMatch.setProfileBID(3);
+        testMatch.setStateID(1);
+        testMatches.add(testMatch);
+        requestTable.setItems(testMatches);
+    }
+
 
     /**
      * Handles the action when the "Matches" button is clicked.

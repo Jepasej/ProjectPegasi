@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.BusinessService.LoginCredentialsSession;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
@@ -67,6 +68,13 @@ public class MainViewController
         wrongCredentials.setVisible(true);
     }
 
+    /**
+     *  Validates the login by checking the username and password against the database.
+     *  If login is successful, the method sets the userID and profileID in the login session.
+     * @param username the entered user name
+     * @param password the entered password
+     * @return true if log-in is successful, otherwise false.
+     */
     private boolean validateLogin(String username, String password)
     {
         if(!usernameField.getText().isEmpty() || !passwordField.getText().isEmpty())
@@ -76,7 +84,12 @@ public class MainViewController
             boolean isVerified = dao.verifyUser(user);
             if(isVerified)
             {
+                // If verified, get userID from username and save it in the login session
                 currentUserID = dao.getUserID(username);
+                LoginCredentialsSession.setUserID(currentUserID);
+                // Get and store the connected profileID for the user
+                int profileID = dao.getProfileID(currentUserID);
+                LoginCredentialsSession.setProfileID(profileID);
             }
             return isVerified;
         }
