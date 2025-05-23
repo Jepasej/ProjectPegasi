@@ -1,0 +1,156 @@
+DROP DATABASE DBJobSwapSystem
+
+GO
+
+CREATE DATABASE DBJobSwapSystem
+
+GO
+
+USE DBJobSwapSystem
+
+GO
+
+CREATE TABLE tblUser(
+	fldUserName NVARCHAR(20) NOT NULL,
+	fldPassword NVARCHAR(20) NOT NULL,
+	fldUserID INT PRIMARY KEY IDENTITY(1,1)
+	);
+
+CREATE TABLE tblCompany(
+	fldCompanyID INT PRIMARY KEY IDENTITY(1,1),
+	fldCompanyName NVARCHAR(255) NOT NULL,
+	fldCompanyAddress NVARCHAR(255) NOT NULL
+	);
+
+CREATE TABLE tblProfile(
+	fldFullName NVARCHAR(255) NOT NULL,
+	fldJobTitle NVARCHAR(255) NOT NULL,
+	fldHomeAddress NVARCHAR(255) NOT NULL,
+	fldCompanyID INT FOREIGN KEY REFERENCES tblCompany(fldCompanyID) NOT NULL,
+	fldWage INT,
+	fldPayPref INT,
+	fldDistPref NVARCHAR(255),
+	fldSwappingStatus BIT,
+	fldProfileID INT PRIMARY KEY IDENTITY (1,1),
+	fldUserID INT FOREIGN KEY REFERENCES tblUser(fldUserID) NOT NULL
+	);
+
+CREATE TABLE tblJobFunction(
+	fldJobFunctionID INT PRIMARY KEY IDENTITY (1,1),
+	fldFunction NVARCHAR(255) NOT NULL
+	);
+
+	-- Bridge Table between Profile and JobFunction
+CREATE TABLE tblProfileJobFunction(
+	fldJobFunctionID INT FOREIGN KEY REFERENCES tblJobFunction(fldJobFunctionID),
+	fldProfileID INT FOREIGN KEY REFERENCES tblProfile(fldProfileID),
+	fldProfileJobFunctionID INT PRIMARY KEY IDENTITY (1,1)
+	);
+
+CREATE TABLE tblState(
+	fldStateID INT PRIMARY KEY IDENTITY (1,1),
+	fldState NVARCHAR (20) NOT NULL
+	);
+
+CREATE TABLE tblMatches(
+	fldMatchID INT PRIMARY KEY IDENTITY (1,1),
+	fldProfileAID INT FOREIGN KEY REFERENCES tblProfile(fldProfileID),
+	fldProfileBID INT FOREIGN KEY REFERENCES tblProfile(fldProfileID),
+	fldStateID INT FOREIGN KEY REFERENCES tblState(fldStateID),
+	fldMatchDate DATE, -- When the algorithm matches two profiles
+	fldMatchResponseDate DATE, -- When one of the profiles respond to the match
+	fldRequestResponseDate DATE, -- When both profiles have responded to the match/request
+	fldSwapResponseDate DATE, -- When HR (People & Culture) responds to the request
+	);
+
+GO
+
+USE DBJobSwapSystem
+
+-- Insert the states into the tblState table
+INSERT INTO tblState (fldState) VALUES ('Match');
+INSERT INTO tblState (fldState) VALUES ('Request');
+INSERT INTO tblState (fldState) VALUES ('Swap');
+INSERT INTO tblState (fldState) VALUES ('Denied');
+INSERT INTO tblState (fldState) VALUES ('Completed');
+
+-- Verify the inserted data
+SELECT * FROM tblState
+
+GO
+
+INSERT INTO tblUser (fldUserName, fldPassword)
+VALUES 
+('Mads', 'mads123'),
+('Frederik', 'fred456'),
+('Kasper', 'kas789'),
+('Sofie', 'sofie321'),
+('Emilie', 'emi654'),
+('Lukas', 'lukas987'),
+('Mathilde', 'math123'),
+('Oscar', 'oscar456'),
+('Ida', 'ida789'),
+('Magnus', 'mag123');
+
+GO
+
+INSERT INTO tblJobFunction (fldFunction) VALUES
+('Tømrer'),
+('Carpenter'),
+('Pædagog'),
+('Pedagogue'),
+('IT-supporter'),
+('IT-supporter'),
+('Sygeplejerske'),
+('Nurse'),
+('Elektriker'),
+('Electrician');
+
+GO
+
+INSERT INTO tblCompany (fldCompanyName, fldCompanyAddress)
+VALUES 
+('Novo Nordisk', 'Novo Allé 1, 2880 Bagsværd'),
+('Maersk', 'Esplanaden 50, 1263 København K'),
+('Carlsberg Group', 'Ny Carlsberg Vej 100, 1799 København V'),
+('LEGO Group', 'Åstvej 1, 7190 Billund'),
+('Vestas Wind Systems', 'Hedeager 42, 8200 Aarhus N'),
+('Danske Bank', 'Holmens Kanal 2-12, 1092 København K'),
+('Coloplast', 'Holtedam 1, 3050 Humlebæk'),
+('Pandora A/S', 'Havneholmen 17-19, 1561 København V'),
+('DSV A/S', 'Hovedgaden 630, 2640 Hedehusene'),
+('ISS A/S', 'Buddingevej 197, 2860 Søborg');
+
+GO
+
+INSERT INTO tblProfile (
+    fldFullName,
+    fldJobTitle,
+    fldHomeAddress,
+    fldCompanyID,
+    fldWage,
+    fldPayPref,
+    fldDistPref,
+    fldSwappingStatus,
+    fldUserID
+
+)
+VALUES
+(N'Mads Kristensen', N'Softwareudvikler', N'Østerbrogade 45, 2100 København Ø', 1, 48000, 30000, N'3', 1, 1),
+(N'Frederik Hansen', N'Projektleder', N'Banevænget 12, 3460 Birkerød', 2, 52000, 35000, N'4', 1, 2),
+(N'Kasper Nielsen', N'Markedsføringskonsulent', N'Søndergade 88, 8000 Aarhus C', 3, 43000, 29000, N'2', 1, 3),
+(N'Sofie Sørensen', N'HR-specialist', N'Højmarksvej 4, 8700 Horsens', 2, 41000, 31000, N'3', 1, 4),
+(N'Emilie Jensen', N'IT-supporter', N'Vesterbrogade 120, 1620 København V', 1, 39000, 25000, N'5', 1, 5),
+(N'Lukas Madsen', N'UX-designer', N'Rosenørns Allé 32, 1970 Frederiksberg', 3, 45000, 32000, N'4', 1, 6),
+(N'Mathilde Lauritsen', N'Datavarehusanalytiker', N'Kastetvej 100, 9000 Aalborg', 4, 51000, 33000, N'2', 1, 7),
+(N'Oscar Thomsen', N'Kommunikationsrådgiver', N'Venlighedsvej 2, 2800 Kongens Lyngby', 2, 47000, 31000, N'1', 1, 8),
+(N'Ida Holm', N'Netværksadministrator', N'Kirkegade 22, 6700 Esbjerg', 4, 44000, 29000, N'5', 1, 9),
+(N'Magnus Bro', N'Forretningsudvikler', N'Skolegade 7, 6000 Kolding', 1, 55000, 36000, N'3', 1, 10);
+
+GO
+
+INSERT INTO tblProfileJobFunction(
+		fldProfileID,
+		fldJobFunctionID)
+
+VALUES (5, 5)
