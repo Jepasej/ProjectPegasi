@@ -2,7 +2,7 @@ USE DBJobSwapSystem
 
 GO
 
-CREATE PROCEDURE sp_GetUserPasswordByID
+CREATE OR ALTER PROCEDURE sp_GetUserPasswordByID
     @UserID INT,
     @Password NVARCHAR(20) OUTPUT
 AS
@@ -16,7 +16,7 @@ END;
 
 GO
 
-CREATE PROCEDURE GetUserID(@Username NVARCHAR(255))
+CREATE OR ALTER PROCEDURE GetUserID(@Username NVARCHAR(255))
 AS
     BEGIN
         SELECT fldUserID 
@@ -26,11 +26,7 @@ AS
 
 GO
 
-USE DBJobSwapSystem
-
-GO
-
-CREATE PROCEDURE GetCompanyID (@CompanyName NVARCHAR(255))
+CREATE OR ALTER PROCEDURE GetCompanyID (@CompanyName NVARCHAR(255))
 AS
     BEGIN
         SELECT fldCompanyID
@@ -40,7 +36,7 @@ AS
 
 GO
 
-CREATE PROCEDURE spCreateProfile
+CREATE OR ALTER PROCEDURE spCreateProfile
     @FullName NVARCHAR(255),
     @JobTitle NVARCHAR(255),
     @HomeAddress NVARCHAR(255),
@@ -75,7 +71,7 @@ END;
 
 GO
 
-CREATE PROCEDURE NewUser (@UserName NVARCHAR(20), @Password NVARCHAR(20))
+CREATE OR ALTER PROCEDURE NewUser (@UserName NVARCHAR(20), @Password NVARCHAR(20))
 AS
     BEGIN
         INSERT INTO tblUser(fldUserName, fldPassword)
@@ -84,11 +80,8 @@ AS
 
 GO
 
-use DBJobSwapSystem
+CREATE OR ALTER PROCEDURE ReadMatchByID (@matchID int)
 
-GO
-
-create procedure ReadMatchByID (@matchID int)
 as
     begin
         Select * 
@@ -98,7 +91,8 @@ as
 
 GO
 
-create procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date)
+CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date)
+
 as
     begin
         Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) 
@@ -107,7 +101,7 @@ as
 
 GO
 
-create procedure DeclineMatchByID (@matchID int)
+CREATE OR ALTER procedure DeclineMatchByID (@matchID int)
     as
         begin
             Update tblMatches 
@@ -117,7 +111,7 @@ create procedure DeclineMatchByID (@matchID int)
 
 GO
 
-CREATE PROCEDURE CheckPassword
+CREATE OR ALTER PROCEDURE CheckPassword
     @fldUserName VARCHAR(20),
     @fldPassword varchar(20)
 AS
@@ -134,7 +128,7 @@ END
 
 GO
 
-CREATE PROCEDURE UpdateSwappingStatus
+CREATE OR ALTER PROCEDURE UpdateSwappingStatus
     @ProfileID INT,
     @SwappingStatus BIT
 AS
@@ -150,7 +144,7 @@ END;
 
 GO
 
-CREATE PROCEDURE InsertMatch
+CREATE OR ALTER PROCEDURE InsertMatch
     @ProfileAID INT,
     @ProfileBID INT,
     @StateID INT,
@@ -186,7 +180,7 @@ END;
 
 GO
 
-CREATE PROCEDURE DeleteProfile
+CREATE OR ALTER PROCEDURE DeleteProfile
     @ProfileID INT
 AS
 BEGIN
@@ -204,7 +198,7 @@ END;
 
 GO
 
-CREATE PROCEDURE ReadProfileByID
+CREATE OR ALTER PROCEDURE ReadProfileByID
     @ProfileID INT
 AS
 BEGIN
@@ -217,7 +211,6 @@ BEGIN
         p.fldWage,
         p.fldPayPref,
         p.fldDistPref,
-        p.fldAbout,
         p.fldSwappingStatus,
         jf.fldFunction
     FROM
@@ -234,7 +227,7 @@ END;
 
 GO
 
-CREATE PROCEDURE UpdateMatch
+CREATE OR ALTER PROCEDURE UpdateMatch
     @MatchID INT,
     @StateID INT = NULL,
     @MatchResponseDate DATE = NULL,
@@ -258,7 +251,7 @@ END;
 
 GO
 
-CREATE PROCEDURE spUpdateProfile
+CREATE OR ALTER PROCEDURE spUpdateProfile
     @ProfileID INT,
     @FullName NVARCHAR(255),
     @JobTitle NVARCHAR(255),
@@ -287,7 +280,7 @@ END;
 
 GO
 
-CREATE PROCEDURE GetTwoNewestMatches
+CREATE OR ALTER PROCEDURE GetTwoNewestMatches
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -299,7 +292,7 @@ END;
 
 GO
 
-CREATE PROCEDURE GetTwoNewestRequest
+CREATE OR ALTER PROCEDURE GetTwoNewestRequest
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -311,7 +304,7 @@ END;
 
 GO
 
-CREATE PROC UserNameUniqueness(@name varchar(20))
+CREATE OR ALTER PROC UserNameUniqueness(@name varchar(20))
 
 AS
 
@@ -325,7 +318,7 @@ AS
 
 GO
 
-CREATE PROCEDURE GetJobTitleByProfileID
+CREATE OR ALTER PROCEDURE GetJobTitleByProfileID
     @ProfileID INT
 AS
 BEGIN
@@ -336,7 +329,7 @@ END;
 
 GO
 
-alter procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @matchDate date, @matchresponseDate date)
+CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @matchDate date, @matchresponseDate date)
 as
     BEGIN
         Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) 
@@ -345,11 +338,7 @@ as
 
 GO
 
-USE DBJobSwapSystem
-
-GO
-
-CREATE PROCEDURE UpdateSwappingStatus 
+CREATE OR ALTER PROCEDURE UpdateSwappingStatus
                 (@ProfileID INT,
                 @SwappingStatus BIT)
 AS
@@ -361,7 +350,7 @@ AS
 
 GO
 
-CREATE PROCEDURE GetTwoNewestMatchesByProfileID
+CREATE OR ALTER PROCEDURE GetTwoNewestMatchesByProfileID
     @ProfileID INT
 AS
 BEGIN
@@ -373,7 +362,7 @@ END;
 
 GO
 
-CREATE PROC spReadAllJobFunctions
+CREATE OR ALTER PROC spReadAllJobFunctions
 
 AS
     BEGIN
@@ -382,7 +371,7 @@ AS
 
 GO
 
-CREATE PROCEDURE GetTwoNewestRequestsByProfileID
+CREATE OR ALTER PROCEDURE GetTwoNewestRequestsByProfileID
     @ProfileID INT
 AS
 BEGIN
@@ -396,7 +385,7 @@ END;
 
 GO
 
-CREATE PROCEDURE UserNameUniqueness (@name VARCHAR(20))
+CREATE OR ALTER PROCEDURE UserNameUniqueness (@name VARCHAR(20))
 
 AS
 
@@ -410,7 +399,7 @@ AS
 
 GO
 
-CREATE PROCEDURE spUpdatePassword
+CREATE OR ALTER PROCEDURE spUpdatePassword
     @UserID INT,
     @NewPassword NVARCHAR(20)
 AS
@@ -425,7 +414,7 @@ BEGIN
 
 GO
 
-CREATE PROCEDURE spReadAllCompanies
+CREATE OR ALTER PROCEDURE spReadAllCompanies
 AS
     BEGIN
         SELECT * FROM tblCompany
@@ -433,7 +422,7 @@ AS
 
 GO
 
-CREATE PROCEDURE GetProfileID @UserID INT
+CREATE OR ALTER PROCEDURE GetProfileID @UserID INT
 AS
     BEGIN
         SELECT fldProfileID
