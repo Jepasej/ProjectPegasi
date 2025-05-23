@@ -38,6 +38,8 @@ public class ProfileViewController
     public void initialize()
     {
         int userID = MainViewController.getCurrentUserID();
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
         if(userID != 0)
         {
             getProfileInformation(userID);
@@ -57,20 +59,6 @@ public class ProfileViewController
 
         boolean isUpdated = dao.updateSwappingStatus(profileID, newSwappingStatus);
 
-    }
-
-    /**
-     * Sets the current user ID and initializes profile information and the display
-     * of the most recent matches in the ListView.
-     *
-     * @param userID the ID of the currently logged-in user
-     */
-    public void setUserID ( int userID)
-    {
-        this.userID = userID;
-        getProfileInformation(userID);
-        loadRecentMatchesInListView();
-        loadRecentRequestsInListView();
         if (isUpdated)
         {
             swappingStatusLbl.setText(newSwappingStatus ? "Interested" : "Not Interested");
@@ -88,6 +76,7 @@ public class ProfileViewController
     private void loadRecentMatchesInListView ()
     {
         // Use stored procedure to get 2 most recent matches
+        int userID = MainViewController.getCurrentUserID();
         DataAccessObject dao = new DataAccessObject();
         recentMatchesList = dao.getTwoNewestMatchesByProfileID(userID);
 
@@ -107,6 +96,7 @@ public class ProfileViewController
     private void loadRecentRequestsInListView ()
     {
         // Use stored procedure to get 2 most recent requests
+        int userID = MainViewController.getCurrentUserID();
         DataAccessObject dao = new DataAccessObject();
         List<Match> recentRequestsList = dao.getTwoNewestRequestsByProfileID(userID);
         recentRequestLV.getItems().clear();
