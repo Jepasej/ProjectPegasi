@@ -1,4 +1,4 @@
-package org.example.projectpegasi;
+package org.example.projectpegasi.DomainModels;
 
 /**
  * Holds the data to be shown in the MatchView table which contains the job title and company name

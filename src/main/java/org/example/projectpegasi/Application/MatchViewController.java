@@ -9,13 +9,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.projectpegasi.BusinessService.ControllerNames;
-import org.example.projectpegasi.BusinessService.LoginCredentialsSession;
 import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.HelloApplication;
-import org.example.projectpegasi.MatchDetails;
+import org.example.projectpegasi.DomainModels.MatchDetails;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.util.ArrayList;
@@ -42,7 +40,6 @@ public class MatchViewController {
      */
     @FXML
     public void initialize() throws Exception {
-        System.out.println("LoginProfileID: " + LoginCredentialsSession.getProfileID());
 
         SwapRequestManager srManager = new SwapRequestManager();
 
@@ -87,7 +84,7 @@ public class MatchViewController {
         });
 
         // Load all matches for the current user
-        int LoginProfileID = LoginCredentialsSession.getProfileID();
+        int LoginProfileID = MainViewController.getCurrentProfileID();
         DataAccessObject dao = new DataAccessObject();
         List<Match> matches = dao.getMatchesForProfile(LoginProfileID);
 
@@ -104,8 +101,6 @@ public class MatchViewController {
             Profile profile = dao.getAttributesForMatchView(othersProfileID);
             //
             MatchDetails details = new MatchDetails(profile.getJobTitle(), profile.getCompany().getName(), match.getMatchID());
-            System.out.println("Jobtitle: " + profile.getJobTitle() + ", Company: " + profile.getCompany().getName());
-            System.out.println("Total matches added: " + matchDetails.size());
 
             matchDetails.add(details);
         }
