@@ -786,7 +786,7 @@ public class DataAccessObject implements DAO
             }
 
         }
-        catch (SQLException| ClassNotFoundException e)
+        catch (SQLException | ClassNotFoundException e)
         {
             e.printStackTrace();
         }
