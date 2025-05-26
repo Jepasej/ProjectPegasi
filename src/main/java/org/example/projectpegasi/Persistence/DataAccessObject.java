@@ -15,31 +15,43 @@ public class DataAccessObject implements DAO
      * @return a Match object if found, otherwise null.
      * @throws Exception if a database access error occurs.
      */
-    public Match readAMatchID(int matchID) throws Exception
+    public Match readAMatchID(int matchID)
     {
-        Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call ReadMatchByID(?)}");
-        stmt.setInt(1, matchID);
-        ResultSet rs = stmt.executeQuery();
-
-        boolean hasMatch = false;
         Match match = null;
-        //If match found
-        while (rs.next())
+        try
         {
-            match = new Match();
-            hasMatch = true;
-            match.setMatchID(rs.getInt(1));
-            match.setProfileAID(rs.getInt(2));
-            match.setProfileBID(rs.getInt(3));
-            match.setStateID(rs.getInt(4));
-            match.setMatchDate(rs.getDate(5));
-            match.setMatchResponseDate(rs.getDate(6));
+            Connection conn = null;
+            conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call ReadMatchByID(?)}");
+            stmt.setInt(1, matchID);
+            ResultSet rs = stmt.executeQuery();
+
+            boolean hasMatch = false;
+            //If match found
+            while (rs.next())
+            {
+                match = new Match();
+                hasMatch = true;
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                match.setMatchDate(rs.getDate(5));
+                match.setMatchResponseDate(rs.getDate(6));
+            }
+            //If match not found
+            if (!hasMatch)
+            {
+                System.out.println("No match found");
+            }
         }
-        //If match not found
-        if (!hasMatch)
+        catch (SQLException e)
         {
-            System.out.println("No match found");
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
 
         return match;
@@ -51,18 +63,29 @@ public class DataAccessObject implements DAO
      * @param request The swapRequest with updated match info.
      * @throws Exception if a database access error occurs.
      */
-    public void saveSwapRequestAndSwapAccept(SwapRequest request) throws Exception
+    public void saveSwapRequestAndSwapAccept(SwapRequest request)
     {
-        Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?,?)}");
-        stmt.setInt(1, request.getMatchId());
-        stmt.setInt(2, request.getProfileAId());
-        stmt.setInt(3, request.getProfileBId());
-        stmt.setInt(4, request.getStateId());
-        stmt.setDate(5, request.getMatchDate());
-        stmt.setDate(6, request.getMatchDateResponse());
-        stmt.executeUpdate();
-        conn.close();
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?,?)}");
+            stmt.setInt(1, request.getMatchId());
+            stmt.setInt(2, request.getProfileAId());
+            stmt.setInt(3, request.getProfileBId());
+            stmt.setInt(4, request.getStateId());
+            stmt.setDate(5, request.getMatchDate());
+            stmt.setDate(6, request.getMatchDateResponse());
+            stmt.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
     }
 
     /**
@@ -71,12 +94,23 @@ public class DataAccessObject implements DAO
      * @param matchID the ID of the match that has been decline
      * @throws Exception If a database access error occurs.
      */
-    public void declineMatchAndRequest(int matchID) throws Exception{
-        Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call DeclineMatchByID(?)}");
-        stmt.setInt(1, matchID);
-        stmt.executeUpdate();
-        conn.close();
+    public void declineMatchAndRequest(int matchID) {
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call DeclineMatchByID(?)}");
+            stmt.setInt(1, matchID);
+            stmt.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
     }
 
     /**
@@ -84,12 +118,23 @@ public class DataAccessObject implements DAO
      * @param matchID The ID match to be deleted
      * @throws Exception if data access error occurs
      */
-    public void deleteRequest(int matchID) throws Exception{
-        Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call DeleteRequestByMatchID(?)}");
-        stmt.setInt(1, matchID);
-        stmt.executeUpdate();
-        conn.close();
+    public void deleteRequest(int matchID) {
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call DeleteRequestByMatchID(?)}");
+            stmt.setInt(1, matchID);
+            stmt.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
     }
 
     /**
@@ -98,23 +143,35 @@ public class DataAccessObject implements DAO
      * @return all the matches for this profile with state 1 in the database
      * @throws Exception if data aceess error occurs
      */
-    public List<Match> getMatchesForProfile(int profileID) throws Exception{
+    public List<Match> getMatchesForProfile(int profileID) {
         List<Match> matches = new ArrayList<>();
-        Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call GetMatchesForProfile(?)}");
-        stmt.setInt(1, profileID);
-        ResultSet rs = stmt.executeQuery();
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call GetMatchesForProfile(?)}");
+            stmt.setInt(1, profileID);
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()){
-            Match match = new Match();
-            match.setMatchID(rs.getInt(1));
-            match.setProfileAID(rs.getInt(2));
-            match.setProfileBID(rs.getInt(3));
-            match.setStateID(rs.getInt(4));
-            matches.add(match);
+            while (rs.next()){
+                Match match = new Match();
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                matches.add(match);
+
+            }
 
         }
-        conn.close();
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
         return matches;
     }
 
@@ -124,22 +181,35 @@ public class DataAccessObject implements DAO
      * @return a Profile object containing job title and associated company name.
      * @throws Exception if database access error occurs.
      */
-    public Profile getAttributesForMatchView(int profileID) throws Exception{
-        Connection conn = DBConnection.getInstance().getConnection();
-        CallableStatement stmt = conn.prepareCall("{call GetAttributesForMatchView(?)}");
-        stmt.setInt(1, profileID);
-        ResultSet rs = stmt.executeQuery();
+    public Profile getAttributesForMatchView(int profileID) {
         // Creates a Profile object and links a Company object with only its ID set
         Profile profile = null;
-        while (rs.next()){
-            profile = new Profile();
-            profile.setJobTitle(rs.getString(1));
-            int companyID = rs.getInt(2);
-            String companyName = rs.getString(3);
-            Company company = new Company();
-            company.setID(companyID);
-            company.setName(companyName);
-            profile.setCompany(company);
+
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call GetAttributesForMatchView(?)}");
+            stmt.setInt(1, profileID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                profile = new Profile();
+                profile.setJobTitle(rs.getString(1));
+                int companyID = rs.getInt(2);
+                String companyName = rs.getString(3);
+                Company company = new Company();
+                company.setID(companyID);
+                company.setName(companyName);
+                profile.setCompany(company);
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
         return profile;
     }
@@ -179,18 +249,15 @@ public class DataAccessObject implements DAO
                     list.add(jobFunction);
                 }
 
-                conn.close();
             }
             catch (SQLException e)
             {
                 e.printStackTrace();
                 throw new RuntimeException(e);
-            }
-            catch(ClassNotFoundException e)
+            } finally
             {
-                e.printStackTrace();
+                DBConnection.getInstance().closeConnection();
             }
-
             return list;
         }
         if(object instanceof Company)
@@ -212,17 +279,14 @@ public class DataAccessObject implements DAO
 
                     list.add(c);
                 }
-
-                conn.close();
             }
             catch (SQLException e)
             {
                 e.printStackTrace();
                 throw new RuntimeException(e);
-            }
-            catch(ClassNotFoundException e)
+            } finally
             {
-                e.printStackTrace();
+                DBConnection.getInstance().closeConnection();
             }
 
             return list;
@@ -255,19 +319,15 @@ public class DataAccessObject implements DAO
             cs.setString(1, u.getUserName());
             cs.setString(2, u.getPassword());
             cs.execute();
-
-            conn.close();
         }
         catch (SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
+            DBConnection.getInstance().closeConnection();
         }
-
         createUserProfile(u);
     }
 
@@ -293,17 +353,14 @@ public class DataAccessObject implements DAO
             cs.setString(7, p.getDistPref());
             cs.setInt(8, userID);
             cs.execute();
-
-            conn.close();
         }
         catch (SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -322,8 +379,6 @@ public class DataAccessObject implements DAO
             rs.next();
             String result = rs.getString(1);
 
-            conn.close();
-
             if(result.equalsIgnoreCase("true"))
                 return true;
             else if(result.equalsIgnoreCase("false"))
@@ -333,10 +388,9 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
+            DBConnection.getInstance().closeConnection();
         }
         return false;
     }
@@ -347,7 +401,6 @@ public class DataAccessObject implements DAO
      * @param UserID Uses this to know which user to get the data from
      * @return password for later use.
      */
-
     @Override
     public String getPassword(int UserID)
     {
@@ -366,9 +419,9 @@ public class DataAccessObject implements DAO
         catch (SQLException e)
         {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e)
+        } finally
         {
-            throw new RuntimeException(e);
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -379,9 +432,8 @@ public class DataAccessObject implements DAO
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-
     @Override
-    public void changePassword(String text, int UserID) throws SQLException, ClassNotFoundException
+    public void changePassword(String text, int UserID)
     {
         try
         {
@@ -400,9 +452,9 @@ public class DataAccessObject implements DAO
         catch (SQLException e)
         {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e)
+        } finally
         {
-            throw new RuntimeException(e);
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -423,10 +475,14 @@ public class DataAccessObject implements DAO
             cs.setString(7, distancePref);
             cs.execute();
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -452,8 +508,6 @@ public class DataAccessObject implements DAO
             rs.next();
             String result = rs.getString(1);
 
-            conn.close();
-
             if(result.equalsIgnoreCase("true"))
                 return true;
             else if(result.equalsIgnoreCase("false"))
@@ -463,10 +517,9 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
+            DBConnection.getInstance().closeConnection();
         }
         return false;
     }
@@ -515,11 +568,14 @@ public class DataAccessObject implements DAO
                 profileInfo.add(distPref);
                 profileInfo.add(swappingStatus);
             }
-            conn.close();
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
         return profileInfo;
     }
@@ -547,11 +603,15 @@ public class DataAccessObject implements DAO
             {
                 return rs.getInt("fldUserID");
             }
-            conn.close();
+
         }
-        catch (SQLException| ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
         return -1;
     }
@@ -580,9 +640,13 @@ public class DataAccessObject implements DAO
                 return rs.getInt("fldCompanyID");
             }
 
-        } catch (SQLException| ClassNotFoundException e)
+        } catch (SQLException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
         return -1;
     }
@@ -612,11 +676,14 @@ public class DataAccessObject implements DAO
                 int profileID = rs.getInt("fldProfileID");
                 return profileID;
             }
-            conn.close();
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
         return -1;
     }
@@ -634,13 +701,16 @@ public class DataAccessObject implements DAO
             clStmt.setBoolean(2, swappingStatus);
 
             int rowsAffected = clStmt.executeUpdate();
-            conn.close();
             return rowsAffected > 0;
 
 
-        }catch (SQLException | ClassNotFoundException e)
+        }catch (SQLException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
         }
         return false;
     }

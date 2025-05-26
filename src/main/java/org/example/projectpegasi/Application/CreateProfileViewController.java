@@ -95,6 +95,8 @@ public class CreateProfileViewController
     @FXML
     private void onJobFunctionSelected()
     {
+        loadJobFunctionBox();
+
         String selected = jobFunctionComboBox.getValue();
         // Check if the selection is valid
         if (selected != null && !selected.isBlank())
@@ -152,13 +154,6 @@ public class CreateProfileViewController
     @FXML
     public void onSaveButtonClick()
     {
-
-//        Company c = new Company("Novo Nordisk", "Novo Allé 1, 2880 Bagsværd");
-//        Profile p = new Profile("ErikErik", "Finanser", "Lillegade 8", 24000, 18000,"20km", c);
-//        User u = new User("Erik", "ErikdenRode", p);
-//        createUser(u);
-
-
         isFormCorrect = checkFields();
         isUsernameUnique = checkUniqueness(usernameField.getText());
 

@@ -23,40 +23,62 @@ public class DBConnection
     /**
      * Private constructor that initializes the database connection.
      * Called internally via the getInstance() method.
-     *
-     * @throws SQLException if the connection cannot be established.
-     * @throws ClassNotFoundException if the JDBC driver is not found.
      */
-    private DBConnection() throws SQLException, ClassNotFoundException
+    private DBConnection()
     {
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        this.connection = DriverManager.getConnection(DATABASEURL, USERNAME, PASSWORD);
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            this.connection = DriverManager.getConnection(DATABASEURL, USERNAME, PASSWORD);
+        } catch (ClassNotFoundException | SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * Returns the singleton instance of DBConnection.
      * If no instance exists or the connection is closed, a new one is created.
      *
-     * @return the singleton DBConnection instance
-     * @throws SQLException if the connection cannot be established.
-     * @throws ClassNotFoundException if the JDBC driver is not found.
+     * @return the singleton DBConnection instance, or null if connection could not be established
      */
-    public static DBConnection getInstance() throws SQLException, ClassNotFoundException
+    public static DBConnection getInstance()
     {
-        if(instance == null || instance.getConnection().isClosed())
+        try {
+            if (instance == null || instance.getConnection() == null || instance.getConnection().isClosed())
+            {
+                instance = new DBConnection();
+            }
+        } catch (SQLException e)
         {
-            instance = new DBConnection();
+            e.printStackTrace();
         }
         return instance;
     }
 
     /**
      * Returns the active SQL Connection object.
-     *
-     * @return the current database connection
      */
     public Connection getConnection()
     {
         return connection;
+    }
+
+
+    /**
+     * Closes the current connection
+     * Accessible from other classes
+     */
+    public void closeConnection()
+    {
+        try
+        {
+            connection.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 }
