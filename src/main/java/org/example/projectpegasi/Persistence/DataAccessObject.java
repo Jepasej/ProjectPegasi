@@ -45,20 +45,13 @@ public class DataAccessObject implements DAO
                 System.out.println("No match found");
             }
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            }
-            catch (SQLException | ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
 
         return match;
@@ -84,21 +77,14 @@ public class DataAccessObject implements DAO
             stmt.setDate(6, request.getMatchDateResponse());
             stmt.executeUpdate();
         }
-        catch(SQLException | ClassNotFoundException e)
+        catch(SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException | ClassNotFoundException e)
-            {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -116,23 +102,14 @@ public class DataAccessObject implements DAO
             stmt.setInt(1, matchID);
             stmt.executeUpdate();
         }
-        catch(SQLException | ClassNotFoundException e)
+        catch(SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -149,23 +126,14 @@ public class DataAccessObject implements DAO
             stmt.setInt(1, matchID);
             stmt.executeUpdate();
         }
-        catch(SQLException | ClassNotFoundException e)
+        catch(SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -195,23 +163,14 @@ public class DataAccessObject implements DAO
             }
 
         }
-        catch(SQLException | ClassNotFoundException e)
+        catch(SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return matches;
     }
@@ -243,23 +202,14 @@ public class DataAccessObject implements DAO
                 profile.setCompany(company);
             }
         }
-        catch(SQLException | ClassNotFoundException e)
+        catch(SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return profile;
     }
@@ -304,23 +254,9 @@ public class DataAccessObject implements DAO
             {
                 e.printStackTrace();
                 throw new RuntimeException(e);
-            }
-            catch(ClassNotFoundException e)
+            } finally
             {
-                e.printStackTrace();
-            }
-            finally
-            {
-                try
-                {
-                    DBConnection.getInstance().closeConnection();
-                } catch (SQLException e)
-                {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e)
-                {
-                    throw new RuntimeException(e);
-                }
+                DBConnection.getInstance().closeConnection();
             }
             return list;
         }
@@ -348,23 +284,9 @@ public class DataAccessObject implements DAO
             {
                 e.printStackTrace();
                 throw new RuntimeException(e);
-            }
-            catch(ClassNotFoundException e)
+            } finally
             {
-                e.printStackTrace();
-            }
-            finally
-            {
-                try
-                {
-                    DBConnection.getInstance().closeConnection();
-                } catch (SQLException e)
-                {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e)
-                {
-                    throw new RuntimeException(e);
-                }
+                DBConnection.getInstance().closeConnection();
             }
 
             return list;
@@ -402,21 +324,9 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            }
-            catch (SQLException | ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         createUserProfile(u);
     }
@@ -448,23 +358,9 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -492,23 +388,9 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return false;
     }
@@ -537,23 +419,9 @@ public class DataAccessObject implements DAO
         catch (SQLException e)
         {
             throw new RuntimeException(e);
-        }
-        catch (ClassNotFoundException e)
+        } finally
         {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -584,23 +452,9 @@ public class DataAccessObject implements DAO
         catch (SQLException e)
         {
             throw new RuntimeException(e);
-        }
-        catch (ClassNotFoundException e)
+        } finally
         {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -621,23 +475,14 @@ public class DataAccessObject implements DAO
             cs.setString(7, distancePref);
             cs.execute();
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
     }
 
@@ -672,23 +517,9 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
-        catch(ClassNotFoundException e)
+        } finally
         {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return false;
     }
@@ -738,22 +569,13 @@ public class DataAccessObject implements DAO
                 profileInfo.add(swappingStatus);
             }
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return profileInfo;
     }
@@ -783,22 +605,13 @@ public class DataAccessObject implements DAO
             }
 
         }
-        catch (SQLException| ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return -1;
     }
@@ -827,22 +640,13 @@ public class DataAccessObject implements DAO
                 return rs.getInt("fldCompanyID");
             }
 
-        } catch (SQLException| ClassNotFoundException e)
+        } catch (SQLException e)
         {
             e.printStackTrace();
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return -1;
     }
@@ -873,22 +677,13 @@ public class DataAccessObject implements DAO
                 return profileID;
             }
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return -1;
     }
@@ -909,22 +704,13 @@ public class DataAccessObject implements DAO
             return rowsAffected > 0;
 
 
-        }catch (SQLException | ClassNotFoundException e)
+        }catch (SQLException e)
         {
             e.printStackTrace();
         }
         finally
         {
-            try
-            {
-                DBConnection.getInstance().closeConnection();
-            } catch (SQLException e)
-            {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e)
-            {
-                throw new RuntimeException(e);
-            }
+            DBConnection.getInstance().closeConnection();
         }
         return false;
     }
