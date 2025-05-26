@@ -77,7 +77,7 @@ public class MainViewController
      */
     private boolean validateLogin(String username, String password)
     {
-        if(!usernameField.getText().isEmpty() || !passwordField.getText().isEmpty())
+        if(!usernameField.getText().isBlank() || !passwordField.getText().isBlank())
         {
             User user = new User(usernameField.getText(), passwordField.getText());
             DAO dao = new DataAccessObject();
