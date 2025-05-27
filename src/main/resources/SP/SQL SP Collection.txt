@@ -215,11 +215,11 @@ BEGIN
         jf.fldFunction
     FROM
         tblProfile p
-    JOIN
+    INNER JOIN
         tblCompany c ON p.fldCompanyID = c.fldCompanyID
-    JOIN
+    INNER JOIN
         tblProfileJobFunction pjf ON p.fldProfileID = pjf.fldProfileID
-    JOIN
+    INNER JOIN
         tblJobFunction jf ON pjf.fldJobFunctionID = jf.fldJobFunctionID
     WHERE
         p.fldProfileID = @ProfileID;

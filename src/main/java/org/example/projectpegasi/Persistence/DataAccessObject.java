@@ -744,7 +744,7 @@ public class DataAccessObject implements DAO
                 matches.add(match);
             }
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
@@ -774,7 +774,7 @@ public class DataAccessObject implements DAO
             }
             conn.close();
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
@@ -815,7 +815,7 @@ public class DataAccessObject implements DAO
             }
             conn.close();
         }
-        catch (SQLException | ClassNotFoundException e)
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
