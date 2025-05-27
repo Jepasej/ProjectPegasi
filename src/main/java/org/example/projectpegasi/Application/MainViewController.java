@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import org.example.projectpegasi.BusinessService.ControllerNames;
-import org.example.projectpegasi.BusinessService.LoginCredentialsSession;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
@@ -27,6 +26,8 @@ public class MainViewController
 
     private static int currentUserID; // Static variable to store the users ID
 
+    private static int currentProfileID; // Static variable to store the profile ID
+
     /**
      * Method tied to MainView.fxml's CreateProfileButton.
      * Sends the user to the CreateProfileView
@@ -39,6 +40,10 @@ public class MainViewController
     public static int getCurrentUserID()
     {
         return currentUserID;
+    }
+
+    public static int getCurrentProfileID() {
+        return currentProfileID;
     }
 
     /**
@@ -77,19 +82,15 @@ public class MainViewController
      */
     private boolean validateLogin(String username, String password)
     {
-        if(!usernameField.getText().isEmpty() || !passwordField.getText().isEmpty())
+        if(!usernameField.getText().isBlank() || !passwordField.getText().isBlank())
         {
             User user = new User(usernameField.getText(), passwordField.getText());
             DAO dao = new DataAccessObject();
             boolean isVerified = dao.verifyUser(user);
             if(isVerified)
             {
-                // If verified, get userID from username and save it in the login session
                 currentUserID = dao.getUserID(username);
-                LoginCredentialsSession.setUserID(currentUserID);
-                // Get and store the connected profileID for the user
-                int profileID = dao.getProfileID(currentUserID);
-                LoginCredentialsSession.setProfileID(profileID);
+                currentProfileID = dao.getProfileID(currentUserID); //Finds the profileID based upon the currently logged-in user
             }
             return isVerified;
         }
