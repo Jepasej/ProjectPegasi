@@ -43,7 +43,7 @@ public class DBConnection
      *
      * @return the singleton DBConnection instance, or null if connection could not be established
      */
-    public static DBConnection getInstance()
+    public static Connection getInstance()
     {
         try {
             if (instance == null || instance.getConnection() == null || instance.getConnection().isClosed())
@@ -54,7 +54,7 @@ public class DBConnection
         {
             e.printStackTrace();
         }
-        return instance;
+        return instance.getConnection();
     }
 
     /**
