@@ -813,8 +813,7 @@ public class DataAccessObject implements DAO
         String Password = adminPassword;
         try
         {
-            Connection conn = DBConnection.getInstance().getConnection();
-            CallableStatement cs = conn.prepareCall(query);
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
 
             cs.setString(1, Username);
             cs.setString(2, Password);
@@ -825,7 +824,13 @@ public class DataAccessObject implements DAO
         }
         finally
         {
-            DBConnection.getInstance().closeConnection();
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -836,8 +841,7 @@ public class DataAccessObject implements DAO
 
         try
         {
-            Connection conn = DBConnection.getInstance().getConnection();
-            CallableStatement cs = conn.prepareCall(query);
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
 
             cs.setString(1, Username);
         } catch (SQLException e)
@@ -846,7 +850,13 @@ public class DataAccessObject implements DAO
         }
         finally
         {
-            DBConnection.getInstance().closeConnection();
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -856,17 +866,21 @@ public class DataAccessObject implements DAO
         String nameToBeRevoked = adminName;
         try
         {
-            Connection conn = DBConnection.getInstance().getConnection();
-            CallableStatement cs = conn.prepareCall(query);
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
 
             cs.setString(1, nameToBeRevoked);
         } catch (SQLException e)
         {
             throw new RuntimeException(e);
-        }
-        finally
+        } finally
         {
-            DBConnection.getInstance().closeConnection();
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }
