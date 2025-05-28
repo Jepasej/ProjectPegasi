@@ -227,8 +227,6 @@ public class CreateProfileViewController
         jobFunctionArea.clear();
         companyComboBox.getItems().clear();
         jobFunctionComboBox.getItems().clear();
-        minSalaryComboBox.getItems().clear();
-        distancePrefComboBox.getItems().clear();
     }
 
     /**

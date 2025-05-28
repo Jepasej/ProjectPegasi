@@ -27,7 +27,7 @@ public class HelloApplication extends Application
         //Loads our MainView.fxml as our first Scene
         FXMLLoader MainViewLoader = new FXMLLoader(getClass().getResource("MainView.fxml"));
         Parent MainViewPane = MainViewLoader.load();
-        Scene overViewScene = new Scene(MainViewPane, 1000, 600);
+        Scene overViewScene = new Scene(MainViewPane, 1000, 800);
 
         //Adds our scenes to the UI through lazy initialization
         scenes.add(new SceneControllerPairs(
@@ -108,7 +108,7 @@ public class HelloApplication extends Application
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
             Parent root = loader.load();
-            return new Scene(root, 1000, 600);
+            return new Scene(root, 1000, 800);
         }
         catch (IOException e)
         {
