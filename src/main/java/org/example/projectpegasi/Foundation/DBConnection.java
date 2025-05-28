@@ -11,9 +11,9 @@ import java.sql.SQLException;
  */
 public class DBConnection
 {
-    private static final String DATABASEURL = "jdbc:sqlserver://localhost;database=DBJobSwapSystem;encrypt=true;trustServerCertificate=true";
-    private static final String USERNAME = "sa";
-    private static final String PASSWORD = "123456";
+    private final String DATABASEURL = "jdbc:sqlserver://localhost;database=DBJobSwapSystem;encrypt=true;trustServerCertificate=true";
+    private final String USERNAME = "sa";
+    private final String PASSWORD = "123456";
 
     //Singleton instance
     private static DBConnection instance;
@@ -41,7 +41,7 @@ public class DBConnection
      * Returns the singleton instance of DBConnection.
      * If no instance exists or the connection is closed, a new one is created.
      *
-     * @return the singleton DBConnection instance, or null if connection could not be established
+     * @return the singleton DBConnection instance connectionk, or null if connection could not be established
      */
     public static Connection getInstance()
     {
