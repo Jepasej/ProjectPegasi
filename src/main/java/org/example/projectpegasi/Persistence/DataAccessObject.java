@@ -405,13 +405,13 @@ public class DataAccessObject implements DAO
     public String getPassword(int UserID)
     {
         String sql = " { call sp_GetUserPasswordByID(?,?) } ";
-        String password = null;
+        String password;
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
             CallableStatement cs = conn.prepareCall(sql);
             cs.setInt(1, UserID);
-            cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
+            cs.registerOutParameter(2, Types.NVARCHAR);
             cs.execute();
             password = cs.getString(2);
             return password;
@@ -713,6 +713,35 @@ public class DataAccessObject implements DAO
             DBConnection.getInstance().closeConnection();
         }
         return false;
+    }
+
+    /**
+     * Creates a user in our database with admin access, so that employees and/or administrators can edit/change the db
+     * @param adminName
+     * @param adminPassword
+     */
+
+    public void createDB_UserAdmin(String adminName, String adminPassword)
+    {
+        String query = "{call CreateJobSwapAdmin(?,?)}";
+        String Username = adminName;
+        String Password = adminPassword;
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+
+            cs.setString(1, Username);
+            cs.setString(2, Password);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
     }
 
 

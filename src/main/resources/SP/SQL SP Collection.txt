@@ -495,3 +495,38 @@ begin
 delete from tblMatches where fldMatchID = @matchID
 end
 
+CREATE OR ALTER PROCEDURE spUpdateProfileData
+    @fldUserID INT,
+    @fldFullName NVARCHAR(255),       -- Required (NOT NULL)
+    @fldJobTitle NVARCHAR(255) = NULL,
+    @fldHomeAddress NVARCHAR(255) = NULL,
+    @fldCompanyID INT = NULL,
+    @fldWage INT = NULL,
+    @fldPayPref INT = NULL,
+    @fldDistPref NVARCHAR(255) = NULL,
+    @fldSwappingStatus BIT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Ensure fldFullName is not NULL
+    IF @fldFullName IS NULL
+    BEGIN
+        RAISERROR('fldFullName cannot be NULL.', 16, 1);
+        RETURN;
+    END
+
+    UPDATE tblProfile
+    SET
+        fldFullName = @fldFullName,
+        fldJobTitle = @fldJobTitle,
+        fldHomeAddress = @fldHomeAddress,
+        fldCompanyID = @fldCompanyID,
+        fldWage = @fldWage,
+        fldPayPref = @fldPayPref,
+        fldDistPref = @fldDistPref,
+        fldSwappingStatus = @fldSwappingStatus
+    WHERE fldUserID = @fldUserID;
+END;
+
+
