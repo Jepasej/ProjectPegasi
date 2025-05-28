@@ -717,11 +717,11 @@ public class DataAccessObject implements DAO
 
     /**
      * Creates a user in our database with admin access, so that employees and/or administrators can edit/change the db
+     * For future use to create
      * @param adminName
      * @param adminPassword
      */
-
-    public void createDB_UserAdmin(String adminName, String adminPassword)
+    public void createDBUserAdmin(String adminName, String adminPassword)
     {
         String query = "{call CreateJobSwapAdmin(?,?)}";
         String Username = adminName;
@@ -744,5 +744,44 @@ public class DataAccessObject implements DAO
         }
     }
 
+    public void grantDBAdminRoles(String username)
+    {
+        String query = "{GrantAdminRoles(?)}";
+        String Username = username;
 
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+
+            cs.setString(1, Username);
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
+    }
+
+    public void revokeDBAdminRights(String adminName)
+    {
+        String query = "{call RevokeJobSwapAdminRoles(?)}";
+        String nameToBeRevoked = adminName;
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement cs = conn.prepareCall(query);
+
+            cs.setString(1, nameToBeRevoked);
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
+    }
 }

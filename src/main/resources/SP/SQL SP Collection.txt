@@ -560,3 +560,52 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE GrantAdminRoles
+    @Username NVARCHAR(128)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    EXEC sp_addrolemember 'db_accessadmin',    @Username;
+    EXEC sp_addrolemember 'db_backupoperator', @Username;
+    EXEC sp_addrolemember 'db_datareader',     @Username;
+    EXEC sp_addrolemember 'db_datawriter',     @Username;
+    EXEC sp_addrolemember 'db_ddladmin',       @Username;
+    EXEC sp_addrolemember 'db_owner',          @Username;
+    EXEC sp_addrolemember 'db_securityadmin',  @Username;
+    EXEC sp_addrolemember 'jobSwapAdmin',      @Username;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE RevokeJobSwapAdminRoles
+    @Username NVARCHAR(128)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check and revoke each role if the user is a member
+    IF IS_ROLEMEMBER('db_accessadmin', @Username) = 1
+        EXEC sp_droprolemember 'db_accessadmin', @Username;
+
+	IF IS_ROLEMEMBER('db_backupoperator', @Username) =1
+		EXEC sp_droprolemember 'db_backupoperator', @Username;
+
+	IF IS_ROLEMEMBER('db_datareader', @Username) =1
+		EXEC sp_droprolemember 'db_datareader', @Username;
+
+	IF IS_ROLEMEMBER('db_datawriter', @Username) =1
+		EXEC sp_droprolemember 'db_datawriter', @Username;
+
+	IF IS_ROLEMEMBER('db_ddladmin', @Username) = 1
+        EXEC sp_droprolemember 'db_ddladmin', @Username;
+
+	IF IS_ROLEMEMBER('db_owner', @Username) =1
+		EXEC sp_droprolemember 'db_owner', @Username;
+
+    IF IS_ROLEMEMBER('db_securityadmin', @Username) = 1
+        EXEC sp_droprolemember 'db_securityadmin', @Username;
+
+	IF IS_ROLEMEMBER('jobSwapAdmin', @Username) = 1
+        EXEC sp_droprolemember 'jobSwapAdmin', @Username;
+END;
+GO
