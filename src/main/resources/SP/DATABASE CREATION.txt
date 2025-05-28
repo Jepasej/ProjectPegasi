@@ -61,6 +61,7 @@ CREATE TABLE tblMatches(
 	fldMatchResponseDate DATE, -- When one of the profiles respond to the match
 	fldRequestResponseDate DATE, -- When both profiles have responded to the match/request
 	fldSwapResponseDate DATE, -- When HR (People & Culture) responds to the request
+	fldSenderProfileID INT, -- To differentiate who sent the request in a match between two profiles
 	);
 
 GO
@@ -164,17 +165,18 @@ INSERT INTO tblMatches (
             fldMatchDate,
             fldMatchResponseDate,
             fldRequestResponseDate,
-            fldSwapResponseDate)
+            fldSwapResponseDate,
+            fldSenderProfileID)
 
 VALUES
-        (1, 2, 1, '2025-05-22', NULL, NULL, NULL)
+        (1, 2, 1, '2025-05-22', NULL, NULL, NULL, NULL)
 
 GO
 
-INSERT INTO tblMatches (fldProfileAID, fldProfileBID, fldStateID, fldMatchDate)
+INSERT INTO tblMatches (fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldSenderProfileID)
 VALUES
-(2, 5, 1, GETDATE()),  -- Frederik Hansen ↔ Emilie Jensen
-(3, 6, 1, GETDATE()),  -- Kasper Nielsen ↔ Lukas Madsen
-(4, 7, 1, GETDATE()),  -- Sofie Sørensen ↔ Mathilde Lauritsen
-(8, 10, 1, GETDATE()), -- Oscar Thomsen ↔ Magnus Bro
-(2, 9, 1, GETDATE());  -- Mads Kristensen ↔ Ida Holm
+(2, 5, 1, GETDATE()), NULL,  -- Frederik Hansen ↔ Emilie Jensen
+(3, 6, 1, GETDATE()), NULL, -- Kasper Nielsen ↔ Lukas Madsen
+(4, 7, 1, GETDATE()), NULL, -- Sofie Sørensen ↔ Mathilde Lauritsen
+(8, 10, 1, GETDATE()), Null, -- Oscar Thomsen ↔ Magnus Bro
+(2, 9, 1, GETDATE()), Null; -- Mads Kristensen ↔ Ida Holm

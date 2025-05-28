@@ -68,13 +68,14 @@ public class DataAccessObject implements DAO
         try
         {
             Connection conn = DBConnection.getInstance().getConnection();
-            CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?,?)}");
+            CallableStatement stmt = conn.prepareCall("{call SaveSwapRequest(?,?,?,?,?,?,?)}");
             stmt.setInt(1, request.getMatchId());
             stmt.setInt(2, request.getProfileAId());
             stmt.setInt(3, request.getProfileBId());
             stmt.setInt(4, request.getStateId());
             stmt.setDate(5, request.getMatchDate());
             stmt.setDate(6, request.getMatchDateResponse());
+            stmt.setInt(7, request.getSenderProfileId());
             stmt.executeUpdate();
         }
         catch(SQLException e)
@@ -174,6 +175,46 @@ public class DataAccessObject implements DAO
         }
         return matches;
     }
+
+    /**
+     * Retrieves all incoming requests for the logged-in profile from the database (state 2 = request).
+     * @param profileID The ID of the logged-in profile.
+     * @return all the incoming requests from other profiles for the logged in profile
+     * with state 2 in the database
+     * @throws Exception if data aceess error occurs
+     */
+    public List<Match> getIncomingRequests(int profileID) {
+        List<Match> matches = new ArrayList<>();
+        try
+        {
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement stmt = conn.prepareCall("{call GetMatchesForProfile(?)}");
+            stmt.setInt(1, profileID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                Match match = new Match();
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                matches.add(match);
+
+            }
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DBConnection.getInstance().closeConnection();
+        }
+        return matches;
+    }
+
 
     /**
      *  Retrieves job title and company information for a profile, used to display match info in the UI.

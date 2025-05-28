@@ -17,9 +17,10 @@ public class SwapRequestManager {
      * It updates the match state in the database to 'Request' (state = 2)
      * and sets the current date as the match response date.
      * @param matchID The ID of the match to update
+     * @param senderProfileID The ID of the profile that accepted the match and initiated the swap request
      * @throws Exception If a database error occurs
      */
-    public void createSwapRequest (int matchID) throws Exception {
+    public void createSwapRequest (int matchID, int senderProfileID) throws Exception {
         DataAccessObject dao = new DataAccessObject();
         Match match = dao.readAMatchID(matchID);
 
@@ -30,6 +31,7 @@ public class SwapRequestManager {
             swapRequest.setProfileAId(match.getProfileAID());
             swapRequest.setProfileBId(match.getProfileBID());
             swapRequest.setStateId(2);
+            swapRequest.setSenderProfileId(senderProfileID);
             swapRequest.setMatchDate(match.getMatchDate());
             // Set today's date as the response date when user clicks 'accept'
             swapRequest.setMatchDateResponse(java.sql.Date.valueOf(LocalDate.now()));

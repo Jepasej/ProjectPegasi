@@ -55,7 +55,7 @@ public class OutgoingRequestViewController
         });
         requestTable.getColumns().add(deleteRequestcolumnMatch); // Add the column to table
 
-        //Testkode for at tjekke om knapper duer, skal fjernes når view matches virker
+        //Testkode for at tjekke om knapper duer, skal fjernes når view outgoing requests virker
         ObservableList<Match> testMatches = FXCollections.observableArrayList();
 
         Match testMatch = new Match();
