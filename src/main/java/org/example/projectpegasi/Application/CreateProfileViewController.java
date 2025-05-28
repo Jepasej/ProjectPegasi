@@ -62,7 +62,6 @@ public class CreateProfileViewController
     {
         populateMinSalaryBox();
         populateDistanceBox();
-        loadJobFunctionBox();
     }
 
     private void loadCompanyBox()
