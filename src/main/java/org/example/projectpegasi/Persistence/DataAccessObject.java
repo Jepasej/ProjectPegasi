@@ -821,4 +821,34 @@ public class DataAccessObject implements DAO
         }
         return requests;
     }
+
+    @Override
+    public List<Profile> getAllProfiles()
+    {
+        List<Profile> profiles = new ArrayList<>();
+        String query = "{Call ReadAllProfilesWithJobFunctions()}";
+
+        try{
+            Connection conn = DBConnection.getInstance().getConnection();
+            CallableStatement clStmt = conn.prepareCall(query);
+            ResultSet rs = clStmt.executeQuery();
+
+            while(rs.next())
+            {
+                int profileID = rs.getInt("fldProfileID");
+                List<String> profileInfo = getProfileInformation(profileID);
+
+                String jobFunction = profileInfo.get(2);
+                int payPref = Integer.parseInt(profileInfo.get(6));
+
+                Profile profile = new Profile(jobFunction, payPref);
+                profiles.add(profile);
+            }
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return profiles;
+    }
+
 }

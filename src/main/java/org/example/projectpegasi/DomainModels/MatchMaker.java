@@ -1,5 +1,7 @@
 package org.example.projectpegasi.DomainModels;
 
+import org.example.projectpegasi.Persistence.DataAccessObject;
+
 import java.util.ArrayList;
 import java.util.List;
 

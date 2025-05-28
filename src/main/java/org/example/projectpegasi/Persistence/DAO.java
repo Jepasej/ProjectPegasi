@@ -1,6 +1,7 @@
 package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.User;
 
 import java.util.ArrayList;
@@ -43,4 +44,6 @@ public interface DAO
     List<Match>getTwoNewestRequestsByProfileID(int profileID);
 
     boolean updateSwappingStatus(int profileID, Boolean swappingStatus);
+
+    List<Profile> getAllProfiles();
 }
