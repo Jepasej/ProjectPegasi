@@ -56,6 +56,9 @@ public class EditProfileViewController
             String NewPasswordToUpdate = NewPasswordEdit.getText();
             DataAccessObject DAONewPassword = new DataAccessObject();
             DAONewPassword.changePassword(NewPasswordToUpdate,UserID);
+            NewPasswordEdit.clear();
+            RepeatNewPasswordEdit.clear();
+            OldPasswordEdit.clear();
             //System.out.println("Change password to" + NewPasswordToUpdate);
         }
         else
@@ -69,6 +72,8 @@ public class EditProfileViewController
     }
         return OldPasswordWritten;
     }
+
+
         //Not Tested
     public void onSaveButtonClickEdit() throws SQLException, ClassNotFoundException
     {
