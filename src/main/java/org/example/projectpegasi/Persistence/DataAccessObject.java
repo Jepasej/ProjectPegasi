@@ -938,6 +938,36 @@ public class DataAccessObject implements DAO
         return matches;
     }
 
+    /**
+     * Retrieves the job title of a profile based on the given profile ID.
+     * Calls the stored procedure: GetJobTitleByProfileID
+     * @param profileID the ID of the profile whose job title should be retrieved
+     * @return the job title as a String, or null if no job title is found
+     */
+    @Override
+    public String getJobTitleByProfileID(int profileID){
+        String jobTitle = null;
+        String query = "{call GetJobTitleByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            if(rs.next()) {
+                jobTitle = rs.getString("fldJobTitle");
+            }
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return jobTitle;
+    }
+
     public void revokeDBAdminRights(String adminName)
     {
         String query = "{call RevokeJobSwapAdminRoles(?)}";
