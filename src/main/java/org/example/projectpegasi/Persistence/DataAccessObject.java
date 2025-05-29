@@ -257,13 +257,16 @@ public class DataAccessObject implements DAO
 
             while (rs.next()){
                 Match match = new Match();
-                match.setMatchID(rs.getInt(1));
-                match.setProfileAID(rs.getInt(2));
-                match.setProfileBID(rs.getInt(3));
-                match.setStateID(rs.getInt(4));
-                match.setSenderProfileID(rs.getInt(5));
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setSenderProfileID(rs.getInt("fldSenderProfileID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                match.setRequestResponseDate(rs.getDate("fldRequestResponseDate"));
+                match.setSwapResponseDate(rs.getDate("fldSwapResponseDate"));
                 matches.add(match);
-
             }
 
         }

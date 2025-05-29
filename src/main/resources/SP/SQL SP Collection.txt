@@ -91,12 +91,18 @@ as
 
 GO
 
-CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date)
+CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date, @senderProfileID int)
 
 as
     begin
-        Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) 
-        values(@matchID, @profileAID, @profileBID, @stateID, @matchDate, @matchresponseDate)
+        Update tblMatches
+            	SET
+            		fldStateID = @stateID,
+            		fldMatchDate = @matchDate,
+            		fldMatchResponseDate = @matchResponseDate,
+            		fldSenderProfileID = @senderProfileID
+            	WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
+            	OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
     end
 
 GO
@@ -1224,12 +1230,24 @@ GO
 
 CREATE OR ALTER PROCEDURE GetOutgoingRequestsForProfile
     @profileID INT,
-	@senderProfileID int
+    @senderProfileID INT
 AS
 BEGIN
-    SELECT *
+    SELECT
+        fldMatchID,
+        fldProfileAID,
+        fldProfileBID,
+        fldStateID,
+        fldSenderProfileID,
+        fldMatchDate,
+        fldMatchResponseDate,
+        fldRequestResponseDate,
+        fldSwapResponseDate
     FROM tblMatches
-    WHERE (fldProfileAID = @profileID OR fldProfileBID = @profileID) AND fldStateID = 2 AND fldSenderProfileID = @senderProfileID;
+    WHERE
+        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
+        AND fldStateID = 2
+        AND fldSenderProfileID = @senderProfileID;
 END
 
 GO

@@ -54,7 +54,7 @@ public class MatchViewController {
                     try {
                         int senderProfileID = MainViewController.getCurrentProfileID();
                         srManager.createSwapRequest(details.getMatchID(), senderProfileID);
-                        getTableView().getColumns().remove(getIndex());
+                        matchTable.getItems().remove(getIndex());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -74,7 +74,7 @@ public class MatchViewController {
                     MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
                         srManager.declineMatchAndRequest(details.getMatchID());
-                        getTableView().getColumns().remove(getIndex());
+                        matchTable.getItems().remove(getIndex());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
