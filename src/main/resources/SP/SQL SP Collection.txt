@@ -119,7 +119,9 @@ BEGIN
 
 SET NOCOUNT ON
 
-IF EXISTS(SELECT * FROM tblUser WHERE fldUserName = @fldUserName AND fldPassword = @fldPassword)
+IF EXISTS(SELECT * FROM tblUser
+WHERE fldUserName LIKE @fldUserName COLLATE SQL_Latin1_General_CP1_CS_AS
+AND fldPassword LIKE @fldPassword COLLATE SQL_Latin1_General_CP1_CS_AS)
     SELECT 'true' AS UserExists
 ELSE
     SELECT 'false' AS UserExists
