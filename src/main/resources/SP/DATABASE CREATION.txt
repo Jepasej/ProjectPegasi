@@ -175,8 +175,13 @@ GO
 
 INSERT INTO tblMatches (fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldSenderProfileID)
 VALUES
-(2, 5, 1, GETDATE()), NULL,  -- Frederik Hansen ↔ Emilie Jensen
-(3, 6, 1, GETDATE()), NULL, -- Kasper Nielsen ↔ Lukas Madsen
-(4, 7, 1, GETDATE()), NULL, -- Sofie Sørensen ↔ Mathilde Lauritsen
-(8, 10, 1, GETDATE()), Null, -- Oscar Thomsen ↔ Magnus Bro
-(2, 9, 1, GETDATE()), Null; -- Mads Kristensen ↔ Ida Holm
+(2, 3, 1, GETDATE(), NULL),  -- Frederik Hansen ↔ Kasper Nielsen
+(4, 5, 1, GETDATE(), NULL),  -- Sofie Sørensen ↔ Emilie Jensen
+(6, 7, 1, GETDATE(), NULL),  -- Lukas Madsen ↔ Mathilde Lauritsen
+(8, 9, 1, GETDATE(), NULL),  -- Oscar Thomsen ↔ Ida Holm
+(10, 11, 1, GETDATE(), NULL),-- Magnus Bro ↔ ??? (profil 11s navn ukendt)
+(2, 4, 1, GETDATE(), NULL),  -- Frederik Hansen ↔ Sofie Sørensen
+(3, 5, 1, GETDATE(), NULL),  -- Kasper Nielsen ↔ Emilie Jensen
+(6, 9, 1, GETDATE(), NULL),  -- Lukas Madsen ↔ Ida Holm
+(7, 8, 1, GETDATE(), NULL),  -- Mathilde Lauritsen ↔ Oscar Thomsen
+(3, 10, 1, GETDATE(), NULL); -- Kasper Nielsen ↔ Magnus Bro
