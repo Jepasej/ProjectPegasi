@@ -46,13 +46,12 @@ public class OutgoingRequestViewController
         TableColumn<MatchDetails, Void> deleteRequestcolumnMatch = new TableColumn<>("Delete Request");
         deleteRequestcolumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button deleteRequestButton = new Button("✘");
-
             {
                 deleteRequestButton.setOnAction(event -> {
-                    Match match = getTableView().getItems().get(getIndex());
+                    MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.deleteSwapRequest(match.getMatchID());
-                        requestTable.getItems().remove(match);
+                        srManager.deleteSwapRequest(details.getMatchID());
+                        requestTable.getItems().remove(details);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
