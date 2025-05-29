@@ -14,7 +14,6 @@ public class Profile
     private boolean swappingStatus;
     private int profileID;
     private Company company;
-
     private String jobFunction; //Tilføjet her for at gemme jobfunctions man vælger
 
     public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, Company company)
@@ -38,6 +37,12 @@ public class Profile
         this.distPref = distPref;
         this.swappingStatus = swappingStatus;
         this.profileID = profileID;
+    }
+
+    public Profile(String Jobfunction, int payPref)
+    {
+        this.jobFunction = Jobfunction;
+        this.payPref = payPref;
     }
 
     public Profile()

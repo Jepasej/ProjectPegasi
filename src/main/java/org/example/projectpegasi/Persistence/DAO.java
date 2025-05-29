@@ -1,5 +1,7 @@
 package org.example.projectpegasi.Persistence;
 
+import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.User;
 
 import java.util.ArrayList;
@@ -35,5 +37,13 @@ public interface DAO
 
     List<String> getProfileInformation(int profileID);
 
+    List<Match> getTwoNewestMatchesByProfileID(int profileID);
+
+    String getJobTitleByProfileID(int profileID);
+
+    List<Match>getTwoNewestRequestsByProfileID(int profileID);
+
     boolean updateSwappingStatus(int profileID, Boolean swappingStatus);
+
+    List<Profile> getAllProfiles();
 }

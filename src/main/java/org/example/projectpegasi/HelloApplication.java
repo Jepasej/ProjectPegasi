@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import org.example.projectpegasi.BusinessService.Lazy;
+import org.example.projectpegasi.BusinessService.MatchManager;
 import org.example.projectpegasi.BusinessService.SceneControllerPairs;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 
@@ -69,7 +70,10 @@ public class HelloApplication extends Application
                 new Lazy<>(() -> buildScene("ProfileView.fxml")),
                 ControllerNames.ProfileView
         ));
-
+        
+        //Matches our profiles on application start
+        MatchManager matchManager = new MatchManager();
+        matchManager.findAllMatches();
 
         stage.setTitle("JobSwap");
         stage.setScene(overViewScene);
