@@ -860,6 +860,43 @@ public class DataAccessObject implements DAO
         }
     }
 
+    /**
+     * Retrieves the two most recent matches from the database using the stored procedure: GetTwoNewestMatches
+     * @return a list containing the two most recent Match objects,
+     * or an empty list if no matches are found.
+     */
+    @Override
+    public List<Match> getTwoNewestMatchesByProfileID(int profileID)
+    {
+        List<Match> matches = new ArrayList<>();
+        String query = "{call GetTwoNewestMatchesByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            while(rs.next())
+            {
+                Match match = new Match();
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                matches.add(match);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return matches;
+    }
+
     public void revokeDBAdminRights(String adminName)
     {
         String query = "{call RevokeJobSwapAdminRoles(?)}";
@@ -897,7 +934,7 @@ public class DataAccessObject implements DAO
         String query = "{Call ReadAllProfilesWithJobFunctions()}";
 
         try{
-            Connection conn = DBConnection.getInstance().getConnection();
+            Connection conn = DBConnection.getInstance();
             CallableStatement clStmt = conn.prepareCall(query);
             ResultSet rs = clStmt.executeQuery();
 
