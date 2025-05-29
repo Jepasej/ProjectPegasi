@@ -822,6 +822,12 @@ public class DataAccessObject implements DAO
         return requests;
     }
 
+    /**
+     * Method to get all information on a profile and
+     * extracts the job function and the pay preference
+     *
+     * @return a List of profiles with the specific information
+     */
     @Override
     public List<Profile> getAllProfiles()
     {
@@ -835,13 +841,10 @@ public class DataAccessObject implements DAO
 
             while(rs.next())
             {
-                int profileID = rs.getInt("fldProfileID");
-                List<String> profileInfo = getProfileInformation(profileID);
+                String jobFunction = rs.getString("fldFunction");
+                int payPref = rs.getInt("fldPayPref");
 
-                String jobFunction = profileInfo.get(2);
-                int payPref = Integer.parseInt(profileInfo.get(6));
-
-                Profile profile = new Profile(jobFunction, payPref);
+                Profile profile = new Profile();
                 profiles.add(profile);
             }
         } catch (SQLException e)

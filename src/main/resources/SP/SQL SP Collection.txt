@@ -495,3 +495,23 @@ begin
 delete from tblMatches where fldMatchID = @matchID
 end
 
+GO
+
+CREATE OR ALTER PROCEDURE ReadAllProfilesWithJobFunctions
+AS
+	BEGIN
+		SELECT
+				p.fldProfileID, p.fldFullName, p.fldJobTitle, jf.fldFunction, c.fldCompanyName,
+				p.fldHomeAddress, p.fldWage, p.fldPayPref, p.fldDistPref, p.fldSwappingStatus
+
+		FROM tblProfile p
+
+		INNER JOIN
+				tblProfileJobFunction pjf ON p.fldProfileID = pjf.fldProfileID
+		INNER JOIN
+				tblJobFunction jf ON pjf.fldJobFunctionID = jf.fldJobFunctionID
+		INNER JOIN
+				tblCompany c ON p.fldCompanyID = c.fldCompanyID
+	END
+
+
