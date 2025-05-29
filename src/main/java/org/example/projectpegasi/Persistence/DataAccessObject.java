@@ -199,15 +199,13 @@ public class DataAccessObject implements DAO
      * Retrieves all incoming requests for the logged-in profile from the database (state 2 = request).
      * @param profileID The ID of the logged-in profile.
      * @return all the incoming requests from other profiles for the logged in profile
-     * with state 2 in the database
-     * @throws Exception if data aceess error occurs
+     * with state 2 in the database.
      */
-    public List<Match> getIncomingRequests(int profileID) {
+    public List<Match> getIncomingRequests(int profileID, int senderProfileID) {
         List<Match> matches = new ArrayList<>();
         try
         {
-            Connection conn = DBConnection.getInstance().getConnection();
-            CallableStatement stmt = conn.prepareCall("{call GetMatchesForProfile(?)}");
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetMatchesForProfile(?)}");
             stmt.setInt(1, profileID);
             ResultSet rs = stmt.executeQuery();
 
@@ -228,12 +226,63 @@ public class DataAccessObject implements DAO
             throw new RuntimeException(e);
         }
         finally
+        { try
         {
-            DBConnection.getInstance().closeConnection();
+            DBConnection.getInstance().close();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
         }
         return matches;
     }
 
+
+    /**
+     * Retrieves all outgoing requests for the logged-in profile from the database (state 2 = request)
+     * which the logged-in user has sent to others.
+     * @param profileID The ID of the logged-in profile.
+     * @param senderProfileID gets the requests that has been sent by the logged-in user
+     * @return all the outgoing requests from the logged in profile with state 2 in the database
+     */
+    public List<Match> getOutgoingRequests(int profileID, int senderProfileID) {
+
+        List<Match> matches = new ArrayList<>();
+        try
+        {
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetOutgoingRequestsForProfile(?,?)}");
+            stmt.setInt(1, profileID);
+            stmt.setInt(2, senderProfileID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                Match match = new Match();
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                match.setSenderProfileID(rs.getInt(5));
+                matches.add(match);
+
+            }
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        { try
+        {
+            DBConnection.getInstance().close();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        }
+        return matches;
+    }
 
     /**
      *  Retrieves job title and company information for a profile, used to display match info in the UI.

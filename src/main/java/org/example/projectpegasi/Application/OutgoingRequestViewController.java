@@ -5,11 +5,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.DomainModels.MatchDetails;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.Persistence.DataAccessObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the "Outgoing Requests" view.
@@ -19,7 +27,7 @@ import org.example.projectpegasi.HelloApplication;
 public class OutgoingRequestViewController
 {
     @FXML
-    private TableView<Match> requestTable;
+    private TableView<MatchDetails> requestTable;
 
     @FXML
     private TableColumn<SwapRequest, String> jobTitleColumnMatch, companyColumnMatch, deleteRequestColumn;
@@ -35,7 +43,7 @@ public class OutgoingRequestViewController
 
         // Creates a column with a "✘" button that allows the user to delete a request.
         // When clicked, the request is removed from the UI and database.
-        TableColumn<Match, Void> deleteRequestcolumnMatch = new TableColumn<>("Delete Request");
+        TableColumn<MatchDetails, Void> deleteRequestcolumnMatch = new TableColumn<>("Delete Request");
         deleteRequestcolumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button deleteRequestButton = new Button("✘");
 
@@ -53,18 +61,49 @@ public class OutgoingRequestViewController
                 setGraphic(deleteRequestButton); //Show button in cell
             }
         });
-        requestTable.getColumns().add(deleteRequestcolumnMatch); // Add the column to table
 
-        //Testkode for at tjekke om knapper duer, skal fjernes når view outgoing requests virker
-        ObservableList<Match> testMatches = FXCollections.observableArrayList();
+        // Load all requests for the current user
+        int LoginProfileID = MainViewController.getCurrentProfileID();
+        DataAccessObject dao = new DataAccessObject();
+        List<Match> outgoingRequests = dao.getOutgoingRequests(LoginProfileID, LoginProfileID);
 
-        Match testMatch = new Match();
-        testMatch.setMatchID(123);
-        testMatch.setProfileAID(2);
-        testMatch.setProfileBID(3);
-        testMatch.setStateID(1);
-        testMatches.add(testMatch);
-        requestTable.setItems(testMatches);
+
+        // Filter requests where state = 2 (outgoing requests)
+        outgoingRequests = outgoingRequests.stream()
+                .filter(match -> match.getStateID() == 2)
+                .collect(Collectors.toList());
+
+        //Filter requests which the logged-in user has sent
+        outgoingRequests = outgoingRequests.stream()
+                .filter(match -> match.getSenderProfileID() == LoginProfileID)
+                .collect(Collectors.toList());
+        List<MatchDetails> matchDetails = new ArrayList<>();
+
+        // Retrieve job title and company info for the other profile in each request
+        for (Match match : outgoingRequests) {
+            int othersProfileID = (match.getProfileAID() == LoginProfileID) ? match.getProfileBID() : match.getProfileAID();
+            //Get profileinformation
+            Profile profile = dao.getAttributesForMatchView(othersProfileID);
+            MatchDetails details = new MatchDetails(profile.getJobTitle(), profile.getCompany().getName(), match.getMatchID());
+
+            matchDetails.add(details);
+        }
+        // Convert list to an observable list for TableView
+        ObservableList<MatchDetails> observableList = FXCollections.observableArrayList(matchDetails);
+
+        // Bind columns to MatchDetails fields
+        jobTitleColumnMatch.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
+        companyColumnMatch.setCellValueFactory(new PropertyValueFactory<>("companyName"));
+        requestTable.setItems(observableList);
+
+        // Remove existing button columns if anyone present
+        requestTable.getColumns().removeIf(col ->
+                col.getText().equals("Delete Request"));
+
+        // Add button columns only if there are requests
+        if (!observableList.isEmpty()) {
+            requestTable.getColumns().addAll(deleteRequestcolumnMatch);
+        }
     }
 
 

@@ -609,3 +609,17 @@ BEGIN
         EXEC sp_droprolemember 'jobSwapAdmin', @Username;
 END;
 GO
+
+USE DBJobSwapSystem
+
+GO
+
+CREATE OR ALTER PROCEDURE GetOutgoingRequestsForProfile
+    @profileID INT,
+	@senderProfileID int
+AS
+BEGIN
+    SELECT *
+    FROM tblMatches
+    WHERE (fldProfileAID = @profileID OR fldProfileBID = @profileID) AND fldStateID = 2 AND fldSenderProfileID = @senderProfileID;
+END
