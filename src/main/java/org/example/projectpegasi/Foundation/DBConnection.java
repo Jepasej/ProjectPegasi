@@ -41,7 +41,7 @@ public class DBConnection
      * Returns the singleton instance of DBConnection.
      * If no instance exists or the connection is closed, a new one is created.
      *
-     * @return the singleton DBConnection instance connectionk, or null if connection could not be established
+     * @return the singleton DBConnection instance connection, or null if connection could not be established
      */
     public static Connection getInstance()
     {
