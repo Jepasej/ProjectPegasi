@@ -62,7 +62,6 @@ public class CreateProfileViewController
     {
         populateMinSalaryBox();
         populateDistanceBox();
-        loadJobFunctionBox();
     }
 
     private void loadCompanyBox()
@@ -163,6 +162,8 @@ public class CreateProfileViewController
 
             createUser(user);
 
+            clearFields();
+
             HelloApplication.changeScene(ControllerNames.MainView);
         }
     }
@@ -211,6 +212,21 @@ public class CreateProfileViewController
         }
 
         return check;
+    }
+
+    private void clearFields()
+    {
+        usernameField.clear();
+        passwordField.clear();
+        repeatPasswordField.clear();
+        fullNameField.clear();
+        jobTitleField.clear();
+        companyField.clear();
+        homeAddressField.clear();
+        currentSalaryField.clear();
+        jobFunctionArea.clear();
+        companyComboBox.getItems().clear();
+        jobFunctionComboBox.getItems().clear();
     }
 
     /**
@@ -269,6 +285,7 @@ public class CreateProfileViewController
     @FXML
     public void onCancelButtonClick()
     {
+        clearFields();
         HelloApplication.changeScene(ControllerNames.MainView);
     }
 }
