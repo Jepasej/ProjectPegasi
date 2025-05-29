@@ -489,12 +489,12 @@ public class DataAccessObject implements DAO
     public String getPassword(int UserID)
     {
         String sql = " { call sp_GetUserPasswordByID(?,?) } ";
-        String password = null;
+        String password;
         try
         {
             CallableStatement cs = DBConnection.getInstance().prepareCall(sql);
             cs.setInt(1, UserID);
-            cs.registerOutParameter(2, java.sql.Types.NVARCHAR);
+            cs.registerOutParameter(2, Types.NVARCHAR);
             cs.execute();
             password = cs.getString(2);
             return password;
@@ -841,5 +841,87 @@ public class DataAccessObject implements DAO
         return false;
     }
 
+    /**
+     * Creates a user in our database with admin access, so that employees and/or administrators can edit/change the db
+     * For future use to create
+     * @param adminName
+     * @param adminPassword
+     */
+    public void createDBUserAdmin(String adminName, String adminPassword)
+    {
+        String query = "{call CreateJobSwapAdmin(?,?)}";
+        String Username = adminName;
+        String Password = adminPassword;
+        try
+        {
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
 
+            cs.setString(1, Username);
+            cs.setString(2, Password);
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void grantDBAdminRoles(String username)
+    {
+        String query = "{GrantAdminRoles(?)}";
+        String Username = username;
+
+        try
+        {
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
+
+            cs.setString(1, Username);
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void revokeDBAdminRights(String adminName)
+    {
+        String query = "{call RevokeJobSwapAdminRoles(?)}";
+        String nameToBeRevoked = adminName;
+        try
+        {
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
+
+            cs.setString(1, nameToBeRevoked);
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 }

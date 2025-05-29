@@ -495,3 +495,117 @@ begin
 delete from tblMatches where fldMatchID = @matchID
 end
 
+CREATE OR ALTER PROCEDURE spUpdateProfileData
+    @fldUserID INT,
+    @fldFullName NVARCHAR(255),       -- Required (NOT NULL)
+    @fldJobTitle NVARCHAR(255) = NULL,
+    @fldHomeAddress NVARCHAR(255) = NULL,
+    @fldCompanyID INT = NULL,
+    @fldWage INT = NULL,
+    @fldPayPref INT = NULL,
+    @fldDistPref NVARCHAR(255) = NULL,
+    @fldSwappingStatus BIT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Ensure fldFullName is not NULL
+    IF @fldFullName IS NULL
+    BEGIN
+        RAISERROR('fldFullName cannot be NULL.', 16, 1);
+        RETURN;
+    END
+
+    UPDATE tblProfile
+    SET
+        fldFullName = @fldFullName,
+        fldJobTitle = @fldJobTitle,
+        fldHomeAddress = @fldHomeAddress,
+        fldCompanyID = @fldCompanyID,
+        fldWage = @fldWage,
+        fldPayPref = @fldPayPref,
+        fldDistPref = @fldDistPref,
+        fldSwappingStatus = @fldSwappingStatus
+    WHERE fldUserID = @fldUserID;
+END;
+
+CREATE OR ALTER PROCEDURE CreateJobSwapAdmin
+    @Username NVARCHAR(128),
+    @Password NVARCHAR(128)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Create the login at the server level (if not already exists)
+    IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = @Username)
+    BEGIN
+        EXEC('CREATE LOGIN [' + @Username + '] WITH PASSWORD = ''' + @Password + ''';');
+    END
+
+    -- Create the user in the database
+    IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = @Username)
+    BEGIN
+        EXEC('CREATE USER [' + @Username + '] FOR LOGIN [' + @Username + '];');
+    END
+
+    -- Grant roles
+    EXEC sp_addrolemember 'db_accessadmin',  @Username;
+	EXEC sp_addrolemember 'db_backupoperator',@Username;
+	EXEC sp_addrolemember 'db_datareader',@Username;
+	EXEC sp_addrolemember 'db_datawriter',@Username;
+	EXEC sp_addrolemember 'db_ddladmin',     @Username;
+	EXEC sp_addrolemember 'db_owner',     @Username;
+	EXEC sp_addrolemember 'db_securityadmin',@Username;
+	EXEC sp_addrolemember 'jobSwapAdmin',@Username;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE GrantAdminRoles
+    @Username NVARCHAR(128)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    EXEC sp_addrolemember 'db_accessadmin',    @Username;
+    EXEC sp_addrolemember 'db_backupoperator', @Username;
+    EXEC sp_addrolemember 'db_datareader',     @Username;
+    EXEC sp_addrolemember 'db_datawriter',     @Username;
+    EXEC sp_addrolemember 'db_ddladmin',       @Username;
+    EXEC sp_addrolemember 'db_owner',          @Username;
+    EXEC sp_addrolemember 'db_securityadmin',  @Username;
+    EXEC sp_addrolemember 'jobSwapAdmin',      @Username;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE RevokeJobSwapAdminRoles
+    @Username NVARCHAR(128)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check and revoke each role if the user is a member
+    IF IS_ROLEMEMBER('db_accessadmin', @Username) = 1
+        EXEC sp_droprolemember 'db_accessadmin', @Username;
+
+	IF IS_ROLEMEMBER('db_backupoperator', @Username) =1
+		EXEC sp_droprolemember 'db_backupoperator', @Username;
+
+	IF IS_ROLEMEMBER('db_datareader', @Username) =1
+		EXEC sp_droprolemember 'db_datareader', @Username;
+
+	IF IS_ROLEMEMBER('db_datawriter', @Username) =1
+		EXEC sp_droprolemember 'db_datawriter', @Username;
+
+	IF IS_ROLEMEMBER('db_ddladmin', @Username) = 1
+        EXEC sp_droprolemember 'db_ddladmin', @Username;
+
+	IF IS_ROLEMEMBER('db_owner', @Username) =1
+		EXEC sp_droprolemember 'db_owner', @Username;
+
+    IF IS_ROLEMEMBER('db_securityadmin', @Username) = 1
+        EXEC sp_droprolemember 'db_securityadmin', @Username;
+
+	IF IS_ROLEMEMBER('jobSwapAdmin', @Username) = 1
+        EXEC sp_droprolemember 'jobSwapAdmin', @Username;
+END;
+GO
