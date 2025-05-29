@@ -42,6 +42,7 @@ public class MatchMaker
      */
     public double calculateSimilarity(Profile profile1, Profile profile2)
     {
+        // Can implement strategy pattern to
         double jobFunctionScore = compareJobFunctions(profile1.getJobFunction(), profile2.getJobFunction());
         double payPrefScore = comparePayPreferences(profile1.getPayPref(), profile2.getPayPref());
 

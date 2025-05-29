@@ -70,8 +70,8 @@ public class HelloApplication extends Application
                 new Lazy<>(() -> buildScene("ProfileView.fxml")),
                 ControllerNames.ProfileView
         ));
-
-
+        
+        //Matches our profiles on application start
         MatchManager matchManager = new MatchManager();
         matchManager.findAllMatches();
 
