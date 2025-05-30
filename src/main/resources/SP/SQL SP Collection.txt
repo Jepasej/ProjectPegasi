@@ -1270,42 +1270,19 @@ END
 
 GO
 
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-ALTER   PROCEDURE [dbo].[spCreateProfile]
-    @FullName NVARCHAR(255),
-    @JobTitle NVARCHAR(255),
-    @HomeAddress NVARCHAR(255),
-    @CompanyID INT,
-    @Wage INT,
-    @PayPref INT,
-    @DistPref NVARCHAR(255),
-    @UserID INT,
+CREATE OR ALTER   PROCEDURE [dbo].[spCreateProfile]
+    @FullName NVARCHAR(255), @JobTitle NVARCHAR(255),
+    @HomeAddress NVARCHAR(255), @CompanyID INT,
+    @Wage INT, @PayPref INT,
+    @DistPref NVARCHAR(255), @UserID INT,
 	@JobFunction NVARCHAR(255)
 AS
 BEGIN
-    INSERT INTO tblProfile (
-        fldFullName,
-        fldJobTitle,
-        fldHomeAddress,
-        fldCompanyID,
-        fldWage,
-        fldPayPref,
-        fldDistPref,
-        fldUserID
+    INSERT INTO tblProfile (fldFullName, fldJobTitle, fldHomeAddress, fldCompanyID,
+        fldWage, fldPayPref, fldDistPref, fldUserID, fldSwappingStatus
     )
-    VALUES (
-        @FullName,
-        @JobTitle,
-        @HomeAddress,
-        @CompanyID,
-        @Wage,
-        @PayPref,
-        @DistPref,
-        @UserID
+    VALUES (@FullName, @JobTitle, @HomeAddress, @CompanyID,
+        @Wage, @PayPref, @DistPref, @UserID, 1
     );
 
 	DECLARE @JobFunctionID INT;
