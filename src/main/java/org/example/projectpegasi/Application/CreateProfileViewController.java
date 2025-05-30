@@ -52,6 +52,9 @@ public class CreateProfileViewController
 
     private String errorColour = "-fx-background-color: red;";
 
+    /**
+     * Prepares the view for use
+     */
     @FXML
     public void initialize()
     {
@@ -59,6 +62,11 @@ public class CreateProfileViewController
         populateDistanceBox();
     }
 
+    /**
+     * Writes user input to a User object.
+     * Clears input for security reasons.
+     * Changes back to login screen.
+     */
     @FXML
     private void onConfirmButtonClick()
     {
@@ -71,12 +79,16 @@ public class CreateProfileViewController
         HelloApplication.changeScene(ControllerNames.MainView);
     }
 
+
     @FXML
     private void onBackButtonClick()
     {
         changeVisibility();
     }
 
+    /**
+     * Alternates between the profile creation form and the input confirmation screen.
+     */
     private void changeVisibility()
     {
         if(formVBox.isVisible())
@@ -91,6 +103,9 @@ public class CreateProfileViewController
         }
     }
 
+    /**
+     * Retrieves companies from the DB.
+     */
     private void loadCompanyBox()
     {
         DAO dao = new DataAccessObject();
@@ -102,6 +117,9 @@ public class CreateProfileViewController
         }
     }
 
+    /**
+     * Retrieves jobfunctions from the DB.
+     */
     private void loadJobFunctionBox()
     {
         DAO dao = new DataAccessObject();
