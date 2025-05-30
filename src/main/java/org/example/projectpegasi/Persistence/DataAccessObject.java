@@ -197,6 +197,7 @@ public class DataAccessObject implements DAO
 
     /**
      * Retrieves all incoming requests for the logged-in profile from the database (state 2 = request).
+     * Which has been sent to the logged-in user from other profiles.
      * @param profileID The ID of the logged-in profile.
      * @return all the incoming requests from other profiles for the logged in profile
      * with state 2 in the database.
@@ -205,16 +206,23 @@ public class DataAccessObject implements DAO
         List<Match> matches = new ArrayList<>();
         try
         {
-            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetMatchesForProfile(?)}");
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetIncomingRequestsForProfile(?,?)}");
             stmt.setInt(1, profileID);
+            stmt.setInt(2, senderProfileID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
                 Match match = new Match();
-                match.setMatchID(rs.getInt(1));
-                match.setProfileAID(rs.getInt(2));
-                match.setProfileBID(rs.getInt(3));
-                match.setStateID(rs.getInt(4));
+                // Map each column by name – ensures correctness even if column order changes
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setSenderProfileID(rs.getInt("fldSenderProfileID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                match.setRequestResponseDate(rs.getDate("fldRequestResponseDate"));
+                match.setSwapResponseDate(rs.getDate("fldSwapResponseDate"));
                 matches.add(match);
 
             }
@@ -255,8 +263,9 @@ public class DataAccessObject implements DAO
             stmt.setInt(2, senderProfileID);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 Match match = new Match();
+                // Map each column by name – ensures correctness even if column order changes
                 match.setMatchID(rs.getInt("fldMatchID"));
                 match.setProfileAID(rs.getInt("fldProfileAID"));
                 match.setProfileBID(rs.getInt("fldProfileBID"));
@@ -303,9 +312,9 @@ public class DataAccessObject implements DAO
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 profile = new Profile();
-                profile.setJobTitle(rs.getString(1));
-                int companyID = rs.getInt(2);
-                String companyName = rs.getString(3);
+                profile.setJobTitle(rs.getString("fldJobTitle"));
+                int companyID = rs.getInt("fldCompanyID");
+                String companyName = rs.getString("fldCompanyName");
                 Company company = new Company();
                 company.setID(companyID);
                 company.setName(companyName);
@@ -472,7 +481,7 @@ public class DataAccessObject implements DAO
             CallableStatement cs = DBConnection.getInstance().prepareCall(sql);
             cs.setString(1, p.getFullName());
             cs.setString(2, p.getJobTitle());
-            cs.setString(3, p.getJobTitle());
+            cs.setString(3, p.getHomeAddress());
             cs.setInt(4, companyID);
             cs.setInt(5, p.getWage());
             cs.setInt(6, p.getPayPref());

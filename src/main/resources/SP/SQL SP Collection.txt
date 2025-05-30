@@ -1324,3 +1324,26 @@ BEGIN
 END;
 
 GO
+
+CREATE OR ALTER PROCEDURE GetIncomingRequestsForProfile
+    @profileID INT,
+    @senderProfileID INT
+AS
+BEGIN
+    SELECT
+        fldMatchID,
+        fldProfileAID,
+        fldProfileBID,
+        fldStateID,
+        fldSenderProfileID,
+        fldMatchDate,
+        fldRequestResponseDate,
+        fldSwapResponseDate
+    FROM tblMatches
+    WHERE
+        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
+        AND fldStateID = 2
+        AND fldSenderProfileID != @senderProfileID;
+END
+
+Go
