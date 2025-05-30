@@ -66,14 +66,14 @@ public class OutgoingRequestViewController
         List<Match> outgoingRequests = dao.getOutgoingRequests(LoginProfileID, LoginProfileID);
 
         // Filter requests where state = 2 (outgoing requests)
-        outgoingRequests = outgoingRequests.stream()
+        /*outgoingRequests = outgoingRequests.stream()
                 .filter(match -> match.getStateID() == 2)
                 .collect(Collectors.toList());
 
         //Filter requests which the logged-in user has sent
         outgoingRequests = outgoingRequests.stream()
                 .filter(match -> match.getSenderProfileID() == LoginProfileID)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); */
         List<MatchDetails> matchDetails = new ArrayList<>();
 
         // Retrieve job title and company info for the other profile in each request

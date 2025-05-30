@@ -38,8 +38,11 @@ public class IncomingRequestViewController
     public void initialize() {
         SwapRequestManager srManager = new SwapRequestManager();
 
-        // Creates a column with a "✔" button that allows the user to accept a request.
-        // When clicked, it creates a jobswap using the match's ID.
+        /*
+         Creates a column with a "✔" button that allows the user to accept a request.
+         When clicked, it creates a jobswap using the match's ID.
+         In future releases, this should be extended to notify HR of a potential jobSwap opportunity.
+         */
         TableColumn<MatchDetails, Void> acceptRequestColumnMatch = new TableColumn<>("Accept Request");
         acceptRequestColumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button acceptRequestButton = new Button("✔");
@@ -57,7 +60,6 @@ public class IncomingRequestViewController
                 setGraphic(acceptRequestButton); //Show button in cell
             }
         });
-        incomingRequestTable.getColumns().add(acceptRequestColumnMatch); // Add the column to table
 
         // Creates a column with a "✘" button that allows the user to decline a request.
         // When clicked, the match is removed from the UI, but remains in the database and
@@ -84,10 +86,10 @@ public class IncomingRequestViewController
         // Load all incoming requests for the current user
         int LoginProfileID = MainViewController.getCurrentProfileID();
         DataAccessObject dao = new DataAccessObject();
-        List<Match> incomingRequests = dao.getMatchesForProfile(LoginProfileID);
+        List<Match> incomingRequests = dao.getIncomingRequests(LoginProfileID, LoginProfileID);
 
 
-        // Filter requests where state = 2 (outgoing requests)
+       /* // Filter requests where state = 2 (outgoing requests)
         incomingRequests = incomingRequests.stream()
                 .filter(match -> match.getStateID() == 2)
                 .collect(Collectors.toList());
@@ -95,7 +97,7 @@ public class IncomingRequestViewController
         //Filter requests which the logged-in user has sent
         incomingRequests = incomingRequests.stream()
                 .filter(match -> match.getSenderProfileID() != LoginProfileID)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); */
         List<MatchDetails> matchDetails = new ArrayList<>();
 
         // Retrieve job title and company info for the other profile in each request
