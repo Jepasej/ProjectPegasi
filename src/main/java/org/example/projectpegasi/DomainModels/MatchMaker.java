@@ -15,6 +15,7 @@ public class MatchMaker
     public List<ProfilePair> matchProfiles(List<Profile> profiles)
     {
         List<ProfilePair> matchedPairs = new ArrayList<>();
+        DataAccessObject dao = new DataAccessObject();
 
         for (Profile profile1 : profiles)
         {
@@ -25,7 +26,9 @@ public class MatchMaker
                     double similarityScore = calculateSimilarity(profile1, profile2);
                     if (similarityScore > 0.7)
                     {
-                        matchedPairs.add(new ProfilePair(profile1, profile2, similarityScore));
+                        ProfilePair pair = new ProfilePair(profile1, profile2, similarityScore);
+                        matchedPairs.add(pair);
+                        dao.saveMatch(profile1.getProfileID(), profile2.getProfileID());
                     }
                 }
             }
@@ -56,6 +59,10 @@ public class MatchMaker
 
     private double compareJobFunctions(String jobFunction1, String jobFunction2)
     {
+        if(jobFunction1 == null || jobFunction2 == null)
+        {
+            return 0.0;
+        }
         return jobFunction1.equals(jobFunction2) ? 1 : 0;
     }
 

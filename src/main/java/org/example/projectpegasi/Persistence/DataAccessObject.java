@@ -996,10 +996,19 @@ public class DataAccessObject implements DAO
                 requests.add(match);
             }
             conn.close();
-        }
-        catch (SQLException e)
+        } catch (SQLException e)
         {
             e.printStackTrace();
+        } finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+
         }
         return requests;
     }
@@ -1038,6 +1047,16 @@ public class DataAccessObject implements DAO
         {
             e.printStackTrace();
         }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
         return matches;
     }
 
@@ -1067,6 +1086,16 @@ public class DataAccessObject implements DAO
         catch (SQLException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
         return jobTitle;
     }
@@ -1124,6 +1153,52 @@ public class DataAccessObject implements DAO
         {
             throw new RuntimeException(e);
         }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
         return profiles;
+    }
+
+    /**
+     * Method to save the match the algorithm makes.
+     * @param profileAID First profile ID
+     * @param profileBID Second Profile ID
+     */
+    @Override
+    public void saveMatch(int profileAID, int profileBID)
+    {
+        String query = "{call SaveMatch(?, ?, 1, ?)}";
+
+        try{
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+
+            clStmt.setInt(1, profileAID);
+            clStmt.setInt(2, profileBID);
+            clStmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+
+            clStmt.execute();
+
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }

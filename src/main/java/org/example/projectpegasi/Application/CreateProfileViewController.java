@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.BusinessService.MatchManager;
 import org.example.projectpegasi.DomainModels.Company;
 import org.example.projectpegasi.DomainModels.JobFunction;
 import org.example.projectpegasi.DomainModels.User;
@@ -67,6 +68,9 @@ public class CreateProfileViewController
         createUser(user);
 
         clearFields();
+
+        MatchManager matchManager = new MatchManager();
+        matchManager.findAllMatches();
 
         HelloApplication.changeScene(ControllerNames.MainView);
     }

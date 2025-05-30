@@ -11,7 +11,6 @@ import java.sql.SQLException;
 
 public interface DAO
 {
-    //TO BE UPDATED!
     void create(Object object);
     void read(Object object);
     ArrayList readAll(Object object);
@@ -46,4 +45,6 @@ public interface DAO
     boolean updateSwappingStatus(int profileID, Boolean swappingStatus);
 
     List<Profile> getAllProfiles();
+
+    void saveMatch(int profileAID, int profileBID);
 }
