@@ -96,16 +96,11 @@ VALUES
 GO
 
 INSERT INTO tblJobFunction (fldFunction) VALUES
-('Tømrer'),
-('Carpenter'),
-('Pædagog'),
-('Pedagogue'),
-('IT-supporter'),
-('IT-supporter'),
-('Sygeplejerske'),
-('Nurse'),
-('Elektriker'),
-('Electrician');
+('Carpenter'), -- 1
+('Pedagogue'), -- 2
+('IT-Supporter'), -- 3
+('Nurse'), -- 4
+('Electrician'); -- 5
 
 GO
 
@@ -137,16 +132,16 @@ INSERT INTO tblProfile (
 
 )
 VALUES
-(N'Mads Kristensen', N'Softwareudvikler', N'Østerbrogade 45, 2100 København Ø', 1, 48000, 30000, N'3', 1, 1),
-(N'Frederik Hansen', N'Projektleder', N'Banevænget 12, 3460 Birkerød', 2, 52000, 35000, N'4', 1, 2),
-(N'Kasper Nielsen', N'Markedsføringskonsulent', N'Søndergade 88, 8000 Aarhus C', 3, 43000, 29000, N'2', 1, 3),
-(N'Sofie Sørensen', N'HR-specialist', N'Højmarksvej 4, 8700 Horsens', 2, 41000, 31000, N'3', 1, 4),
-(N'Emilie Jensen', N'IT-supporter', N'Vesterbrogade 120, 1620 København V', 1, 39000, 25000, N'5', 1, 5),
-(N'Lukas Madsen', N'UX-designer', N'Rosenørns Allé 32, 1970 Frederiksberg', 3, 45000, 32000, N'4', 1, 6),
-(N'Mathilde Lauritsen', N'Datavarehusanalytiker', N'Kastetvej 100, 9000 Aalborg', 4, 51000, 33000, N'2', 1, 7),
-(N'Oscar Thomsen', N'Kommunikationsrådgiver', N'Venlighedsvej 2, 2800 Kongens Lyngby', 2, 47000, 31000, N'1', 1, 8),
-(N'Ida Holm', N'Netværksadministrator', N'Kirkegade 22, 6700 Esbjerg', 4, 44000, 29000, N'5', 1, 9),
-(N'Magnus Bro', N'Forretningsudvikler', N'Skolegade 7, 6000 Kolding', 1, 55000, 36000, N'3', 1, 10);
+(N'Mads Kristensen', N'Software Developer', N'Østerbrogade 45, 2100 København Ø', 1, 48000, 30000, N'25 km', 1, 1),
+(N'Frederik Hansen', N'Project Leader', N'Banevænget 12, 3460 Birkerød', 2, 52000, 35000, N'35 km', 1, 2),
+(N'Kasper Nielsen', N'Marketing Consultant', N'Søndergade 88, 8000 Aarhus C', 3, 43000, 29000, N'10 km', 1, 3),
+(N'Sofie Sørensen', N'HR-Specialist', N'Højmarksvej 4, 8700 Horsens', 2, 41000, 31000, N'20 km', 1, 4),
+(N'Emilie Jensen', N'IT-Supporter', N'Vesterbrogade 120, 1620 København V', 1, 39000, 25000, N'35 km', 1, 5),
+(N'Lukas Madsen', N'UX-Designer', N'Rosenørns Allé 32, 1970 Frederiksberg', 3, 45000, 32000, N'50 km', 1, 6),
+(N'Mathilde Lauritsen', N'Data Warehouse Analyst', N'Kastetvej 100, 9000 Aalborg', 4, 51000, 33000, N'20 km', 1, 7),
+(N'Oscar Thomsen', N'Communications Advisor', N'Venlighedsvej 2, 2800 Kongens Lyngby', 2, 47000, 31000, N'45 km', 1, 8),
+(N'Ida Holm', N'Networks Administrator', N'Kirkegade 22, 6700 Esbjerg', 4, 44000, 29000, N'10', 1, 9),
+(N'Magnus Bro', N'Business Developer', N'Skolegade 7, 6000 Kolding', 1, 55000, 36000, N'5', 1, 10);
 
 GO
 
@@ -154,7 +149,16 @@ INSERT INTO tblProfileJobFunction(
 		fldProfileID,
 		fldJobFunctionID)
 
-VALUES (5, 5)
+VALUES (1, 1),
+       (2, 1),
+       (3, 2),
+       (4, 1),
+       (5, 2),
+       (6, 5),
+       (7, 3),
+       (8, 3),
+       (9, 5),
+       (10, 2);
 
 GO
 
@@ -163,25 +167,15 @@ INSERT INTO tblMatches (
             fldProfileBID,
             fldStateID,
             fldMatchDate,
-            fldMatchResponseDate,
-            fldRequestResponseDate,
-            fldSwapResponseDate,
             fldSenderProfileID)
 
 VALUES
-        (1, 2, 1, '2025-05-22', NULL, NULL, NULL, NULL)
+        (1, 2, 1, GETDATE(), NULL),
+        (1, 4, 1, GETDATE(), NULL),
+        (2, 4, 1, GETDATE(), NULL),
+        (3, 5, 1, GETDATE(), NULL);
+        (3, 10, 1, GETDATE(), NULL),
+        (6, 9, 1, GETDATE(), NULL),
+        (7, 8, 1, GETDATE(), NULL);
 
 GO
-
-INSERT INTO tblMatches (fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldSenderProfileID)
-VALUES
-(4, 5, 1, GETDATE(), NULL),  -- Kasper Nielsen ↔ Sofie Sørensen
-(6, 7, 1, GETDATE(), NULL),  -- Emilie Jensen ↔ Lukas Madsen
-(5, 9, 1, GETDATE(), NULL),  -- Sofie Sørensen ↔ Mathilde Lauritsen
-(8, 4, 1, GETDATE(), NULL),  -- Oscar Thomsen ↔ Kasper Nielsen
-(10, 11, 1, GETDATE(), NULL),-- Magnus Bro ↔ Magnus Bro
-(2, 4, 1, GETDATE(), NULL),  -- Frederik Hansen ↔ Kasper Nielsen
-(3, 5, 1, GETDATE(), NULL),  -- Kasper Nielsen ↔ Sofie Sørensen
-(6, 9, 1, GETDATE(), NULL),  -- Emilie Jensen ↔ Ida Holm
-(5, 8, 1, GETDATE(), NULL),  -- Sofie Sørensen ↔ Oscar Thomsen
-(3, 10, 1, GETDATE(), NULL); -- Kasper Nielsen ↔ Magnus Bro
