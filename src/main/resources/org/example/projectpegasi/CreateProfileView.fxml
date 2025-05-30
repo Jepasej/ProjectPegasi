@@ -4,91 +4,126 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="500" prefWidth="400" style="-fx-background-color: #EDE6D6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.CreateProfileViewController">
+<AnchorPane prefHeight="802.0" prefWidth="400" style="-fx-background-color: #EDE6D6;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpegasi.Application.CreateProfileViewController">
+   <StackPane prefHeight="800.0" prefWidth="800.0">
+      <children>
 
-    <VBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
-        <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Profile" />
-      <VBox prefHeight="0.0" prefWidth="360.0">
-         <children>
-            <Label text="Username" />
-            <TextField fx:id="usernameField" promptText="Enter desired username" />
-         </children>
-      </VBox>
-      <VBox prefHeight="0.0" prefWidth="360.0">
-         <children>
-            <Label text="Password" />
-            <TextField fx:id="passwordField" promptText="Enter desired password" />
-         </children>
-      </VBox>
-      <VBox layoutX="10.0" layoutY="101.0" prefHeight="0.0" prefWidth="360.0">
-         <children>
-            <Label text="Repeat Password" />
-            <TextField fx:id="repeatPasswordField" promptText="Enter desired password" />
-         </children>
-      </VBox>
+          <VBox fx:id="formVBox" alignment="CENTER" spacing="8.0">
+              <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Profile" />
+            <VBox prefHeight="0.0" prefWidth="360.0">
+               <children>
+                  <Label text="Username" />
+                  <TextField fx:id="usernameField" promptText="Enter desired username" />
+               </children>
+            </VBox>
+            <VBox prefHeight="0.0" prefWidth="360.0">
+               <children>
+                  <Label text="Password" />
+                  <TextField fx:id="passwordField" promptText="Enter desired password" />
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="101.0" prefHeight="0.0" prefWidth="360.0">
+               <children>
+                  <Label text="Repeat Password" />
+                  <TextField fx:id="repeatPasswordField" promptText="Enter desired password" />
+               </children>
+            </VBox>
 
-        <!-- Full Name -->
-        <VBox>
-            <Label text="Full Name" />
-            <TextField fx:id="fullNameField" promptText="Enter full name" />
-        </VBox>
+              <!-- Full Name -->
+              <VBox>
+                  <Label text="Full Name" />
+                  <TextField fx:id="fullNameField" promptText="Enter full name" />
+              </VBox>
 
-        <!-- Job Title -->
-        <VBox>
-            <Label text="Job Title " />
-            <TextField fx:id="jobTitleField" promptText="Enter job title" />
-        </VBox>
+              <!-- Job Title -->
+              <VBox>
+                  <Label text="Job Title " />
+                  <TextField fx:id="jobTitleField" promptText="Enter job title" />
+              </VBox>
 
-        <!-- Job Function -->
-        <VBox>
-            <Label text="Job Function" />
-         <HBox prefHeight="100.0" prefWidth="200.0">
+              <!-- Job Function -->
+              <VBox>
+                  <Label text="Job Function" />
+               <TextField fx:id="jobFunctionField" editable="false" />
+                  <ComboBox fx:id="jobFunctionComboBox" editable="true" onAction="#onJobFunctionSelected" promptText="Select job function" />
+              </VBox>
+
+              <!-- Company -->
+              <VBox>
+                  <Label text="Company" />
+               <TextField fx:id="companyField" editable="false" />
+                  <ComboBox fx:id="companyComboBox" editable="true" onAction="#onCompanySelected" onMouseClicked="#onCompanySelected" promptText="Select company" />
+              </VBox>
+
+              <!-- Home Address -->
+              <VBox>
+                  <Label text="Home Address " />
+                  <TextField fx:id="homeAddressField" promptText="Enter address" />
+              </VBox>
+
+              <!-- Min Salary -->
+              <VBox>
+                  <Label text="Min Salary" />
+                  <ComboBox fx:id="minSalaryComboBox" promptText="Select salary" />
+              </VBox>
+            <VBox layoutX="10.0" layoutY="576.0">
+               <children>
+                  <Label text="Current Salary (before taxes)" />
+                  <TextField fx:id="currentSalaryField" promptText="Enter current salary before tax" />
+               </children>
+            </VBox>
+
+              <!-- Distance Preference -->
+              <VBox>
+                  <Label text="Max Distance From Home" />
+                  <ComboBox fx:id="distancePrefComboBox" promptText="Select distance" />
+              </VBox>
+
+              <!-- Buttons -->
+              <HBox alignment="CENTER" spacing="20">
+                  <Button fx:id="saveButton" onAction="#onSaveButtonClick" text="Save" />
+                  <Button fx:id="cancelButton" onAction="#onCancelButtonClick" text="Cancel" />
+              </HBox>
+            <StackPane.margin>
+               <Insets left="20.0" right="20.0" />
+            </StackPane.margin>
+          </VBox>
+         <VBox fx:id="confirmationVBox" prefHeight="851.0" prefWidth="360.0" spacing="10.0" visible="false">
             <children>
-                  <ComboBox fx:id="jobFunctionComboBox" editable="true"
-                            promptText="Select job function"
-                            onAction="#onJobFunctionSelected" />
-               <TextArea fx:id="jobFunctionArea" editable="false" prefHeight="100.0" prefWidth="219.0" />
+               <Label alignment="CENTER" prefHeight="27.0" prefWidth="409.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Profile Information" />
+               <Label text="Username: " />
+               <Label fx:id="usernameLabel" />
+               <Label text="Password" />
+               <Label fx:id="passwordLabel" />
+               <Label text="Full Name: " />
+               <Label fx:id="fullNameLabel" />
+               <Label text="Job Title: " />
+               <Label fx:id="jobTitleLabel" />
+               <Label text="Job Function: " />
+               <Label fx:id="jobFunctionLabel" />
+               <Label text="Company: " />
+               <Label fx:id="companyLabel" />
+               <Label text="Home Address: " />
+               <Label fx:id="homeAddressLabel" />
+               <Label text="Minimum Salary: " />
+               <Label fx:id="minSalLabel" />
+               <Label text="Current Salary: " />
+               <Label fx:id="curSalLabel" />
+               <Label text="Maximum Distance From Home: " />
+               <Label fx:id="maxDistLabel" />
+               <HBox alignment="CENTER" prefHeight="30.0" prefWidth="360.0" spacing="20.0">
+                  <children>
+                     <Button mnemonicParsing="false" onAction="#onConfirmButtonClick" text="Confirm" />
+                     <Button mnemonicParsing="false" onAction="#onBackButtonClick" text="Back" />
+                  </children>
+               </HBox>
             </children>
-         </HBox>
-        </VBox>
-
-        <!-- Company -->
-        <VBox>
-            <Label text="Company" />
-         <TextField fx:id="companyField" editable="false" />
-            <ComboBox fx:id="companyComboBox" editable="true" onAction="#onCompanySelected" onMouseClicked="#onCompanySelected" promptText="Select company" />
-        </VBox>
-
-        <!-- Home Address -->
-        <VBox>
-            <Label text="Home Address " />
-            <TextField fx:id="homeAddressField" promptText="Enter address" />
-        </VBox>
-
-        <!-- Min Salary -->
-        <VBox>
-            <Label text="Min Salary" />
-            <ComboBox fx:id="minSalaryComboBox" promptText="Select salary" />
-        </VBox>
-      <VBox layoutX="10.0" layoutY="576.0">
-         <children>
-            <Label text="Current Salary (before taxes)" />
-            <TextField fx:id="currentSalaryField" promptText="Enter current salary before tax" />
-         </children>
-      </VBox>
-
-        <!-- Distance Preference -->
-        <VBox>
-            <Label text="Max Distance From Home" />
-            <ComboBox fx:id="distancePrefComboBox" promptText="Select distance" />
-        </VBox>
-
-        <!-- Buttons -->
-        <HBox alignment="CENTER" spacing="20">
-            <Button fx:id="saveButton" onAction="#onSaveButtonClick" text="Save" />
-            <Button fx:id="cancelButton" onAction="#onCancelButtonClick" text="Cancel" />
-        </HBox>
-    </VBox>
+            <StackPane.margin>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </StackPane.margin>
+         </VBox>
+      </children>
+   </StackPane>
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
