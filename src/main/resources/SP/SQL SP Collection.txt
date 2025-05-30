@@ -1125,6 +1125,7 @@ AS
 				tblCompany c ON p.fldCompanyID = c.fldCompanyID
 	END
 
+GO
 
 CREATE OR ALTER PROCEDURE spUpdateProfileData
     @fldUserID INT,
@@ -1269,3 +1270,13 @@ BEGIN
 END
 
 GO
+
+CREATE OR ALTER PROCEDURE SaveMatch(@ProfileAID INT,
+									@ProfileBID INT,
+									@StateID INT,
+									@MatchDate DATE)
+AS
+	BEGIN
+		INSERT INTO tblMatches(fldProfileAID, fldProfileBID, fldStateID, fldMatchDate)
+		VALUES (@ProfileAID, @ProfileBID, @StateID, @MatchDate)
+	END

@@ -46,4 +46,6 @@ public interface DAO
     boolean updateSwappingStatus(int profileID, Boolean swappingStatus);
 
     List<Profile> getAllProfiles();
+
+    void saveMatch(int profileAID, int profileBID);
 }

@@ -1,19 +1,25 @@
 package org.example.projectpegasi;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javafx.util.Duration;
 import org.example.projectpegasi.BusinessService.Lazy;
 import org.example.projectpegasi.BusinessService.MatchManager;
 import org.example.projectpegasi.BusinessService.SceneControllerPairs;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.DomainModels.ProfilePair;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class HelloApplication extends Application
 {
@@ -70,10 +76,32 @@ public class HelloApplication extends Application
                 new Lazy<>(() -> buildScene("ProfileView.fxml")),
                 ControllerNames.ProfileView
         ));
-        
-        //Matches our profiles on application start
-        MatchManager matchManager = new MatchManager();
-        matchManager.findAllMatches();
+
+        System.out.println("Setting up Timeline");
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.seconds(15),
+                event -> {
+                    System.out.println("Timeline started at " + System.currentTimeMillis());
+            try
+            {
+                MatchManager matchManager = new MatchManager();
+                List<ProfilePair> matchedPairs = matchManager.findAllMatches();
+
+                for (ProfilePair pair : matchedPairs)
+                {
+                    System.out.println("Match: " + pair.getProfile1().getJobFunction() +
+                            " " + pair.getProfile2().getJobFunction() + " " + pair.getSimilarityScore());
+                }
+                }catch (Exception e)
+                {
+                    System.err.println("An error occurred while trying to find matches " + e.getMessage());
+                    e.printStackTrace();
+                }
+                }
+        ));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        Platform.runLater(timeline::play);
+
 
         stage.setTitle("JobSwap");
         stage.setScene(overViewScene);
