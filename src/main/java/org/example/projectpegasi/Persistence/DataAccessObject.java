@@ -29,12 +29,12 @@ public class DataAccessObject implements DAO
             {
                 match = new Match();
                 hasMatch = true;
-                match.setMatchID(rs.getInt(1));
-                match.setProfileAID(rs.getInt(2));
-                match.setProfileBID(rs.getInt(3));
-                match.setStateID(rs.getInt(4));
-                match.setMatchDate(rs.getDate(5));
-                match.setMatchResponseDate(rs.getDate(6));
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
             }
             //If match not found
             if (!hasMatch)
@@ -205,18 +205,24 @@ public class DataAccessObject implements DAO
         List<Match> matches = new ArrayList<>();
         try
         {
-            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetMatchesForProfile(?)}");
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetIncomingRequestsForProfile(?,?)}");
             stmt.setInt(1, profileID);
+            stmt.setInt(2, senderProfileID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
                 Match match = new Match();
-                match.setMatchID(rs.getInt(1));
-                match.setProfileAID(rs.getInt(2));
-                match.setProfileBID(rs.getInt(3));
-                match.setStateID(rs.getInt(4));
+                // Map each column by name – ensures correctness even if column order changes
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setSenderProfileID(rs.getInt("fldSenderProfileID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                match.setRequestResponseDate(rs.getDate("fldRequestResponseDate"));
+                match.setSwapResponseDate(rs.getDate("fldSwapResponseDate"));
                 matches.add(match);
-
             }
 
         }
@@ -257,6 +263,7 @@ public class DataAccessObject implements DAO
 
             while (rs.next()){
                 Match match = new Match();
+                // Map each column by name – ensures correctness even if column order changes
                 match.setMatchID(rs.getInt("fldMatchID"));
                 match.setProfileAID(rs.getInt("fldProfileAID"));
                 match.setProfileBID(rs.getInt("fldProfileBID"));

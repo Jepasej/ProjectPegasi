@@ -2,7 +2,6 @@ package org.example.projectpegasi.Application;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -65,7 +64,6 @@ public class OutgoingRequestViewController
         int LoginProfileID = MainViewController.getCurrentProfileID();
         DataAccessObject dao = new DataAccessObject();
         List<Match> outgoingRequests = dao.getOutgoingRequests(LoginProfileID, LoginProfileID);
-
 
         // Filter requests where state = 2 (outgoing requests)
         outgoingRequests = outgoingRequests.stream()

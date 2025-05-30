@@ -9,18 +9,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
+import org.example.projectpegasi.DomainModels.MatchDetails;
+import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IncomingRequestViewController
 {
     @FXML
-    private TableView<Match> incomingRequestTable;
+    private TableView<MatchDetails> incomingRequestTable;
 
     @FXML
     private TableColumn<Match, String> jobTitleColumnMatch, companyColumnMatch;
@@ -28,9 +33,6 @@ public class IncomingRequestViewController
     @FXML
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
 
-    // Her skal laves en initialize metode. SwapRequestManagers metoder til accept request og decline request
-    // skal bruges her. Hardcode kolonner og indsæt enten "✔" eller "✘" alt afhængig af hvilken knap der trykkes
-    // Brug metoden fra MatchViewController og omdøb navne.
 
     @FXML
     public void initialize() {
@@ -38,15 +40,16 @@ public class IncomingRequestViewController
 
         // Creates a column with a "✔" button that allows the user to accept a request.
         // When clicked, it creates a jobswap using the match's ID.
-        TableColumn<Match, Void> acceptRequestColumnMatch = new TableColumn<>("Accept Request");
+        TableColumn<MatchDetails, Void> acceptRequestColumnMatch = new TableColumn<>("Accept Request");
         acceptRequestColumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button acceptRequestButton = new Button("✔");
 
             {
                 acceptRequestButton.setOnAction(event -> {
-                    Match match = getTableView().getItems().get(getIndex());
+                    MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.acceptSwapRequest(match.getMatchID());
+                        srManager.acceptSwapRequest(details.getMatchID());
+                        incomingRequestTable.getItems().remove(getIndex());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -59,16 +62,16 @@ public class IncomingRequestViewController
         // Creates a column with a "✘" button that allows the user to decline a request.
         // When clicked, the match is removed from the UI, but remains in the database and
         // changes it's state to "denied".
-        TableColumn<Match, Void> declineRequestcolumnMatch = new TableColumn<>("Decline Request");
+        TableColumn<MatchDetails, Void> declineRequestcolumnMatch = new TableColumn<>("Decline Request");
         declineRequestcolumnMatch.setCellFactory(col -> new TableCell<>() {
             private final Button declineRequestButton = new Button("✘");
 
             {
                 declineRequestButton.setOnAction(event -> {
-                    Match match = getTableView().getItems().get(getIndex());
+                    MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.declineMatchAndRequest(match.getMatchID());
-                        incomingRequestTable.getItems().remove(match);
+                        srManager.declineMatchAndRequest(details.getMatchID());
+                        incomingRequestTable.getItems().remove(getIndex());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -77,24 +80,49 @@ public class IncomingRequestViewController
                 setGraphic(declineRequestButton); //Show button in cell
             }
         });
-        incomingRequestTable.getColumns().add(declineRequestcolumnMatch); // Add the column to table
 
         // Load all incoming requests for the current user
         int LoginProfileID = MainViewController.getCurrentProfileID();
         DataAccessObject dao = new DataAccessObject();
         List<Match> incomingRequests = dao.getMatchesForProfile(LoginProfileID);
 
-        //Testkode for at tjekke om knapper duer, skal fjernes når view incoming requests virker
-        ObservableList<Match> testMatches = FXCollections.observableArrayList();
 
-        Match testMatch = new Match();
-        testMatch.setMatchID(123);
-        testMatch.setProfileAID(2);
-        testMatch.setProfileBID(3);
-        testMatch.setStateID(1);
-        testMatches.add(testMatch);
-        incomingRequestTable.setItems(testMatches);
-    }
+        // Filter requests where state = 2 (outgoing requests)
+        incomingRequests = incomingRequests.stream()
+                .filter(match -> match.getStateID() == 2)
+                .collect(Collectors.toList());
+
+        //Filter requests which the logged-in user has sent
+        incomingRequests = incomingRequests.stream()
+                .filter(match -> match.getSenderProfileID() != LoginProfileID)
+                .collect(Collectors.toList());
+        List<MatchDetails> matchDetails = new ArrayList<>();
+
+        // Retrieve job title and company info for the other profile in each request
+        for (Match match : incomingRequests) {
+            int othersProfileID = (match.getProfileAID() == LoginProfileID) ? match.getProfileBID() : match.getProfileAID();
+            //Get profileinformation
+            Profile profile = dao.getAttributesForMatchView(othersProfileID);
+            MatchDetails details = new MatchDetails(profile.getJobTitle(), profile.getCompany().getName(), match.getMatchID());
+
+            matchDetails.add(details);
+        }
+        // Convert list to an observable list for TableView
+        ObservableList<MatchDetails> observableList = FXCollections.observableArrayList(matchDetails);
+
+        // Bind columns to MatchDetails fields
+        jobTitleColumnMatch.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
+        companyColumnMatch.setCellValueFactory(new PropertyValueFactory<>("companyName"));
+        incomingRequestTable.setItems(observableList);
+
+        // Remove existing button columns if anyone present
+        incomingRequestTable.getColumns().removeIf(col ->
+                col.getText().equals("Delete Request"));
+
+        // Add button columns only if there are requests
+        if (!observableList.isEmpty()) {
+            incomingRequestTable.getColumns().addAll(acceptRequestColumnMatch, declineRequestcolumnMatch);
+        }    }
 
     public void onMatchesButtonClick()
     {
