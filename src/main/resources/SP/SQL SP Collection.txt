@@ -1324,3 +1324,137 @@ BEGIN
 END
 
 Go
+
+create or alter procedure DeclineMatchByID (@matchID int)
+	as
+		begin
+			Update tblMatches
+			set fldStateID = 4
+			where fldMatchID = @matchID
+		end
+
+GO
+
+create of alter procedure DeleteRequestByMatchID (@matchID int)
+as
+	begin
+	delete from tblMatches where fldMatchID = @matchID
+	end
+
+
+CREATE OR ALTER PROCEDURE GetAttributesForMatchView
+    @profileID INT
+AS
+BEGIN
+    SELECT
+        p.fldJobTitle,
+        c.fldCompanyID,
+        c.fldCompanyName
+    FROM tblProfile p
+    JOIN tblCompany c ON p.fldCompanyID = c.fldCompanyID
+    WHERE p.fldProfileID = @profileID;
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE GetIncomingRequestsForProfile
+    @profileID INT,
+    @senderProfileID INT
+AS
+BEGIN
+    SELECT
+        fldMatchID,
+        fldProfileAID,
+        fldProfileBID,
+        fldStateID,
+        fldSenderProfileID,
+        fldMatchDate,
+        fldRequestResponseDate,
+        fldSwapResponseDate
+    FROM tblMatches
+    WHERE
+        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
+        AND fldStateID = 2
+        AND fldSenderProfileID != @senderProfileID;
+END
+
+GO
+
+CREATE OR ALTER PROCEDURE GetMatchesForProfile
+    @profileID INT
+AS
+BEGIN
+    SELECT *
+    FROM tblMatches
+    WHERE (fldProfileAID = @profileID OR fldProfileBID = @profileID) AND fldStateID = 1;
+END
+
+GO
+CREATE OR ALTER PROCEDURE GetOutgoingRequestsForProfile
+    @profileID INT,
+    @senderProfileID INT
+AS
+BEGIN
+    SELECT
+        fldMatchID,
+        fldProfileAID,
+        fldProfileBID,
+        fldStateID,
+        fldSenderProfileID,
+        fldMatchDate,
+        fldMatchResponseDate,
+        fldRequestResponseDate,
+        fldSwapResponseDate
+    FROM tblMatches
+    WHERE
+        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
+        AND fldStateID = 2
+        AND fldSenderProfileID = @senderProfileID;
+END
+
+GO
+
+CREATE or alter PROCEDURE GetProfileID
+    @userID INT
+AS
+BEGIN
+    SELECT fldProfileID
+    FROM tblProfile
+    WHERE fldUserID = @userID;
+END
+GO
+
+CREATE or alter PROCEDURE GetProfileInfo
+    @profileID INT
+AS
+BEGIN
+    SELECT fldJobTitle, fldCompanyID
+    FROM tblProfile
+    WHERE fldProfileID = @profileID;
+END
+
+go
+
+create or alter procedure ReadMatchByID (@matchID int)
+as
+	begin
+		select *
+		from tblMatches
+		where fldMatchID = @matchID
+	end
+
+GO
+
+CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profileBID INT, @stateID INT, @matchDate DATE, @matchResponseDate DATE, @senderProfileID int)
+	AS
+		BEGIN
+			UPDATE tblMatches
+				SET
+					fldStateID = @stateID,
+					fldMatchDate = @matchDate,
+					fldMatchResponseDate = @matchResponseDate,
+					fldSenderProfileID = @senderProfileID
+				WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
+				OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
+END
+
