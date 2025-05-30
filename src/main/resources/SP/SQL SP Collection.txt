@@ -310,6 +310,7 @@ AS
 				tblCompany c ON p.fldCompanyID = c.fldCompanyID
 	END
 
+GO
 
 CREATE OR ALTER PROCEDURE spUpdateProfileData
     @fldUserID INT,
@@ -486,12 +487,13 @@ create or alter procedure DeclineMatchByID (@matchID int)
 
 GO
 
-create of alter procedure DeleteRequestByMatchID (@matchID int)
+create or alter procedure DeleteRequestByMatchID (@matchID int)
 as
 	begin
 	delete from tblMatches where fldMatchID = @matchID
 	end
 
+GO
 
 CREATE OR ALTER PROCEDURE GetAttributesForMatchView
     @profileID INT
@@ -574,6 +576,7 @@ BEGIN
     FROM tblProfile
     WHERE fldUserID = @userID;
 END
+
 GO
 
 CREATE or alter PROCEDURE GetProfileInfo
