@@ -19,90 +19,6 @@ GO
 CREATE OR ALTER PROCEDURE GetUserID(@Username NVARCHAR(255))
 AS
     BEGIN
-        SELECT fldUserID 
-        FROM tblUser
-        WHERE fldUserName = @Username;
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetCompanyID (@CompanyName NVARCHAR(255))
-AS
-    BEGIN
-        SELECT fldCompanyID
-        FROM tblCompany
-        WHERE fldCompanyName = @CompanyName
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE NewUser (@UserName NVARCHAR(20), @Password NVARCHAR(20))
-AS
-    BEGIN
-        INSERT INTO tblUser(fldUserName, fldPassword)
-        VALUES (@UserName, @Password)
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE ReadMatchByID (@matchID int)
-
-as
-    begin
-        Select * 
-        from tblMatches 
-        where fldMatchID = @matchID
-    end
-
-GO
-
-CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date, @senderProfileID int)
-
-as
-    begin
-        Update tblMatches
-            	SET
-            		fldStateID = @stateID,
-            		fldMatchDate = @matchDate,
-            		fldMatchResponseDate = @matchResponseDate,
-            		fldSenderProfileID = @senderProfileID
-            	WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
-            	OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
-    end
-
-GO
-
-CREATE OR ALTER procedure DeclineMatchByID (@matchID int)
-    as
-        begin
-            Update tblMatches 
-            set fldStateID = 4 
-            where fldMatchID = @matchID
-        end
-
-GO
-
-USE DBJobSwapSystem
-
-GO
-
-CREATE OR ALTER PROCEDURE sp_GetUserPasswordByID
-    @UserID INT,
-    @Password NVARCHAR(20) OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT @Password = fldPassword
-    FROM tblUser
-    WHERE fldUserID = @UserID;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE GetUserID(@Username NVARCHAR(255))
-AS
-    BEGIN
         SELECT fldUserID
         FROM tblUser
         WHERE fldUserName = @Username;
@@ -129,37 +45,6 @@ AS
 
 GO
 
-CREATE OR ALTER PROCEDURE ReadMatchByID (@matchID int)
-
-as
-    begin
-        Select *
-        from tblMatches
-        where fldMatchID = @matchID
-    end
-
-GO
-
-CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date)
-
-as
-    begin
-        Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate)
-        values(@matchID, @profileAID, @profileBID, @stateID, @matchDate, @matchresponseDate)
-    end
-
-GO
-
-CREATE OR ALTER procedure DeclineMatchByID (@matchID int)
-    as
-        begin
-            Update tblMatches
-            set fldStateID = 4
-            where fldMatchID = @matchID
-        end
-
-GO
-
 CREATE OR ALTER PROCEDURE CheckPassword
     @fldUserName VARCHAR(20),
     @fldPassword varchar(20)
@@ -179,512 +64,6 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE UpdateSwappingStatus
-    @ProfileID INT,
-    @SwappingStatus BIT
-AS
-BEGIN
-    -- Update the swapping status for the specified profile
-    UPDATE tblProfile
-    SET fldSwappingStatus = @SwappingStatus
-    WHERE fldProfileID = @ProfileID;
-
-    -- Return a success message
-    SELECT 'Swapping status updated successfully.' AS Result;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE InsertMatch
-    @ProfileAID INT,
-    @ProfileBID INT,
-    @StateID INT,
-    @MatchDate DATE,
-    @MatchResponseDate DATE,
-    @RequestResponseDate DATE,
-    @SwapResponseDate DATE
-AS
-BEGIN
-    -- Insert a new match record into tblMatches
-    INSERT INTO tblMatches (
-        fldProfileAID,
-        fldProfileBID,
-        fldStateID,
-        fldMatchDate,
-        fldMatchResponseDate,
-        fldRequestResponseDate,
-        fldSwapResponseDate
-    )
-    VALUES (
-        @ProfileAID,
-        @ProfileBID,
-        @StateID,
-        @MatchDate,
-        @MatchResponseDate,
-        @RequestResponseDate,
-        @SwapResponseDate
-    );
-
-    -- Return the newly created MatchID
-    SELECT SCOPE_IDENTITY() AS NewMatchID;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE DeleteProfile
-    @ProfileID INT
-AS
-BEGIN
-    -- Delete related records in tblMatches
-    DELETE FROM tblMatches
-    WHERE fldProfileAID = @ProfileID OR fldProfileBID = @ProfileID;
-
-    -- Delete the profile from tblProfile
-    DELETE FROM tblProfile
-    WHERE fldProfileID = @ProfileID;
-
-    -- Return a success message
-    SELECT 'Profile and related matches deleted successfully.' AS Result;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE ReadProfileByID
-    @ProfileID INT
-AS
-BEGIN
-    -- Select profile based on the provided ProfileID
-    SELECT
-        p.fldFullName,
-        p.fldJobTitle,
-        p.fldHomeAddress,
-        c.fldCompanyName,
-        p.fldWage,
-        p.fldPayPref,
-        p.fldDistPref,
-        p.fldSwappingStatus,
-        jf.fldFunction
-    FROM
-        tblProfile p
-    INNER JOIN
-        tblCompany c ON p.fldCompanyID = c.fldCompanyID
-    INNER JOIN
-        tblProfileJobFunction pjf ON p.fldProfileID = pjf.fldProfileID
-    INNER JOIN
-        tblJobFunction jf ON pjf.fldJobFunctionID = jf.fldJobFunctionID
-    WHERE
-        p.fldProfileID = @ProfileID;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE UpdateMatch
-    @MatchID INT,
-    @StateID INT = NULL,
-    @MatchResponseDate DATE = NULL,
-    @RequestResponseDate DATE = NULL,
-    @SwapResponseDate DATE = NULL
-AS
-BEGIN
-    -- Update the match record in tblMatches
-    UPDATE tblMatches
-    SET
-        fldStateID = ISNULL(@StateID, fldStateID),
-        fldMatchResponseDate = ISNULL(@MatchResponseDate, fldMatchResponseDate),
-        fldRequestResponseDate = ISNULL(@RequestResponseDate, fldRequestResponseDate),
-        fldSwapResponseDate = ISNULL(@SwapResponseDate, fldSwapResponseDate)
-    WHERE
-        fldMatchID = @MatchID;
-
-    -- Return a success message
-    SELECT 'Match updated successfully.' AS Result;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE spUpdateProfile
-    @ProfileID INT,
-    @FullName NVARCHAR(255),
-    @JobTitle NVARCHAR(255),
-    @HomeAddress NVARCHAR(255),
-    @CompanyID INT,
-    @Wage INT,
-    @PayPref INT,
-    @DistPref NVARCHAR(255),
-    @UserID INT
-AS
-BEGIN
-    UPDATE tblProfile
-    SET
-        fldFullName = @FullName,
-        fldJobTitle = @JobTitle,
-        fldHomeAddress = @HomeAddress,
-        fldCompanyID = @CompanyID,
-        fldWage = @Wage,
-        fldPayPref = @PayPref,
-        fldDistPref = @DistPref,
-        fldUserID = @UserID
-    WHERE fldProfileID = @ProfileID;
-END;
-
-GO
-
-CREATE OR ALTER PROC UserNameUniqueness(@name varchar(20))
-
-AS
-
-    BEGIN
-        IF EXISTS (SELECT fldUserName FROM tblUser WHERE fldUserName = @name)
-            SELECT 'true' AS USERNAMEEXISTS
-        ELSE
-            SELECT 'false' AS USERNAMEEXISTS
-
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetJobTitleByProfileID
-    @ProfileID INT
-AS
-BEGIN
-    SELECT fldJobTitle
-    FROM tblProfile
-    WHERE fldProfileID = @ProfileID
-END;
-
-GO
-
-CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @matchDate date, @matchresponseDate date)
-as
-    BEGIN
-        Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate)
-        values(@matchID, @profileAID, @profileBID, 2, @matchDate, @matchresponseDate)
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE UpdateSwappingStatus
-                (@ProfileID INT,
-                @SwappingStatus BIT)
-AS
-    BEGIN
-        UPDATE tblProfile
-        SET fldSwappingStatus = @SwappingStatus
-        WHERE fldProfileID = @ProfileID
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetTwoNewestMatchesByProfileID
-    @ProfileID INT
-AS
-BEGIN
-    SELECT TOP 2 *
-    FROM tblMatches
-    WHERE fldProfileAID = @ProfileID OR fldProfileBID = @ProfileID
-    ORDER BY fldMatchDate DESC;
-END;
-
-GO
-
-CREATE OR ALTER PROC spReadAllJobFunctions
-
-AS
-    BEGIN
-        SELECT fldFunction FROM tblJobFunction
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetTwoNewestRequestsByProfileID
-    @ProfileID INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT TOP 2 *
-    FROM tblMatches
-    WHERE fldProfileBID = @ProfileID AND fldStateID = 1 -- waiting requests
-    ORDER BY fldMatchResponseDate DESC;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE UserNameUniqueness (@name VARCHAR(20))
-
-AS
-
-    BEGIN
-        IF EXISTS (SELECT fldUserName FROM tblUser WHERE fldUserName = @name)
-            SELECT 'false' AS USERNAMEEXISTS
-        ELSE
-            SELECT 'true' AS USERNAMEEXISTS
-
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE spUpdatePassword
-    @UserID INT,
-    @NewPassword NVARCHAR(20)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    UPDATE tblUser
-    SET fldPassword = @NewPassword
-    WHERE fldUserID = @UserID;
-
-    END;
-
-GO
-
-CREATE OR ALTER PROCEDURE spReadAllCompanies
-AS
-    BEGIN
-        SELECT * FROM tblCompany
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetProfileID @UserID INT
-AS
-    BEGIN
-        SELECT fldProfileID
-        FROM tblProfile
-        WHERE fldUserID = @UserID
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetAttributesForMatchView
-    @profileID INT
-AS
-BEGIN
-    SELECT
-        p.fldJobTitle,
-        c.fldCompanyID,
-        c.fldCompanyName
-    FROM tblProfile p
-    JOIN tblCompany c ON p.fldCompanyID = c.fldCompanyID
-    WHERE p.fldProfileID = @profileID;
-END
-
-
-GO
-
-CREATE OR ALTER PROCEDURE GetMatchesForProfile
-    @profileID INT
-AS
-BEGIN
-    SELECT *
-    FROM tblMatches
-    WHERE fldProfileAID = @profileID OR fldProfileBID = @profileID AND fldStateID = 1;
-END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetProfileID
-    @userID INT
-AS
-BEGIN
-    SELECT fldProfileID
-    FROM tblProfile
-    WHERE fldUserID = @userID;
-END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetProfileInfo
-    @profileID INT
-AS
-BEGIN
-    SELECT fldJobTitle, fldCompanyID
-    FROM tblProfile
-    WHERE fldProfileID = @profileID;
-END
-
-go
-
-CREATE OR ALTER PROCEDURE ReadMatchByID (@matchID int)
-as
-begin
-select *
-from tblMatches
-where fldMatchID = @matchID
-end
-
-GO
-
-CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profileBID INT, @stateID INT, @matchDate DATE, @matchResponseDate DATE)
-AS
-BEGIN
-UPDATE tblMatches
-SET
-fldStateID = @stateID,
-fldMatchDate = @matchDate,
-fldMatchResponseDate = @matchResponseDate
-WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
-OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
-END
-
-go
-
-CREATE OR ALTER PROCEDURE DeclineMatchByID (@matchID int)
-as
-begin
-Update tblMatches
-set fldStateID = 4
-where fldMatchID = @matchID
-end
-
-go
-
-CREATE OR ALTER PROCEDURE DeleteRequestByMatchID (@matchID int)
-as
-begin
-delete from tblMatches where fldMatchID = @matchID
-end
-
-GO
-
-CREATE OR ALTER PROCEDURE spUpdateProfileData
-    @fldUserID INT,
-    @fldFullName NVARCHAR(255),       -- Required (NOT NULL)
-    @fldJobTitle NVARCHAR(255) = NULL,
-    @fldHomeAddress NVARCHAR(255) = NULL,
-    @fldCompanyID INT = NULL,
-    @fldWage INT = NULL,
-    @fldPayPref INT = NULL,
-    @fldDistPref NVARCHAR(255) = NULL,
-    @fldSwappingStatus BIT = NULL
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Ensure fldFullName is not NULL
-    IF @fldFullName IS NULL
-    BEGIN
-        RAISERROR('fldFullName cannot be NULL.', 16, 1);
-        RETURN;
-    END
-
-    UPDATE tblProfile
-    SET
-        fldFullName = @fldFullName,
-        fldJobTitle = @fldJobTitle,
-        fldHomeAddress = @fldHomeAddress,
-        fldCompanyID = @fldCompanyID,
-        fldWage = @fldWage,
-        fldPayPref = @fldPayPref,
-        fldDistPref = @fldDistPref,
-        fldSwappingStatus = @fldSwappingStatus
-    WHERE fldUserID = @fldUserID;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE CreateJobSwapAdmin
-    @Username NVARCHAR(128),
-    @Password NVARCHAR(128)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Create the login at the server level (if not already exists)
-    IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = @Username)
-    BEGIN
-        EXEC('CREATE LOGIN [' + @Username + '] WITH PASSWORD = ''' + @Password + ''';');
-    END
-
-    -- Create the user in the database
-    IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = @Username)
-    BEGIN
-        EXEC('CREATE USER [' + @Username + '] FOR LOGIN [' + @Username + '];');
-    END
-
-    -- Grant roles
-    EXEC sp_addrolemember 'db_accessadmin',  @Username;
-	EXEC sp_addrolemember 'db_backupoperator',@Username;
-	EXEC sp_addrolemember 'db_datareader',@Username;
-	EXEC sp_addrolemember 'db_datawriter',@Username;
-	EXEC sp_addrolemember 'db_ddladmin',     @Username;
-	EXEC sp_addrolemember 'db_owner',     @Username;
-	EXEC sp_addrolemember 'db_securityadmin',@Username;
-	EXEC sp_addrolemember 'jobSwapAdmin',@Username;
-END;
-
-GO
-
-CREATE OR ALTER PROCEDURE GrantAdminRoles
-    @Username NVARCHAR(128)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    EXEC sp_addrolemember 'db_accessadmin',    @Username;
-    EXEC sp_addrolemember 'db_backupoperator', @Username;
-    EXEC sp_addrolemember 'db_datareader',     @Username;
-    EXEC sp_addrolemember 'db_datawriter',     @Username;
-    EXEC sp_addrolemember 'db_ddladmin',       @Username;
-    EXEC sp_addrolemember 'db_owner',          @Username;
-    EXEC sp_addrolemember 'db_securityadmin',  @Username;
-    EXEC sp_addrolemember 'jobSwapAdmin',      @Username;
-END;
-GO
-
-CREATE OR ALTER PROCEDURE RevokeJobSwapAdminRoles
-    @Username NVARCHAR(128)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Check and revoke each role if the user is a member
-    IF IS_ROLEMEMBER('db_accessadmin', @Username) = 1
-        EXEC sp_droprolemember 'db_accessadmin', @Username;
-
-	IF IS_ROLEMEMBER('db_backupoperator', @Username) =1
-		EXEC sp_droprolemember 'db_backupoperator', @Username;
-
-	IF IS_ROLEMEMBER('db_datareader', @Username) =1
-		EXEC sp_droprolemember 'db_datareader', @Username;
-
-	IF IS_ROLEMEMBER('db_datawriter', @Username) =1
-		EXEC sp_droprolemember 'db_datawriter', @Username;
-
-	IF IS_ROLEMEMBER('db_ddladmin', @Username) = 1
-        EXEC sp_droprolemember 'db_ddladmin', @Username;
-
-	IF IS_ROLEMEMBER('db_owner', @Username) =1
-		EXEC sp_droprolemember 'db_owner', @Username;
-
-    IF IS_ROLEMEMBER('db_securityadmin', @Username) = 1
-        EXEC sp_droprolemember 'db_securityadmin', @Username;
-
-	IF IS_ROLEMEMBER('jobSwapAdmin', @Username) = 1
-        EXEC sp_droprolemember 'jobSwapAdmin', @Username;
-END;
-GO
-
-
-GO
-
-CREATE OR ALTER PROCEDURE UpdateSwappingStatus
-    @ProfileID INT,
-    @SwappingStatus BIT
-AS
-BEGIN
-    -- Update the swapping status for the specified profile
-    UPDATE tblProfile
-    SET fldSwappingStatus = @SwappingStatus
-    WHERE fldProfileID = @ProfileID;
-
-    -- Return a success message
-    SELECT 'Swapping status updated successfully.' AS Result;
-END;
-
-GO
-
 CREATE OR ALTER PROCEDURE InsertMatch
     @ProfileAID INT,
     @ProfileBID INT,
@@ -819,20 +198,6 @@ END;
 
 GO
 
-CREATE OR ALTER PROC UserNameUniqueness(@name varchar(20))
-
-AS
-
-    BEGIN
-        IF EXISTS (SELECT fldUserName FROM tblUser WHERE fldUserName = @name)
-            SELECT 'true' AS USERNAMEEXISTS
-        ELSE
-            SELECT 'false' AS USERNAMEEXISTS
-
-    END
-
-GO
-
 CREATE OR ALTER PROCEDURE GetJobTitleByProfileID
     @ProfileID INT
 AS
@@ -841,15 +206,6 @@ BEGIN
     FROM tblProfile
     WHERE fldProfileID = @ProfileID
 END;
-
-GO
-
-CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @matchDate date, @matchresponseDate date)
-as
-    BEGIN
-        Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate)
-        values(@matchID, @profileAID, @profileBID, 2, @matchDate, @matchresponseDate)
-    END
 
 GO
 
@@ -934,107 +290,6 @@ AS
     BEGIN
         SELECT * FROM tblCompany
     END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetProfileID @UserID INT
-AS
-    BEGIN
-        SELECT fldProfileID
-        FROM tblProfile
-        WHERE fldUserID = @UserID
-    END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetAttributesForMatchView
-    @profileID INT
-AS
-BEGIN
-    SELECT
-        p.fldJobTitle,
-        c.fldCompanyID,
-        c.fldCompanyName
-    FROM tblProfile p
-    JOIN tblCompany c ON p.fldCompanyID = c.fldCompanyID
-    WHERE p.fldProfileID = @profileID;
-END
-
-
-GO
-
-CREATE OR ALTER PROCEDURE GetMatchesForProfile
-    @profileID INT
-AS
-BEGIN
-    SELECT *
-    FROM tblMatches
-    WHERE fldProfileAID = @profileID OR fldProfileBID = @profileID AND fldStateID = 1;
-END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetProfileID
-    @userID INT
-AS
-BEGIN
-    SELECT fldProfileID
-    FROM tblProfile
-    WHERE fldUserID = @userID;
-END
-
-GO
-
-CREATE OR ALTER PROCEDURE GetProfileInfo
-    @profileID INT
-AS
-BEGIN
-    SELECT fldJobTitle, fldCompanyID
-    FROM tblProfile
-    WHERE fldProfileID = @profileID;
-END
-
-go
-
-CREATE OR ALTER PROCEDURE ReadMatchByID (@matchID int)
-as
-begin
-select *
-from tblMatches
-where fldMatchID = @matchID
-end
-
-GO
-
-CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profileBID INT, @stateID INT, @matchDate DATE, @matchResponseDate DATE)
-AS
-BEGIN
-UPDATE tblMatches
-SET
-fldStateID = @stateID,
-fldMatchDate = @matchDate,
-fldMatchResponseDate = @matchResponseDate
-WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
-OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
-END
-
-go
-
-CREATE OR ALTER PROCEDURE DeclineMatchByID (@matchID int)
-as
-begin
-Update tblMatches
-set fldStateID = 4
-where fldMatchID = @matchID
-end
-
-go
-
-CREATE OR ALTER PROCEDURE DeleteRequestByMatchID (@matchID int)
-as
-begin
-delete from tblMatches where fldMatchID = @matchID
-end
 
 GO
 
@@ -1055,6 +310,7 @@ AS
 				tblCompany c ON p.fldCompanyID = c.fldCompanyID
 	END
 
+GO
 
 CREATE OR ALTER PROCEDURE spUpdateProfileData
     @fldUserID INT,
@@ -1173,30 +429,6 @@ BEGIN
 	IF IS_ROLEMEMBER('jobSwapAdmin', @Username) = 1
         EXEC sp_droprolemember 'jobSwapAdmin', @Username;
 END;
-
-GO
-
-CREATE OR ALTER PROCEDURE GetOutgoingRequestsForProfile
-    @profileID INT,
-    @senderProfileID INT
-AS
-BEGIN
-    SELECT
-        fldMatchID,
-        fldProfileAID,
-        fldProfileBID,
-        fldStateID,
-        fldSenderProfileID,
-        fldMatchDate,
-        fldMatchResponseDate,
-        fldRequestResponseDate,
-        fldSwapResponseDate
-    FROM tblMatches
-    WHERE
-        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
-        AND fldStateID = 2
-        AND fldSenderProfileID = @senderProfileID;
-END
 
 GO
 
@@ -1242,26 +474,6 @@ AS
 		VALUES (@ProfileAID, @ProfileBID, @StateID, @MatchDate)
 	END
 
-CREATE OR ALTER PROCEDURE GetIncomingRequestsForProfile
-    @profileID INT,
-    @senderProfileID INT
-AS
-BEGIN
-    SELECT
-        fldMatchID,
-        fldProfileAID,
-        fldProfileBID,
-        fldStateID,
-        fldSenderProfileID,
-        fldMatchDate,
-        fldRequestResponseDate,
-        fldSwapResponseDate
-    FROM tblMatches
-    WHERE
-        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
-        AND fldStateID = 2
-        AND fldSenderProfileID != @senderProfileID;
-END
 
 Go
 
@@ -1275,12 +487,13 @@ create or alter procedure DeclineMatchByID (@matchID int)
 
 GO
 
-create of alter procedure DeleteRequestByMatchID (@matchID int)
+create or alter procedure DeleteRequestByMatchID (@matchID int)
 as
 	begin
 	delete from tblMatches where fldMatchID = @matchID
 	end
 
+GO
 
 CREATE OR ALTER PROCEDURE GetAttributesForMatchView
     @profileID INT
@@ -1330,6 +543,7 @@ BEGIN
 END
 
 GO
+
 CREATE OR ALTER PROCEDURE GetOutgoingRequestsForProfile
     @profileID INT,
     @senderProfileID INT
@@ -1362,6 +576,7 @@ BEGIN
     FROM tblProfile
     WHERE fldUserID = @userID;
 END
+
 GO
 
 CREATE or alter PROCEDURE GetProfileInfo
