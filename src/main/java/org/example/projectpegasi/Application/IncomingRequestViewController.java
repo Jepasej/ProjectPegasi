@@ -13,6 +13,9 @@ import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.Persistence.DataAccessObject;
+
+import java.util.List;
 
 public class IncomingRequestViewController
 {
@@ -76,7 +79,12 @@ public class IncomingRequestViewController
         });
         incomingRequestTable.getColumns().add(declineRequestcolumnMatch); // Add the column to table
 
-        //Testkode for at tjekke om knapper duer, skal fjernes når view matches virker
+        // Load all incoming requests for the current user
+        int LoginProfileID = MainViewController.getCurrentProfileID();
+        DataAccessObject dao = new DataAccessObject();
+        List<Match> incomingRequests = dao.getMatchesForProfile(LoginProfileID);
+
+        //Testkode for at tjekke om knapper duer, skal fjernes når view incoming requests virker
         ObservableList<Match> testMatches = FXCollections.observableArrayList();
 
         Match testMatch = new Match();

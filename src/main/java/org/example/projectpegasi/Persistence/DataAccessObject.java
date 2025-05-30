@@ -69,13 +69,14 @@ public class DataAccessObject implements DAO
     {
         try
         {
-            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call SaveSwapRequest(?,?,?,?,?,?)}");
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call SaveSwapRequest(?,?,?,?,?,?,?)}");
             stmt.setInt(1, request.getMatchId());
             stmt.setInt(2, request.getProfileAId());
             stmt.setInt(3, request.getProfileBId());
             stmt.setInt(4, request.getStateId());
             stmt.setDate(5, request.getMatchDate());
             stmt.setDate(6, request.getMatchDateResponse());
+            stmt.setInt(7, request.getSenderProfileId());
             stmt.executeUpdate();
         }
         catch(SQLException e)
@@ -190,6 +191,98 @@ public class DataAccessObject implements DAO
             {
                 e.printStackTrace();
             }
+        }
+        return matches;
+    }
+
+    /**
+     * Retrieves all incoming requests for the logged-in profile from the database (state 2 = request).
+     * @param profileID The ID of the logged-in profile.
+     * @return all the incoming requests from other profiles for the logged in profile
+     * with state 2 in the database.
+     */
+    public List<Match> getIncomingRequests(int profileID, int senderProfileID) {
+        List<Match> matches = new ArrayList<>();
+        try
+        {
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetMatchesForProfile(?)}");
+            stmt.setInt(1, profileID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                Match match = new Match();
+                match.setMatchID(rs.getInt(1));
+                match.setProfileAID(rs.getInt(2));
+                match.setProfileBID(rs.getInt(3));
+                match.setStateID(rs.getInt(4));
+                matches.add(match);
+
+            }
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        { try
+        {
+            DBConnection.getInstance().close();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        }
+        return matches;
+    }
+
+
+    /**
+     * Retrieves all outgoing requests for the logged-in profile from the database (state 2 = request)
+     * which the logged-in user has sent to others.
+     * @param profileID The ID of the logged-in profile.
+     * @param senderProfileID gets the requests that has been sent by the logged-in user
+     * @return all the outgoing requests from the logged in profile with state 2 in the database
+     */
+    public List<Match> getOutgoingRequests(int profileID, int senderProfileID) {
+
+        List<Match> matches = new ArrayList<>();
+        try
+        {
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call GetOutgoingRequestsForProfile(?,?)}");
+            stmt.setInt(1, profileID);
+            stmt.setInt(2, senderProfileID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                Match match = new Match();
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setSenderProfileID(rs.getInt("fldSenderProfileID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                match.setRequestResponseDate(rs.getDate("fldRequestResponseDate"));
+                match.setSwapResponseDate(rs.getDate("fldSwapResponseDate"));
+                matches.add(match);
+            }
+
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        { try
+        {
+            DBConnection.getInstance().close();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
         }
         return matches;
     }
@@ -860,6 +953,114 @@ public class DataAccessObject implements DAO
         }
     }
 
+    /**
+     * Retrieves the two most recent match requests for the given profile ID.
+     * A match request is typically a match in an unconfirmed state (e.g., awaiting response).
+     *
+     * @param profileID The ID of the profile for which to retrieve recent match requests.
+     * @return A list containing up to two most recent Match objects representing incoming requests.
+     */
+    @Override
+    public List<Match>getTwoNewestRequestsByProfileID(int profileID)
+    {
+        List<Match> requests = new ArrayList<>();
+        String query = "{call GetTwoNewestRequestsByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            // Process the result set and build Match object
+            while (rs.next())
+            {
+                Match match = new Match();
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                requests.add(match);
+            }
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+
+    /**
+     * Retrieves the two most recent matches from the database using the stored procedure: GetTwoNewestMatches
+     * @return a list containing the two most recent Match objects,
+     * or an empty list if no matches are found.
+     */
+    @Override
+    public List<Match> getTwoNewestMatchesByProfileID(int profileID)
+    {
+        List<Match> matches = new ArrayList<>();
+        String query = "{call GetTwoNewestMatchesByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            while(rs.next())
+            {
+                Match match = new Match();
+                match.setMatchID(rs.getInt("fldMatchID"));
+                match.setProfileAID(rs.getInt("fldProfileAID"));
+                match.setProfileBID(rs.getInt("fldProfileBID"));
+                match.setStateID(rs.getInt("fldStateID"));
+                match.setMatchDate(rs.getDate("fldMatchDate"));
+                match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                matches.add(match);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return matches;
+    }
+
+    /**
+     * Retrieves the job title of a profile based on the given profile ID.
+     * Calls the stored procedure: GetJobTitleByProfileID
+     * @param profileID the ID of the profile whose job title should be retrieved
+     * @return the job title as a String, or null if no job title is found
+     */
+    @Override
+    public String getJobTitleByProfileID(int profileID){
+        String jobTitle = null;
+        String query = "{call GetJobTitleByProfileID(?)}";
+
+        try
+        {
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+            clStmt.setInt(1, profileID);
+            ResultSet rs = clStmt.executeQuery();
+
+            if(rs.next()) {
+                jobTitle = rs.getString("fldJobTitle");
+            }
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return jobTitle;
+    }
+
     public void revokeDBAdminRights(String adminName)
     {
         String query = "{call RevokeJobSwapAdminRoles(?)}";
@@ -882,5 +1083,37 @@ public class DataAccessObject implements DAO
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Method to get all information on a profile and
+     * extracts the job function and the pay preference
+     *
+     * @return a List of profiles with the specific information
+     */
+    @Override
+    public List<Profile> getAllProfiles()
+    {
+        List<Profile> profiles = new ArrayList<>();
+        String query = "{Call ReadAllProfilesWithJobFunctions()}";
+
+        try{
+            Connection conn = DBConnection.getInstance();
+            CallableStatement clStmt = conn.prepareCall(query);
+            ResultSet rs = clStmt.executeQuery();
+
+            while(rs.next())
+            {
+                String jobFunction = rs.getString("fldFunction");
+                int payPref = rs.getInt("fldPayPref");
+
+                Profile profile = new Profile();
+                profiles.add(profile);
+            }
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return profiles;
     }
 }

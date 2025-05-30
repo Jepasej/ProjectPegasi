@@ -52,8 +52,9 @@ public class MatchViewController {
                 requestSwapButton.setOnAction(event -> {
                     MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
-                        srManager.createSwapRequest(details.getMatchID());
-                        matchTable.getItems().remove(details);
+                        int senderProfileID = MainViewController.getCurrentProfileID();
+                        srManager.createSwapRequest(details.getMatchID(), senderProfileID);
+                        matchTable.getItems().remove(getIndex());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -73,7 +74,7 @@ public class MatchViewController {
                     MatchDetails details = getTableView().getItems().get(getIndex());
                     try {
                         srManager.declineMatchAndRequest(details.getMatchID());
-                        matchTable.getItems().remove(details);
+                        matchTable.getItems().remove(getIndex());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

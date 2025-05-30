@@ -11,6 +11,7 @@ public class Match
     private int profileAID;
     private int profileBID;
     private int stateID;
+    private int senderProfileID;
     private Date matchDate;
     private Date matchResponseDate;
     private Date requestResponseDate;
@@ -46,6 +47,14 @@ public class Match
 
     public void setStateID(int stateID) {
         this.stateID = stateID;
+    }
+
+    public int getSenderProfileID() {
+        return senderProfileID;
+    }
+
+    public void setSenderProfileID(int senderProfileID) {
+        this.senderProfileID = senderProfileID;
     }
 
     public java.sql.Date getMatchDate() {

@@ -91,12 +91,18 @@ as
 
 GO
 
-CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date)
+CREATE OR ALTER procedure SaveSwapRequest (@matchID int, @profileAID int, @profileBID int, @stateID int, @matchDate date, @matchresponseDate date, @senderProfileID int)
 
 as
     begin
-        Insert into tblMatches(fldMatchID, fldProfileAID, fldProfileBID, fldStateID, fldMatchDate, fldMatchResponseDate) 
-        values(@matchID, @profileAID, @profileBID, @stateID, @matchDate, @matchresponseDate)
+        Update tblMatches
+            	SET
+            		fldStateID = @stateID,
+            		fldMatchDate = @matchDate,
+            		fldMatchResponseDate = @matchResponseDate,
+            		fldSenderProfileID = @senderProfileID
+            	WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
+            	OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
     end
 
 GO
@@ -330,11 +336,11 @@ BEGIN
         jf.fldFunction
     FROM
         tblProfile p
-    JOIN
+    INNER JOIN
         tblCompany c ON p.fldCompanyID = c.fldCompanyID
-    JOIN
+    INNER JOIN
         tblProfileJobFunction pjf ON p.fldProfileID = pjf.fldProfileID
-    JOIN
+    INNER JOIN
         tblJobFunction jf ON pjf.fldJobFunctionID = jf.fldJobFunctionID
     WHERE
         p.fldProfileID = @ProfileID;
@@ -1102,6 +1108,24 @@ end
 
 GO
 
+CREATE OR ALTER PROCEDURE ReadAllProfilesWithJobFunctions
+AS
+	BEGIN
+		SELECT
+				p.fldProfileID, p.fldFullName, p.fldJobTitle, jf.fldFunction, c.fldCompanyName,
+				p.fldHomeAddress, p.fldWage, p.fldPayPref, p.fldDistPref, p.fldSwappingStatus
+
+		FROM tblProfile p
+
+		INNER JOIN
+				tblProfileJobFunction pjf ON p.fldProfileID = pjf.fldProfileID
+		INNER JOIN
+				tblJobFunction jf ON pjf.fldJobFunctionID = jf.fldJobFunctionID
+		INNER JOIN
+				tblCompany c ON p.fldCompanyID = c.fldCompanyID
+	END
+
+
 CREATE OR ALTER PROCEDURE spUpdateProfileData
     @fldUserID INT,
     @fldFullName NVARCHAR(255),       -- Required (NOT NULL)
@@ -1219,5 +1243,29 @@ BEGIN
 	IF IS_ROLEMEMBER('jobSwapAdmin', @Username) = 1
         EXEC sp_droprolemember 'jobSwapAdmin', @Username;
 END;
+
+GO
+
+CREATE OR ALTER PROCEDURE GetOutgoingRequestsForProfile
+    @profileID INT,
+    @senderProfileID INT
+AS
+BEGIN
+    SELECT
+        fldMatchID,
+        fldProfileAID,
+        fldProfileBID,
+        fldStateID,
+        fldSenderProfileID,
+        fldMatchDate,
+        fldMatchResponseDate,
+        fldRequestResponseDate,
+        fldSwapResponseDate
+    FROM tblMatches
+    WHERE
+        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
+        AND fldStateID = 2
+        AND fldSenderProfileID = @senderProfileID;
+END
 
 GO

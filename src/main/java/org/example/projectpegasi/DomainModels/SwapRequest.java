@@ -10,6 +10,7 @@ public class SwapRequest
     private int profileAId;
     private int profileBId;
     private int matchId;
+    private int senderProfileId;
     private int stateId;
     private Date matchDate;
     private Date matchDateResponse;
@@ -37,6 +38,14 @@ public class SwapRequest
 
     public void setMatchId(int matchId) {
         this.matchId = matchId;
+    }
+
+    public int getSenderProfileId() {
+        return senderProfileId;
+    }
+
+    public void setSenderProfileId(int senderProfileId) {
+        this.senderProfileId = senderProfileId;
     }
 
     public int getStateId() {
