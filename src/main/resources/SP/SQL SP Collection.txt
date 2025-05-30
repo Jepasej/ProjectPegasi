@@ -600,7 +600,7 @@ as
 
 GO
 
-CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profileBID INT, @stateID INT, @matchDate DATE, @matchResponseDate DATE, @senderProfileID int)
+CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profileBID INT, @stateID INT, @matchDate DATE, @matchResponseDate DATE, @requestResponseDate Date, @senderProfileID int)
 	AS
 		BEGIN
 			UPDATE tblMatches
@@ -608,6 +608,7 @@ CREATE OR ALTER PROCEDURE SaveSwapRequest (@matchID INT, @profileAID INT, @profi
 					fldStateID = @stateID,
 					fldMatchDate = @matchDate,
 					fldMatchResponseDate = @matchResponseDate,
+					fldRequestResponseDate = @requestResponseDate,
 					fldSenderProfileID = @senderProfileID
 				WHERE (fldProfileAID = @profileAID AND fldProfileBID = @profileBID)
 				OR (fldProfileAID = @profileBID AND fldProfileBID = @profileAID);
