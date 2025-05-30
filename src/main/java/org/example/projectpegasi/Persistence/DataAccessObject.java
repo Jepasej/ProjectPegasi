@@ -481,7 +481,7 @@ public class DataAccessObject implements DAO
             CallableStatement cs = DBConnection.getInstance().prepareCall(sql);
             cs.setString(1, p.getFullName());
             cs.setString(2, p.getJobTitle());
-            cs.setString(3, p.getJobTitle());
+            cs.setString(3, p.getHomeAddress());
             cs.setInt(4, companyID);
             cs.setInt(5, p.getWage());
             cs.setInt(6, p.getPayPref());
