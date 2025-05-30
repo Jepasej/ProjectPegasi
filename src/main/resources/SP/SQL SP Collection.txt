@@ -1055,7 +1055,6 @@ AS
 				tblCompany c ON p.fldCompanyID = c.fldCompanyID
 	END
 
-GO
 
 CREATE OR ALTER PROCEDURE spUpdateProfileData
     @fldUserID INT,
@@ -1265,3 +1264,26 @@ AS
 		INSERT INTO tblMatches(fldProfileAID, fldProfileBID, fldStateID, fldMatchDate)
 		VALUES (@ProfileAID, @ProfileBID, @StateID, @MatchDate)
 	END
+
+CREATE OR ALTER PROCEDURE GetIncomingRequestsForProfile
+    @profileID INT,
+    @senderProfileID INT
+AS
+BEGIN
+    SELECT
+        fldMatchID,
+        fldProfileAID,
+        fldProfileBID,
+        fldStateID,
+        fldSenderProfileID,
+        fldMatchDate,
+        fldRequestResponseDate,
+        fldSwapResponseDate
+    FROM tblMatches
+    WHERE
+        (fldProfileAID = @profileID OR fldProfileBID = @profileID)
+        AND fldStateID = 2
+        AND fldSenderProfileID != @senderProfileID;
+END
+
+Go
