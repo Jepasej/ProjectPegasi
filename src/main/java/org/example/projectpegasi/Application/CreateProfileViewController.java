@@ -1,12 +1,8 @@
 package org.example.projectpegasi.Application;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.Company;
 import org.example.projectpegasi.DomainModels.JobFunction;
@@ -34,23 +30,22 @@ public class CreateProfileViewController
     @FXML
     private ComboBox<String> jobFunctionComboBox;
     @FXML
-    private TextArea jobFunctionArea;
-    @FXML
     private ComboBox<String> companyComboBox;
     @FXML
     private TextField companyField;
     @FXML
-    private TextField homeAddressField, currentSalaryField;
+    private TextField homeAddressField, currentSalaryField, jobFunctionField;
     @FXML
     private ComboBox<String> minSalaryComboBox;
     @FXML
     private ComboBox<String> distancePrefComboBox;
     @FXML
-    private Button saveButton;
+    private Label usernameLabel, passwordLabel, fullNameLabel, jobTitleLabel, jobFunctionLabel, companyLabel, homeAddressLabel, minSalLabel, curSalLabel, maxDistLabel;
     @FXML
-    private Button cancelButton;
+    private VBox confirmationVBox, formVBox;
 
-    List<Company> companies;
+    private List<Company> companies;
+    private List<JobFunction> jobFunctions;
 
     private boolean isUsernameUnique = false;
     private boolean isFormCorrect = false;
@@ -64,12 +59,44 @@ public class CreateProfileViewController
         populateDistanceBox();
     }
 
+    @FXML
+    private void onConfirmButtonClick()
+    {
+        User user = setupUser();
+
+        createUser(user);
+
+        clearFields();
+
+        HelloApplication.changeScene(ControllerNames.MainView);
+    }
+
+    @FXML
+    private void onBackButtonClick()
+    {
+        changeVisibility();
+    }
+
+    private void changeVisibility()
+    {
+        if(formVBox.isVisible())
+        {
+            formVBox.setVisible(false);
+            confirmationVBox.setVisible(true);
+        }
+        else
+        {
+            confirmationVBox.setVisible(false);
+            formVBox.setVisible(true);
+        }
+    }
+
     private void loadCompanyBox()
     {
         DAO dao = new DataAccessObject();
         companies = dao.readAll(new Company());
 
-        for(Company c : companies)
+        for (Company c : companies)
         {
             companyComboBox.getItems().add(c.getName());
         }
@@ -78,9 +105,9 @@ public class CreateProfileViewController
     private void loadJobFunctionBox()
     {
         DAO dao = new DataAccessObject();
-        List<JobFunction> jobFunctFromDB = dao.readAll(new JobFunction());
+        jobFunctions = dao.readAll(new JobFunction());
 
-        for(JobFunction jf : jobFunctFromDB)
+        for (JobFunction jf : jobFunctions)
         {
             jobFunctionComboBox.getItems().add(jf.getJobFunction());
         }
@@ -96,39 +123,29 @@ public class CreateProfileViewController
     {
         loadJobFunctionBox();
 
-        String selected = jobFunctionComboBox.getValue();
-        // Check if the selection is valid
-        if (selected != null && !selected.isBlank())
+        for (JobFunction jf : jobFunctions)
         {
-            String currentText = jobFunctionArea.getText();
-
-            // Avoid adding duplicates
-            if (!currentText.contains(selected))
+            if (jf.getJobFunction().equals(jobFunctionComboBox.getValue()))
             {
-                if (!currentText.isBlank())
-                {
-                    jobFunctionArea.appendText("\n" + selected);
-                } else {
-                    jobFunctionArea.setText(selected);
-                }
+                jobFunctionField.setText(jf.getJobFunction());
             }
         }
     }
 
     private void populateDistanceBox()
     {
-        for(int i = 0; i < 20; i++)
+        for (int i = 0; i < 20; i++)
         {
-            int dist = i*5;
+            int dist = i * 5;
             distancePrefComboBox.getItems().add(dist + " km");
         }
     }
 
     private void populateMinSalaryBox()
     {
-        for(int i = 0; i < 50; i++)
+        for (int i = 0; i < 50; i++)
         {
-            int sal = i*1000;
+            int sal = i * 1000;
             minSalaryComboBox.getItems().add(String.valueOf(sal));
         }
     }
@@ -138,14 +155,15 @@ public class CreateProfileViewController
     {
         loadCompanyBox();
 
-        for(Company c : companies)
+        for (Company c : companies)
         {
-            if(c.getName().equals(companyComboBox.getValue()))
+            if (c.getName().equals(companyComboBox.getValue()))
             {
                 companyField.setText(c.getName() + ", " + c.getAddress());
             }
         }
     }
+
     /**
      * Method tied to CreateProfileView.fxml's SaveButton
      * Creates a User and a Profile from user input.
@@ -158,14 +176,29 @@ public class CreateProfileViewController
 
         if (isFormCorrect && isUsernameUnique)
         {
-            User user = setupUser();
-
-            createUser(user);
-
-            clearFields();
-
-            HelloApplication.changeScene(ControllerNames.MainView);
+            updateConfirmationLabels();
+            changeVisibility();
         }
+    }
+
+    private void updateConfirmationLabels()
+    {
+        String password = "";
+        for(int i = 0; i<passwordField.getText().length(); i++)
+        {
+            password += "*";
+        }
+
+        usernameLabel.setText(usernameField.getText());
+        passwordLabel.setText(password);
+        fullNameLabel.setText(fullNameField.getText());
+        jobTitleLabel.setText(jobTitleField.getText());
+        jobFunctionLabel.setText(jobFunctionField.getText());
+        companyLabel.setText(companyField.getText());
+        homeAddressLabel.setText(homeAddressField.getText());
+        minSalLabel.setText(minSalaryComboBox.getValue());
+        curSalLabel.setText(currentSalaryField.getText());
+        maxDistLabel.setText(distancePrefComboBox.getValue());
     }
 
     /**
@@ -183,27 +216,22 @@ public class CreateProfileViewController
         mandatoryInput.add(companyField);
         mandatoryInput.add(homeAddressField);
         mandatoryInput.add(currentSalaryField);
+        mandatoryInput.add(jobFunctionField);
 
         boolean check = true;
 
-        for(TextField t : mandatoryInput)
+        for (TextField t : mandatoryInput)
         {
-            if(t.getText().isBlank())
+            if (t.getText().isBlank())
             {
                 t.setStyle(errorColour);
                 check = false;
             }
         }
 
-        if(jobFunctionArea.getText().isBlank())
-        {
-            jobFunctionArea.setStyle(errorColour);
-            check = false;
-        }
-
         //HER SKAL VAERE VALIDERING AF MIN SALARY og DIST PREF I SAMME STIL SOM OVENSTAAENDE
 
-        if(!passwordField.getText().equals(repeatPasswordField.getText()))
+        if (!passwordField.getText().equals(repeatPasswordField.getText()))
         {
             passwordField.setStyle(errorColour);
             passwordField.clear();
@@ -224,13 +252,14 @@ public class CreateProfileViewController
         companyField.clear();
         homeAddressField.clear();
         currentSalaryField.clear();
-        jobFunctionArea.clear();
+        jobFunctionField.clear();
         companyComboBox.getItems().clear();
         jobFunctionComboBox.getItems().clear();
     }
 
     /**
      * Verifies uniqueness of entered username
+     *
      * @param name userinput of requested username.
      * @return true if username does not exist in database. False if it does.
      */
@@ -250,7 +279,7 @@ public class CreateProfileViewController
 
         Profile profile = setupProfile();
 
-        
+
         user.setProfile(profile);
 
         return user;
@@ -267,7 +296,7 @@ public class CreateProfileViewController
         profile.setPayPref(Integer.parseInt(minSalaryComboBox.getValue()));
         profile.setDistPref(distancePrefComboBox.getValue());
         profile.setCompany(new Company(companyComboBox.getValue()));
-        profile.setJobFunction(jobFunctionArea.getText());
+        profile.setJobFunction(jobFunctionField.getText());
 
         return profile;
     }
