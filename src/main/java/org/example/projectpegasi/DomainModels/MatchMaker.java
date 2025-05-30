@@ -56,6 +56,10 @@ public class MatchMaker
 
     private double compareJobFunctions(String jobFunction1, String jobFunction2)
     {
+        if(jobFunction1 == null || jobFunction2 == null)
+        {
+            return 0.0;
+        }
         return jobFunction1.equals(jobFunction2) ? 1 : 0;
     }
 
