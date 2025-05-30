@@ -77,11 +77,10 @@ public class HelloApplication extends Application
                 ControllerNames.ProfileView
         ));
 
-        System.out.println("Setting up Timeline");
+        // Timeline to continuously update matches
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.seconds(15),
                 event -> {
-                    System.out.println("Timeline started at " + System.currentTimeMillis());
             try
             {
                 MatchManager matchManager = new MatchManager();
@@ -100,7 +99,7 @@ public class HelloApplication extends Application
                 }
         ));
         timeline.setCycleCount(Timeline.INDEFINITE);
-        Platform.runLater(timeline::play);
+        timeline.play();
 
 
         stage.setTitle("JobSwap");

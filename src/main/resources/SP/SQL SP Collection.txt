@@ -36,41 +36,6 @@ AS
 
 GO
 
-CREATE OR ALTER PROCEDURE spCreateProfile
-    @FullName NVARCHAR(255),
-    @JobTitle NVARCHAR(255),
-    @HomeAddress NVARCHAR(255),
-    @CompanyID INT,
-    @Wage INT,
-    @PayPref INT,
-    @DistPref NVARCHAR(255),
-    @UserID INT
-AS
-BEGIN
-    INSERT INTO tblProfile (
-        fldFullName,
-        fldJobTitle,
-        fldHomeAddress,
-        fldCompanyID,
-        fldWage,
-        fldPayPref,
-        fldDistPref,
-        fldUserID
-    )
-    VALUES (
-        @FullName,
-        @JobTitle,
-        @HomeAddress,
-        @CompanyID,
-        @Wage,
-        @PayPref,
-        @DistPref,
-        @UserID
-    );
-END;
-
-GO
-
 CREATE OR ALTER PROCEDURE NewUser (@UserName NVARCHAR(20), @Password NVARCHAR(20))
 AS
     BEGIN
@@ -152,41 +117,6 @@ AS
         FROM tblCompany
         WHERE fldCompanyName = @CompanyName
     END
-
-GO
-
-CREATE OR ALTER PROCEDURE spCreateProfile
-    @FullName NVARCHAR(255),
-    @JobTitle NVARCHAR(255),
-    @HomeAddress NVARCHAR(255),
-    @CompanyID INT,
-    @Wage INT,
-    @PayPref INT,
-    @DistPref NVARCHAR(255),
-    @UserID INT
-AS
-BEGIN
-    INSERT INTO tblProfile (
-        fldFullName,
-        fldJobTitle,
-        fldHomeAddress,
-        fldCompanyID,
-        fldWage,
-        fldPayPref,
-        fldDistPref,
-        fldUserID
-    )
-    VALUES (
-        @FullName,
-        @JobTitle,
-        @HomeAddress,
-        @CompanyID,
-        @Wage,
-        @PayPref,
-        @DistPref,
-        @UserID
-    );
-END;
 
 GO
 
