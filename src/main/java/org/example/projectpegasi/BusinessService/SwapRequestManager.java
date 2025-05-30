@@ -4,6 +4,7 @@ import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.SwapRequest;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 /**
@@ -74,6 +75,7 @@ public class SwapRequestManager {
             swapRequest.setStateId(3);
             swapRequest.setMatchDate(match.getMatchDate());
             swapRequest.setMatchDateResponse(match.getMatchResponseDate());
+            swapRequest.setRequestDateResponse(Date.valueOf(LocalDate.now()));
             dao.saveSwapRequestAndSwapAccept(swapRequest);
         }
         else{
