@@ -14,6 +14,7 @@ public class SwapRequest
     private int stateId;
     private Date matchDate;
     private Date matchDateResponse;
+    private Date requestDateResponse;
 
 
     public int getProfileAId() {
@@ -70,5 +71,13 @@ public class SwapRequest
 
     public void setMatchDateResponse(Date matchDateResponse) {
         this.matchDateResponse = matchDateResponse;
+    }
+
+    public Date getRequestDateResponse() {
+        return requestDateResponse;
+    }
+
+    public void setRequestDateResponse(Date requestDateResponse) {
+        this.requestDateResponse = requestDateResponse;
     }
 }

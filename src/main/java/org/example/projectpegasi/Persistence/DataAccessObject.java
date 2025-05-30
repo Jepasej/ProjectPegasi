@@ -69,14 +69,15 @@ public class DataAccessObject implements DAO
     {
         try
         {
-            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call SaveSwapRequest(?,?,?,?,?,?,?)}");
+            CallableStatement stmt = DBConnection.getInstance().prepareCall("{call SaveSwapRequest(?,?,?,?,?,?,?,?)}");
             stmt.setInt(1, request.getMatchId());
             stmt.setInt(2, request.getProfileAId());
             stmt.setInt(3, request.getProfileBId());
             stmt.setInt(4, request.getStateId());
             stmt.setDate(5, request.getMatchDate());
             stmt.setDate(6, request.getMatchDateResponse());
-            stmt.setInt(7, request.getSenderProfileId());
+            stmt.setDate(7, request.getRequestDateResponse());
+            stmt.setInt(8, request.getSenderProfileId());
             stmt.executeUpdate();
         }
         catch(SQLException e)
