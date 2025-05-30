@@ -465,7 +465,7 @@ public class DataAccessObject implements DAO
         int userID = getUserID(u.getUserName());
         int companyID = getCompanyID(p.getCompany().getName());
 
-        String sql = " { call spCreateProfile(?,?,?,?,?,?,?,?) } ";
+        String sql = " { call spCreateProfile(?,?,?,?,?,?,?,?,?) } ";
 
         try
         {
@@ -478,6 +478,7 @@ public class DataAccessObject implements DAO
             cs.setInt(6, p.getPayPref());
             cs.setString(7, p.getDistPref());
             cs.setInt(8, userID);
+            cs.setString(9, p.getJobFunction());
             cs.execute();
         }
         catch (SQLException e)

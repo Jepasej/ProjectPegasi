@@ -1271,6 +1271,61 @@ END
 
 GO
 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER   PROCEDURE [dbo].[spCreateProfile]
+    @FullName NVARCHAR(255),
+    @JobTitle NVARCHAR(255),
+    @HomeAddress NVARCHAR(255),
+    @CompanyID INT,
+    @Wage INT,
+    @PayPref INT,
+    @DistPref NVARCHAR(255),
+    @UserID INT,
+	@JobFunction NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO tblProfile (
+        fldFullName,
+        fldJobTitle,
+        fldHomeAddress,
+        fldCompanyID,
+        fldWage,
+        fldPayPref,
+        fldDistPref,
+        fldUserID
+    )
+    VALUES (
+        @FullName,
+        @JobTitle,
+        @HomeAddress,
+        @CompanyID,
+        @Wage,
+        @PayPref,
+        @DistPref,
+        @UserID
+    );
+
+	DECLARE @JobFunctionID INT;
+	DECLARE @ProfileID INT;
+	SET @JobFunctionID = (SELECT fldJobFunctionID FROM tblJobFunction WHERE fldFunction = @JobFunction);
+	SET @ProfileID = (SELECT fldProfileID FROM tblProfile WHERE fldUserID = @UserID);
+
+	INSERT INTO tblProfileJobFunction (
+		fldJobFunctionID,
+		fldProfileID
+	)
+	VALUES (
+		@JobFunctionID,
+		@ProfileID
+	)
+END;
+
+GO
+
 CREATE OR ALTER PROCEDURE SaveMatch(@ProfileAID INT,
 									@ProfileBID INT,
 									@StateID INT,
