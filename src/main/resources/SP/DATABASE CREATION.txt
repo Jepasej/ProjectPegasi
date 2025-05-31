@@ -64,6 +64,9 @@ CREATE TABLE tblMatches(
 	fldSenderProfileID INT, -- To differentiate who sent the request in a match between two profiles
 	);
 
+ALTER TABLE tblMatches
+ADD fldSenderProfileID INT; -- To differentiate who sent the request in a match between two profiles);
+
 GO
 
 USE DBJobSwapSystem
