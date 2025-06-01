@@ -16,6 +16,12 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Controller class for handling profile creation in the JavaFX UI.
+ * This class is connected to CreateProfileView.fxml and manages user input, validation,
+ * confirmation display, and persistence of new user and profile data.
+ * It interacts with the DAO layer for database operations and triggers the MatchManager for match updates.
+ */
 public class CreateProfileViewController
 {
     @FXML
@@ -53,6 +59,10 @@ public class CreateProfileViewController
 
     private String errorColour = "-fx-background-color: red;";
 
+    /**
+     * Initializes combo boxes for minimum salary and distance preference.
+     * Automatically called when the view is loaded.
+     */
     @FXML
     public void initialize()
     {
@@ -154,6 +164,10 @@ public class CreateProfileViewController
         }
     }
 
+    /**
+     * Populates the company field based on the selected company from the combo box.
+     * Also loads company address for preview.
+     */
     @FXML
     public void onCompanySelected()
     {
@@ -314,6 +328,8 @@ public class CreateProfileViewController
 
     /**
      * Method tied to CreateProfileView.fxml's CancelButton
+     * Triggered when the cancel button is clicked.
+     *  * Clears all input fields and navigates back to the main view.
      */
     @FXML
     public void onCancelButtonClick()

@@ -7,6 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Central DAO class responsible for all database communication in the system.
+ * Handles user login, profile data, matches, swap requests, and administrative operations.
+ * Uses stored procedures via CallableStatement and applies a singleton DBConnection.
+ */
 public class DataAccessObject implements DAO
 {
     /**
@@ -965,11 +970,11 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Retrieves the two most recent match requests for the given profile ID.
-     * A match request is typically a match in an unconfirmed state (e.g., awaiting response).
+     * Retrieves the two most recent requests for the given profile.
+     * where the user has received an invitation to swap.
      *
-     * @param profileID The ID of the profile for which to retrieve recent match requests.
-     * @return A list containing up to two most recent Match objects representing incoming requests.
+     * @param profileID The ID of the profile for which to retrieve requests.
+     * @return A list containing up to two request objects representing incoming requests.
      */
     @Override
     public List<Match>getTwoNewestRequestsByProfileID(int profileID)
@@ -1015,9 +1020,9 @@ public class DataAccessObject implements DAO
     }
 
     /**
-     * Retrieves the two most recent matches from the database using the stored procedure: GetTwoNewestMatches
-     * @return a list containing the two most recent Match objects,
-     * or an empty list if no matches are found.
+     * Retrieves the two most recent matches for the given profile.
+     * @return A list containing up to two Match objects or an empty list if no matches are found.
+     * @param profileID The ID of the profile for which to retrieve matches.
      */
     @Override
     public List<Match> getTwoNewestMatchesByProfileID(int profileID)
