@@ -20,6 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Match View.
+ * Displays all current matches for the logged-in user, allowing them to accept or decline matches.
+ * Accepting a match creates a swap request; declining updates the match state to denied.
+ */
 public class MatchViewController {
     @FXML
     private TableView<MatchDetails> matchTable;
@@ -124,16 +129,25 @@ public class MatchViewController {
     }
 
 
+    /**
+     * Navigates the user to the Outgoing Request view.
+     */
         public void onOutgoingRequestButtonClick ()
         {
             HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
         }
 
+    /**
+     * Navigates the user to the Incoming Request view.
+     */
         public void onIncomingRequestButtonClick ()
         {
             HelloApplication.changeScene(ControllerNames.IncomingRequestView);
         }
 
+    /**
+     * Returns the user to their profile view.
+     */
         public void onBackToProfileButtonClick ()
         {
             HelloApplication.changeScene(ControllerNames.ProfileView);

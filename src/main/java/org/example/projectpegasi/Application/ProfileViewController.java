@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Controller for the user's profile view.
+ * Displays profile information, recent matches and requests,
+ * and provides navigation to edit, matches, and request views.
+ * Also allows toggling of swap availability.
+ */
 public class ProfileViewController
 {
 
@@ -36,6 +42,9 @@ public class ProfileViewController
 
     private List<Match> recentMatchesList = new ArrayList<>();
 
+    /**
+     * Initializes the view by loading recent matches, requests and user profile info.
+     */
     @FXML
     public void initialize()
     {
@@ -48,6 +57,10 @@ public class ProfileViewController
         }
     }
 
+    /**
+     * Toggles the user's swapping status (Interested / Not Interested)
+     * and updates the label and database accordingly.
+     */
     @FXML
     public void swapStatusButtOnAction()
     {
@@ -113,6 +126,7 @@ public class ProfileViewController
     /**
      * Reads the profile information from our database with a Callable statement
      * the script joins job function and company tables to get all the information
+     *  @param userID ID of the logged-in user
      */
     private void getProfileInformation ( int userID)
     {
@@ -139,7 +153,7 @@ public class ProfileViewController
     }
 
     /**
-     * Change scene to incoming view
+     * Navigates to the IncomingRequestView.
      */
     public void onShowMoreRequestButtonClick ()
     {
@@ -147,7 +161,7 @@ public class ProfileViewController
     }
 
     /**
-     * Change scene to match view
+     * Navigates to the MatchView.
      */
     public void onShowMoreMatchesButtonClick ()
     {
@@ -155,7 +169,7 @@ public class ProfileViewController
     }
 
     /**
-     * Go to edit view
+     * Navigates to the EditProfileView.
      */
     @FXML
     protected void editProfileButtOnAction ()

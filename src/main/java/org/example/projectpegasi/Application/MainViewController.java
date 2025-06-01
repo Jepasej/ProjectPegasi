@@ -15,6 +15,11 @@ import org.example.projectpegasi.HelloApplication;
 import org.example.projectpegasi.Persistence.DAO;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
+/**
+ * Controller for the Main View (login screen).
+ * Handles user login, redirection to profile creation, and manages the current session state
+ * by storing the logged-in user's ID and profile ID as static fields.
+ */
 public class MainViewController
 {
     @FXML
@@ -25,32 +30,37 @@ public class MainViewController
     private Label wrongCredentials;
 
     private static int currentUserID; // Static variable to store the users ID
-
     private static int currentProfileID; // Static variable to store the profile ID
 
     /**
-     * Method tied to MainView.fxml's CreateProfileButton.
-     * Sends the user to the CreateProfileView
+     * Redirects the user to the Create Profile View.
+     * Triggered by clicking the "Create Profile" button on the login screen.
      */
     public void onCreateProfileButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.CreateProfileView);
     }
 
+    /**
+     * Gets the current user's ID (logged-in user).
+     * @return the user ID of the current session
+     */
     public static int getCurrentUserID()
     {
         return currentUserID;
     }
 
+    /**
+     * Gets the current user's profile ID.
+     * @return the profile ID of the current session
+     */
     public static int getCurrentProfileID() {
         return currentProfileID;
     }
 
     /**
-     * Method tied to MainView.fxml's LoginButton
-     * Retrieves Username and Password from respective TextFields,
-     * validates login and either sends user to ProfileView or
-     * notifies user of wrong credentials.
+     * Handles login attempt when "Login" button is clicked.
+     * Validates input and shows error if credentials are wrong, otherwise navigates to Profile View.
      */
     @FXML
     public void onLoginButtonClick()
