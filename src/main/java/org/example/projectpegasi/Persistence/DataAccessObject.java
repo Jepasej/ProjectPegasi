@@ -7,6 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Central DAO class responsible for all database communication in the system.
+ * Handles user login, profile data, matches, swap requests, and administrative operations.
+ * Uses stored procedures via CallableStatement and applies a singleton DBConnection.
+ */
 public class DataAccessObject implements DAO
 {
     /**
