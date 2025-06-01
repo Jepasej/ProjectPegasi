@@ -88,16 +88,6 @@ public class IncomingRequestViewController
         DataAccessObject dao = new DataAccessObject();
         List<Match> incomingRequests = dao.getIncomingRequests(LoginProfileID, LoginProfileID);
 
-
-       /* // Filter requests where state = 2 (outgoing requests)
-        incomingRequests = incomingRequests.stream()
-                .filter(match -> match.getStateID() == 2)
-                .collect(Collectors.toList());
-
-        //Filter requests which the logged-in user has sent
-        incomingRequests = incomingRequests.stream()
-                .filter(match -> match.getSenderProfileID() != LoginProfileID)
-                .collect(Collectors.toList()); */
         List<MatchDetails> matchDetails = new ArrayList<>();
 
         // Retrieve job title and company info for the other profile in each request

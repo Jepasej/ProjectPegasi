@@ -89,10 +89,6 @@ public class MatchViewController {
         DataAccessObject dao = new DataAccessObject();
         List<Match> matches = dao.getMatchesForProfile(LoginProfileID);
 
-        // Filter matches where state = 1 (active matches)
-      /*  matches = matches.stream()
-                .filter(match -> match.getStateID() == 1)
-                .collect(Collectors.toList()); */
         List<MatchDetails> matchDetails = new ArrayList<>();
 
         // Retrieve job title and company info for the other profile in each match
