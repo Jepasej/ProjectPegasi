@@ -34,6 +34,11 @@ public class OutgoingRequestViewController
     @FXML
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
 
+    /**
+     * Initializes the Outgoing Requests view.
+     * Loads all outgoing swap requests, retrieves associated profile data,
+     * and adds a delete button to each row for request cancellation.
+     */
     @FXML
     public void initialize() {
 

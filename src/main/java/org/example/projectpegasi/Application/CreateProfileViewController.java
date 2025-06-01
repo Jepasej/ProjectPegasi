@@ -247,8 +247,6 @@ public class CreateProfileViewController
             }
         }
 
-        //HER SKAL VAERE VALIDERING AF MIN SALARY og DIST PREF I SAMME STIL SOM OVENSTAAENDE
-
         if (!passwordField.getText().equals(repeatPasswordField.getText()))
         {
             passwordField.setStyle(errorColour);
