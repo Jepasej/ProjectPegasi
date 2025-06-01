@@ -13,6 +13,11 @@ import java.sql.SQLException;
 
 import static org.example.projectpegasi.Application.MainViewController.getCurrentUserID;
 
+
+/**
+ * Controller for the Edit Profile view.
+ * Handles password changes and profile updates through DAO calls.
+ */
 public class EditProfileViewController
 {
     @FXML
@@ -28,12 +33,13 @@ public class EditProfileViewController
 
 
     /**
-     * Checks if the old password given in the textfield is the correct one.
-     * Then if the two match, compares both new passwords that were given through TextFields.
-     * After that connects to database again and updates the given UserID with the given password.
-     * @return
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     *  Verifies that the old password entered by the user matches the one stored in the database.
+     *  If correct, it checks whether the new password and repeat password match.
+     *  If both validations pass, the user's password is updated in the database.
+     *
+     *  @return the old password entered by the user
+     *  @throws SQLException           if a database access error occurs
+     *  @throws ClassNotFoundException if the SQL driver class is not found
      */
     public String OnSafePasswordButtonClick() throws SQLException, ClassNotFoundException
     {
@@ -73,8 +79,13 @@ public class EditProfileViewController
         return OldPasswordWritten;
     }
 
-
-        //Not Tested
+    /**
+     * Saves updated profile information for the currently logged-in user.
+     * If the mandatory field (full name) is missing, the operation is aborted and an error label is shown.
+     *
+     * @throws SQLException           if a database access error occurs
+     * @throws ClassNotFoundException if the SQL driver class is not found
+     */
     public void onSaveButtonClickEdit() throws SQLException, ClassNotFoundException
     {
         int UserID = getCurrentUserID();
@@ -98,6 +109,9 @@ public class EditProfileViewController
 
     }
 
+    /**
+     * Cancels the edit operation and navigates the user back to the Profile View.
+     */
     public void onCancelButtonClickEdit()
     {
         HelloApplication.changeScene(ControllerNames.ProfileView);
