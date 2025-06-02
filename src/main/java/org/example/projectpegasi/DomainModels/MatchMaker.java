@@ -12,20 +12,17 @@ public class MatchMaker
      * @param profiles List of profiles
      * @return a List of profiles sorted by score
      */
-    public List<ProfilePair> matchProfiles(List<Profile> profiles)
-    {
+    public List<ProfilePair> matchProfiles(List<Profile> profiles) {
         List<ProfilePair> matchedPairs = new ArrayList<>();
         DataAccessObject dao = new DataAccessObject();
 
-        for (Profile profile1 : profiles)
-        {
-            for (Profile profile2 : profiles)
-            {
-                if(profile1 != profile2 && !alreadyMatched(profile1, profile2, matchedPairs))
-                {
+        for (Profile profile1 : profiles) {
+            for (Profile profile2 : profiles) {
+                if (profile1.getProfileID() != profile2.getProfileID() && !alreadyMatched(profile1, profile2, matchedPairs)) {
                     double similarityScore = calculateSimilarity(profile1, profile2);
-                    if (similarityScore > 0.7)
-                    {
+                    System.out.println("Similarity Score between " + profile1.getJobFunction() + " and " + profile2.getJobFunction() + " : " + similarityScore);
+
+                    if (similarityScore >= 0.7) {
                         ProfilePair pair = new ProfilePair(profile1, profile2, similarityScore);
                         matchedPairs.add(pair);
                         dao.saveMatch(profile1.getProfileID(), profile2.getProfileID());
@@ -36,6 +33,7 @@ public class MatchMaker
         return sortByScore(matchedPairs);
     }
 
+
     /**
      * Method for calculating the similarity scores between two profiles
      * (which is a made up score system intended for expansion later on, like adding distance into the match)
@@ -45,11 +43,16 @@ public class MatchMaker
      */
     public double calculateSimilarity(Profile profile1, Profile profile2)
     {
-        // Can implement strategy pattern to
+        System.out.println("Calculating similarity between:");
+        System.out.println("Profile 1 - Job Function: " + profile1.getJobFunction() + ", Pay Pref: " + profile1.getPayPref());
+        System.out.println("Profile 2 - Job Function: " + profile2.getJobFunction() + ", Pay Pref: " + profile2.getPayPref());
+
         double jobFunctionScore = compareJobFunctions(profile1.getJobFunction(), profile2.getJobFunction());
         double payPrefScore = comparePayPreferences(profile1.getPayPref(), profile2.getPayPref());
 
-        return 0.7 * jobFunctionScore + 0.3 * payPrefScore;
+        double similarityScore = 0.7 * jobFunctionScore + 0.3 * payPrefScore;
+        System.out.println("Similarity score: " + similarityScore);
+        return similarityScore;
     }
 
     private double comparePayPreferences(int payPref1, int payPref2)
@@ -66,18 +69,17 @@ public class MatchMaker
         return jobFunction1.equals(jobFunction2) ? 1 : 0;
     }
 
-    private boolean alreadyMatched(Profile profile1, Profile profile2, List<ProfilePair> matchedPairs)
-    {
-        for (ProfilePair pair : matchedPairs)
-        {
-            if (profile1.equals(pair.getProfile1()) && profile2.equals(pair.getProfile2()) ||
-                profile1.equals(pair.getProfile2()) && profile2.equals(pair.getProfile1())) {
+    private boolean alreadyMatched(Profile profile1, Profile profile2, List<ProfilePair> matchedPairs) {
+        for (ProfilePair pair : matchedPairs) {
+            if ((pair.getProfile1().getProfileID() == profile1.getProfileID() &&
+                    pair.getProfile2().getProfileID() == profile2.getProfileID()) ||
+                    (pair.getProfile1().getProfileID() == profile2.getProfileID() &&
+                            pair.getProfile2().getProfileID() == profile1.getProfileID())) {
                 return true;
             }
         }
         return false;
     }
-
     private List<ProfilePair> sortByScore(List<ProfilePair> matchedPairs)
     {
         matchedPairs.sort((pair1, pair2) ->

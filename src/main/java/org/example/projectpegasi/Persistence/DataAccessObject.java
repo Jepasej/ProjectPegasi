@@ -1149,10 +1149,12 @@ public class DataAccessObject implements DAO
 
             while(rs.next())
             {
+                int profileID = rs.getInt("fldProfileID");
                 String jobFunction = rs.getString("fldFunction");
                 int payPref = rs.getInt("fldPayPref");
 
-                Profile profile = new Profile();
+                System.out.println("Retrieved profile - job function: " + jobFunction + " pay pref: " + payPref);
+                Profile profile = new Profile(profileID, jobFunction, payPref);
                 profiles.add(profile);
             }
         } catch (SQLException e)
@@ -1180,6 +1182,7 @@ public class DataAccessObject implements DAO
     @Override
     public void saveMatch(int profileAID, int profileBID)
     {
+        System.out.println("Saving Match for profiles " + profileAID + " and " + profileBID);
         String query = "{call SaveMatch(?, ?, 1, ?)}";
 
         try{
@@ -1191,6 +1194,7 @@ public class DataAccessObject implements DAO
             clStmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));
 
             clStmt.execute();
+            System.out.println("Match Saved Successfully");
 
         } catch (SQLException e)
         {

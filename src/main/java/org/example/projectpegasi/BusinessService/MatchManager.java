@@ -5,6 +5,7 @@ import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.ProfilePair;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MatchManager
@@ -20,7 +21,10 @@ public class MatchManager
 
     public List<ProfilePair> findAllMatches()
     {
+        System.out.println("Find All Matches");
         List<Profile> profiles = dao.getAllProfiles();
-        return matchMaker.matchProfiles(profiles);
+        System.out.println("Found " + profiles.size() + " profiles");
+        List<ProfilePair> matchedPairs = matchMaker.matchProfiles(profiles);
+        return matchedPairs;
     }
 }

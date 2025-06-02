@@ -15,6 +15,7 @@ import org.example.projectpegasi.BusinessService.MatchManager;
 import org.example.projectpegasi.BusinessService.SceneControllerPairs;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.ProfilePair;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class HelloApplication extends Application
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.seconds(15),
                 event -> {
+                    System.out.println("Timeline started");
             try
             {
                 MatchManager matchManager = new MatchManager();

@@ -39,9 +39,10 @@ public class Profile
         this.profileID = profileID;
     }
 
-    public Profile(String Jobfunction, int payPref)
+    public Profile(int profileID,String jobFunction, int payPref)
     {
-        this.jobFunction = Jobfunction;
+        this.profileID = profileID;
+        this.jobFunction = jobFunction;
         this.payPref = payPref;
     }
 
