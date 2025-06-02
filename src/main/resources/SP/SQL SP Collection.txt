@@ -522,6 +522,7 @@ BEGIN
         fldStateID,
         fldSenderProfileID,
         fldMatchDate,
+        fldMatchResponseDate,
         fldRequestResponseDate,
         fldSwapResponseDate
     FROM tblMatches
