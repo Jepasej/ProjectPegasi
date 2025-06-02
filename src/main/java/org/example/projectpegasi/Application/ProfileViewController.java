@@ -99,8 +99,16 @@ public class ProfileViewController
         // Get job title for each match and add it to the ListView
         for (Match match : recentMatchesList)
         {
-            String jobTitle = dao.getJobTitleByProfileID(match.getProfileBID());
-            recentMatchesLV.getItems().add(jobTitle);
+            if(userID == match.getProfileAID())
+            {
+                String jobTitle = dao.getJobTitleByProfileID(match.getProfileBID());
+                recentMatchesLV.getItems().add(jobTitle);
+            }
+            else
+            {
+                String jobTitle = dao.getJobTitleByProfileID(match.getProfileAID());
+                recentMatchesLV.getItems().add(jobTitle);
+            }
         }
     }
 
