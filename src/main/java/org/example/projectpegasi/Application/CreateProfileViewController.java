@@ -68,6 +68,7 @@ public class CreateProfileViewController
     {
         populateMinSalaryBox();
         populateDistanceBox();
+        loadJobFunctionBox();
     }
 
     @FXML
@@ -135,8 +136,6 @@ public class CreateProfileViewController
     @FXML
     private void onJobFunctionSelected()
     {
-        loadJobFunctionBox();
-
         for (JobFunction jf : jobFunctions)
         {
             if (jf.getJobFunction().equals(jobFunctionComboBox.getValue()))
