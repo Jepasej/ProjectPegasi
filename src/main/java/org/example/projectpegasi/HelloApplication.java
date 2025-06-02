@@ -82,7 +82,6 @@ public class HelloApplication extends Application
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.seconds(15),
                 event -> {
-                    System.out.println("Timeline started");
             try
             {
                 MatchManager matchManager = new MatchManager();

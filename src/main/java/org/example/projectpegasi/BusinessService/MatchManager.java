@@ -21,9 +21,7 @@ public class MatchManager
 
     public List<ProfilePair> findAllMatches()
     {
-        System.out.println("Find All Matches");
         List<Profile> profiles = dao.getAllProfiles();
-        System.out.println("Found " + profiles.size() + " profiles");
         List<ProfilePair> matchedPairs = matchMaker.matchProfiles(profiles);
         return matchedPairs;
     }
