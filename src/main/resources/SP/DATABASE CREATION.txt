@@ -61,7 +61,6 @@ CREATE TABLE tblMatches(
 	fldMatchResponseDate DATE, -- When one of the profiles respond to the match
 	fldRequestResponseDate DATE, -- When both profiles have responded to the match/request
 	fldSwapResponseDate DATE, -- When HR (People & Culture) responds to the request
-	fldSenderProfileID INT, -- To differentiate who sent the request in a match between two profiles
 	);
 
 ALTER TABLE tblMatches
