@@ -469,11 +469,16 @@ CREATE OR ALTER PROCEDURE SaveMatch(@ProfileAID INT,
 									@StateID INT,
 									@MatchDate DATE)
 AS
+    BEGIN
+  		IF NOT EXISTS(
+   		SELECT 1 FROM tblMatches
+   		WHERE (fldProfileAID = @ProfileAID AND fldProfileBID = @ProfileBID) OR (fldProfileAID = @ProfileBID AND fldProfileBID = @ProfileAID)
+   		)
 	BEGIN
 		INSERT INTO tblMatches(fldProfileAID, fldProfileBID, fldStateID, fldMatchDate)
 		VALUES (@ProfileAID, @ProfileBID, @StateID, @MatchDate)
 	END
-
+END
 
 Go
 
