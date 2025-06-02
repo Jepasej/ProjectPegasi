@@ -8,7 +8,8 @@ import java.util.List;
 public class MatchMaker
 {
     /**
-     * Matching Algorithm for matching profiles based on our score system
+     * Matching Algorithm for matching profiles based on our score system.
+     * If profiles have a score of 0.7 or higher, it will get saved in the database
      * @param profiles List of profiles
      * @return a List of profiles sorted by score
      */
@@ -18,7 +19,7 @@ public class MatchMaker
 
         for (Profile profile1 : profiles) {
             for (Profile profile2 : profiles) {
-                if (profile1.getProfileID() != profile2.getProfileID() && !alreadyMatched(profile1, profile2, matchedPairs)) {
+                if (profile1.getProfileID() != profile2.getProfileID()) {
                     double similarityScore = calculateSimilarity(profile1, profile2);
 
                     if (similarityScore >= 0.7) {
@@ -63,17 +64,6 @@ public class MatchMaker
         return jobFunction1.equals(jobFunction2) ? 1 : 0;
     }
 
-    private boolean alreadyMatched(Profile profile1, Profile profile2, List<ProfilePair> matchedPairs) {
-        for (ProfilePair pair : matchedPairs) {
-            if ((pair.getProfile1().getProfileID() == profile1.getProfileID() &&
-                    pair.getProfile2().getProfileID() == profile2.getProfileID()) ||
-                    (pair.getProfile1().getProfileID() == profile2.getProfileID() &&
-                            pair.getProfile2().getProfileID() == profile1.getProfileID())) {
-                return true;
-            }
-        }
-        return false;
-    }
     private List<ProfilePair> sortByScore(List<ProfilePair> matchedPairs)
     {
         matchedPairs.sort((pair1, pair2) ->
