@@ -909,6 +909,8 @@ public class DataAccessObject implements DAO
         return false;
     }
 
+    //The following three methods are an theoretical implementation of creating a database user, granting the user
+    //admin rights and revoking the same rights again.
     /**
      * Creates a user in our database with admin access, so that employees and/or administrators can edit/change the db
      * For future use to create
@@ -969,6 +971,29 @@ public class DataAccessObject implements DAO
         }
     }
 
+    public void revokeDBAdminRights(String adminName)
+    {
+        String query = "{call RevokeJobSwapAdminRoles(?)}";
+        String nameToBeRevoked = adminName;
+        try
+        {
+            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
+
+            cs.setString(1, nameToBeRevoked);
+        } catch (SQLException e)
+        {
+            throw new RuntimeException(e);
+        } finally
+        {
+            try
+            {
+                DBConnection.getInstance().close();
+            } catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * Retrieves the two most recent requests for the given profile.
      * where the user has received an invitation to swap.
@@ -1106,29 +1131,7 @@ public class DataAccessObject implements DAO
         return jobTitle;
     }
 
-    public void revokeDBAdminRights(String adminName)
-    {
-        String query = "{call RevokeJobSwapAdminRoles(?)}";
-        String nameToBeRevoked = adminName;
-        try
-        {
-            CallableStatement cs = DBConnection.getInstance().prepareCall(query);
 
-            cs.setString(1, nameToBeRevoked);
-        } catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        } finally
-        {
-            try
-            {
-                DBConnection.getInstance().close();
-            } catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * Method to get all information on a profile and
