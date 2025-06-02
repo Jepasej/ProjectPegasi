@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for handling incoming swap requests.
+ * Lets users accept or decline job swaps.
+ */
 public class IncomingRequestViewController
 {
     @FXML
@@ -33,7 +37,10 @@ public class IncomingRequestViewController
     @FXML
     private Button goToMatchesButton, outgoingRequestButton, incomingRequestButton, backToProfileButton;
 
-
+    /**
+     * Initializes the view, loads incoming swap requests for the logged-in user,
+     * and sets up accept/decline buttons in the table.
+     */
     @FXML
     public void initialize() {
         SwapRequestManager srManager = new SwapRequestManager();
@@ -116,16 +123,25 @@ public class IncomingRequestViewController
             incomingRequestTable.getColumns().addAll(acceptRequestColumnMatch, declineRequestcolumnMatch);
         }    }
 
+    /**
+     * Navigates to the Match View.
+     */
     public void onMatchesButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.MatchView);
     }
 
+    /**
+     * Navigates to the Outgoing Requests View.
+     */
     public void onOutgoingRequestsButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
     }
 
+    /**
+     * Navigates back to the Profile View.
+     */
     public void onBackToProfileButtonClick()
     {
         HelloApplication.changeScene(ControllerNames.ProfileView);
