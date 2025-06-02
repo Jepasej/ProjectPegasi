@@ -250,7 +250,9 @@ BEGIN
 
     SELECT TOP 2 *
     FROM tblMatches
-    WHERE fldProfileBID = @ProfileID AND fldStateID = 2 -- waiting requests
+    WHERE fldProfileBID = @ProfileID
+    AND fldStateID = 2 -- waiting requests
+    AND fldSenderProfileID != @ProfileID
     ORDER BY fldMatchResponseDate DESC;
 END;
 
