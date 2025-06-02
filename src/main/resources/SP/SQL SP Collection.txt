@@ -227,7 +227,7 @@ AS
 BEGIN
     SELECT TOP 2 *
     FROM tblMatches
-    WHERE fldProfileAID = @ProfileID OR fldProfileBID = @ProfileID
+    WHERE fldProfileAID = @ProfileID OR fldProfileBID = @ProfileID AND fldStateID = 1
     ORDER BY fldMatchDate DESC;
 END;
 
@@ -522,6 +522,7 @@ BEGIN
         fldStateID,
         fldSenderProfileID,
         fldMatchDate,
+        fldMatchResponseDate,
         fldRequestResponseDate,
         fldSwapResponseDate
     FROM tblMatches
