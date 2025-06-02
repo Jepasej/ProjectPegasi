@@ -3,7 +3,6 @@ package org.example.projectpegasi;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,11 +10,10 @@ import javafx.stage.Stage;
 
 import javafx.util.Duration;
 import org.example.projectpegasi.BusinessService.Lazy;
-import org.example.projectpegasi.BusinessService.MatchManager;
+import org.example.projectpegasi.DomainModels.MatchManager;
 import org.example.projectpegasi.BusinessService.SceneControllerPairs;
 import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.DomainModels.ProfilePair;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
 import java.util.ArrayList;

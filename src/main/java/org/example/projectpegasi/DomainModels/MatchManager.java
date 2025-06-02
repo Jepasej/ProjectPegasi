@@ -1,11 +1,7 @@
-package org.example.projectpegasi.BusinessService;
+package org.example.projectpegasi.DomainModels;
 
-import org.example.projectpegasi.DomainModels.MatchMaker;
-import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.DomainModels.ProfilePair;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MatchManager
