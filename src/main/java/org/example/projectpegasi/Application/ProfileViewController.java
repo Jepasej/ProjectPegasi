@@ -166,6 +166,8 @@ public class ProfileViewController
     public void onShowMoreRequestButtonClick ()
     {
         HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 
     /**
@@ -174,6 +176,8 @@ public class ProfileViewController
     public void onShowMoreMatchesButtonClick ()
     {
         HelloApplication.changeScene(ControllerNames.MatchView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 
     /**
@@ -183,5 +187,7 @@ public class ProfileViewController
     protected void editProfileButtOnAction ()
     {
         HelloApplication.changeScene(ControllerNames.EditProfileView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 }
