@@ -2,7 +2,6 @@ package org.example.projectpegasi.Persistence;
 
 import org.example.projectpegasi.DomainModels.*;
 import org.example.projectpegasi.Foundation.DBConnection;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -251,7 +250,6 @@ public class DataAccessObject implements DAO
         return matches;
     }
 
-
     /**
      * Retrieves all outgoing requests for the logged-in profile from the database (state 2 = request)
      * which the logged-in user has sent to others.
@@ -351,13 +349,17 @@ public class DataAccessObject implements DAO
     {
 
     }
-
     @Override
     public void read(Object object)
     {
 
     }
 
+    /**
+     * Reads all records of a specific type from the database using a stored procedure.
+     * @param object
+     * @return
+     */
     @Override
     public ArrayList readAll(Object object)
     {
@@ -446,6 +448,10 @@ public class DataAccessObject implements DAO
 
     }
 
+    /**
+     * Creates a new User in our DB through Stored Procedure "NewUser"
+     * @param u
+     */
     @Override
     public void createUser(User u)
     {
@@ -474,6 +480,11 @@ public class DataAccessObject implements DAO
         createUserProfile(u);
     }
 
+    /**
+     * Creates a new PROFILE in our database with the specified values, User and Profile are diffrent from eachother
+     * While Users are our Login credentials, Profile are the stored information on the users.
+     * @param u
+     */
     private void createUserProfile(User u)
     {
         Profile p = u.getProfile();
@@ -512,6 +523,11 @@ public class DataAccessObject implements DAO
         }
     }
 
+    /**
+     * Checks through our database if the username the user has choosen is unique.
+     * @param name
+     * @return
+     */
     @Override
     public boolean checkUsernameIsUnique(String name)
     {
@@ -618,6 +634,16 @@ public class DataAccessObject implements DAO
         }
     }
 
+    /**
+     * Safes the data the user has given in the EditProfileView to our database.
+     * @param userID
+     * @param newFullName
+     * @param jobTitle
+     * @param homeAddress
+     * @param company
+     * @param minSalary
+     * @param distancePref
+     */
     @Override
     public void SafeEditProfileData(int userID, String newFullName, String jobTitle, String homeAddress, String company, String minSalary, String distancePref)
     {
@@ -835,7 +861,6 @@ public class DataAccessObject implements DAO
         return -1;
     }
 
-
     /**
      * Method for getting the ProfileID from the userID
      * @param userID takes the userID
@@ -877,6 +902,13 @@ public class DataAccessObject implements DAO
         return -1;
     }
 
+    /**
+     * Updates the swappingStatus in our database so our algorithm know to match or not to match the profile
+     * with other profiles.
+     * @param profileID
+     * @param swappingStatus
+     * @return
+     */
     @Override
     public boolean updateSwappingStatus(int profileID, Boolean swappingStatus)
     {
@@ -994,6 +1026,7 @@ public class DataAccessObject implements DAO
             }
         }
     }
+
     /**
      * Retrieves the two most recent requests for the given profile.
      * where the user has received an invitation to swap.
@@ -1131,8 +1164,6 @@ public class DataAccessObject implements DAO
         }
         return jobTitle;
     }
-
-
 
     /**
      * Method to get all information on a profile and

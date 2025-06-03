@@ -1,7 +1,9 @@
 package org.example.projectpegasi.DomainModels;
 
 /**
- * Class modelling the profile of a user
+ * Class modelling the profile of a user.
+ * A profile holds basic information about a user's job, location, and preferences,
+ * which is used for creating and evaluating job swap matches.
  */
 public class Profile
 {
@@ -14,8 +16,18 @@ public class Profile
     private boolean swappingStatus;
     private int profileID;
     private Company company;
-    private String jobFunction; //Tilføjet her for at gemme jobfunctions man vælger
+    private String jobFunction;
 
+    /**
+     * Constructor used when creating a new profile from the UI with all needed input.
+     * @param fullName The user's full name
+     * @param jobTitle The title of the current job
+     * @param homeAddress The user's home address
+     * @param wage The current wage
+     * @param payPref The user's salary preference
+     * @param distPref The user's preferred distance to work
+     * @param company The company the user works for
+     */
     public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, Company company)
     {
         this.fullName = fullName;
@@ -27,6 +39,17 @@ public class Profile
         this.company = company;
     }
 
+    /**
+     * Constructor used when creating a profile from the database that already has an ID and swap status.
+     * @param fullName The user's full name
+     * @param jobTitle The title of the current job
+     * @param homeAddress The user's home address
+     * @param wage The current wage
+     * @param payPref The user's salary preference
+     * @param distPref The user's preferred distance to work
+     * @param profileID The ID of the profile
+     * @param swappingStatus True if the user is open to job swap, false otherwise
+     */
     public Profile(String fullName, String jobTitle, String homeAddress, int wage, int payPref, String distPref, int profileID, boolean swappingStatus)
     {
         this.fullName = fullName;
@@ -39,6 +62,12 @@ public class Profile
         this.profileID = profileID;
     }
 
+    /**
+     * Constructor used mainly for matching logic when only a few profile values are needed.
+     * @param profileID The profile ID
+     * @param jobFunction The job function of the user
+     * @param payPref The salary preference of the user
+     */
     public Profile(int profileID,String jobFunction, int payPref)
     {
         this.profileID = profileID;
@@ -46,6 +75,9 @@ public class Profile
         this.payPref = payPref;
     }
 
+    /**
+     * Empty constructor used when values are set manually later
+     */
     public Profile()
     {
 

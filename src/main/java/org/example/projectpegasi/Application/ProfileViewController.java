@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import org.example.projectpegasi.BusinessService.ControllerNames;
+import org.example.projectpegasi.DomainModels.JobSwap;
 import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.JobSwapApplication;
 import org.example.projectpegasi.Persistence.DAO;
@@ -160,6 +161,8 @@ public class ProfileViewController
     {
         updateListViews();
         JobSwapApplication.changeScene(ControllerNames.IncomingRequestView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 
     /**
@@ -169,6 +172,8 @@ public class ProfileViewController
     {
         updateListViews();
         JobSwapApplication.changeScene(ControllerNames.MatchView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 
     /**
@@ -178,6 +183,8 @@ public class ProfileViewController
     protected void editProfileButtOnAction ()
     {
         JobSwapApplication.changeScene(ControllerNames.EditProfileView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
     }
 
     private void updateListViews()
