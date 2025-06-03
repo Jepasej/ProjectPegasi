@@ -49,8 +49,7 @@ public class ProfileViewController
     public void initialize()
     {
         int userID = MainViewController.getCurrentUserID();
-        loadRecentMatchesInListView();
-        loadRecentRequestsInListView();
+        updateListViews();
         if(userID != 0)
         {
             getProfileInformation(userID);
@@ -94,21 +93,15 @@ public class ProfileViewController
         DataAccessObject dao = new DataAccessObject();
         recentMatchesList = dao.getTwoNewestMatchesByProfileID(userID);
 
+        System.out.println("Retrieved " + recentMatchesList.size() + " recent matches for user " + userID);
+
         recentMatchesLV.getItems().clear();
 
         // Get job title for each match and add it to the ListView
         for (Match match : recentMatchesList)
         {
-            if(userID == match.getProfileAID())
-            {
-                String jobTitle = dao.getJobTitleByProfileID(match.getProfileBID());
-                recentMatchesLV.getItems().add(jobTitle);
-            }
-            else
-            {
-                String jobTitle = dao.getJobTitleByProfileID(match.getProfileAID());
-                recentMatchesLV.getItems().add(jobTitle);
-            }
+            String jobTitle = dao.getJobTitleByProfileID(match.getProfileBID());
+            recentMatchesLV.getItems().add(jobTitle);
         }
     }
 
@@ -126,7 +119,7 @@ public class ProfileViewController
          // Get job title for each request and add it to the ListView
         for (Match match : recentRequestsList)
         {
-            String jobTitle = dao.getJobTitleByProfileID(match.getProfileAID());
+            String jobTitle = dao.getJobTitleByProfileID(match.getProfileBID());
             recentRequestLV.getItems().add(jobTitle);
         }
     }
@@ -139,8 +132,8 @@ public class ProfileViewController
     private void getProfileInformation ( int userID)
     {
         DAO dao = new DataAccessObject();
-         int profileID = dao.getProfileID(userID);
-         List<String> profileInfo = dao.getProfileInformation(profileID);
+        int profileID = dao.getProfileID(userID);
+        List<String> profileInfo = dao.getProfileInformation(profileID);
 
         if (!profileInfo.isEmpty()) {
             // Set data from the list into the labels
@@ -165,6 +158,7 @@ public class ProfileViewController
      */
     public void onShowMoreRequestButtonClick ()
     {
+        updateListViews();
         HelloApplication.changeScene(ControllerNames.IncomingRequestView);
         loadRecentMatchesInListView();
         loadRecentRequestsInListView();
@@ -175,6 +169,7 @@ public class ProfileViewController
      */
     public void onShowMoreMatchesButtonClick ()
     {
+        updateListViews();
         HelloApplication.changeScene(ControllerNames.MatchView);
         loadRecentMatchesInListView();
         loadRecentRequestsInListView();
@@ -187,6 +182,12 @@ public class ProfileViewController
     protected void editProfileButtOnAction ()
     {
         HelloApplication.changeScene(ControllerNames.EditProfileView);
+        loadRecentMatchesInListView();
+        loadRecentRequestsInListView();
+    }
+
+    private void updateListViews()
+    {
         loadRecentMatchesInListView();
         loadRecentRequestsInListView();
     }

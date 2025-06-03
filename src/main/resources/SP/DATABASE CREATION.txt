@@ -138,7 +138,7 @@ VALUES
 (N'Frederik Hansen', N'Carpenter', N'Banevænget 12, 3460 Birkerød', 2, 52000, 35000, N'35 km', 1, 2),
 (N'Kasper Nielsen', N'Pedagogue', N'Søndergade 88, 8000 Aarhus C', 3, 43000, 29000, N'10 km', 1, 3),
 (N'Sofie Sørensen', N'Carpenter', N'Højmarksvej 4, 8700 Horsens', 2, 41000, 31000, N'20 km', 1, 4),
-(N'Emilie Jensen', N'IT-Supporter', N'Vesterbrogade 120, 1620 København V', 1, 39000, 25000, N'35 km', 1, 5),
+(N'Emilie Jensen', N'Pedagogue', N'Vesterbrogade 120, 1620 København V', 1, 39000, 25000, N'35 km', 1, 5),
 (N'Lukas Madsen', N'Electrician', N'Rosenørns Allé 32, 1970 Frederiksberg', 3, 45000, 32000, N'50 km', 1, 6),
 (N'Mathilde Lauritsen', N'IT-Supporter', N'Kastetvej 100, 9000 Aalborg', 4, 51000, 33000, N'20 km', 1, 7),
 (N'Oscar Thomsen', N'IT-Supporter', N'Venlighedsvej 2, 2800 Kongens Lyngby', 2, 47000, 31000, N'45 km', 1, 8),

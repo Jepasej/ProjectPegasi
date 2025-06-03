@@ -1104,6 +1104,7 @@ public class DataAccessObject implements DAO
                 match.setStateID(rs.getInt("fldStateID"));
                 match.setMatchDate(rs.getDate("fldMatchDate"));
                 match.setMatchResponseDate(rs.getDate("fldMatchResponseDate"));
+                match.setSenderProfileID(rs.getInt("fldSenderProfileID"));
                 matches.add(match);
             }
         }
