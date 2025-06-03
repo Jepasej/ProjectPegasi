@@ -11,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class MatchMakerTest
 {
 
+    /**
+     * Method to test if algorithm for matching works after every change made
+     */
     @Test
     public void testMatchProfiles()
     {
@@ -34,6 +37,9 @@ class MatchMakerTest
         assertEquals(1.0, matchProfiles.get(0).getSimilarityScore());
     }
 
+    /**
+     * Method to test if the profiles matched got the right value
+     */
     @Test
     public void testCalculateSimilarity()
     {
