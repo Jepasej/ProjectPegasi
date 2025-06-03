@@ -11,12 +11,11 @@ import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.MatchDetails;
 import org.example.projectpegasi.DomainModels.Profile;
 import org.example.projectpegasi.DomainModels.SwapRequest;
-import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.JobSwapApplication;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller for the "Outgoing Requests" view.
@@ -107,7 +106,7 @@ public class OutgoingRequestViewController
     @FXML
     public void onMatchesButtonClick()
     {
-        HelloApplication.changeScene(ControllerNames.MatchView);
+        JobSwapApplication.changeScene(ControllerNames.MatchView);
     }
 
     /**
@@ -117,7 +116,7 @@ public class OutgoingRequestViewController
     @FXML
     public void onIncomingRequestButtonClick()
     {
-        HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+        JobSwapApplication.changeScene(ControllerNames.IncomingRequestView);
     }
 
     /**
@@ -127,6 +126,6 @@ public class OutgoingRequestViewController
     @FXML
     public void onBackToProfileButtonClick()
     {
-        HelloApplication.changeScene(ControllerNames.ProfileView);
+        JobSwapApplication.changeScene(ControllerNames.ProfileView);
     }
 }
