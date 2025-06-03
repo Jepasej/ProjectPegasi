@@ -11,11 +11,20 @@ public class Lazy<T>
     private T value = null;
     private ConstWrapper<T> wrapperFunction;
 
+    /**
+     * Constructs a new Lazy object with a given function that provides the value when needed.
+     * @param wrapperFunction A wrapper that defines how the value should be instantiated lazily
+     */
     public Lazy(ConstWrapper<T> wrapperFunction)
     {
         this.wrapperFunction = wrapperFunction;
     }
 
+    /**
+     * Returns the lazy initialized value. If the value has not been initialized yet,
+     * it will be created using the provided wrapperFunction.
+     * @return The initialized value of type T
+     */
     public T getValue()
     {
         if(value == null)

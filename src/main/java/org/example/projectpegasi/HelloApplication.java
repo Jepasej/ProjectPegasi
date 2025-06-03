@@ -20,11 +20,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Main application class that starts the JobSwap program.
+ * It loads the first scene and prepares all other scenes using lazy loading.
+ * It also sets up a timeline that updates matches automatically.
+ */
 public class HelloApplication extends Application
 {
     private static Collection<SceneControllerPairs> scenes = new ArrayList<>();
     private static Stage stageHolder = null;
 
+    /**
+     * This method is called when the application starts.
+     * It loads the main view, initializes all other scenes with lazy loading,
+     * and sets up a timeline that keeps checking for new matches every 15 seconds.
+     *
+     * @param stage The main window for the application
+     * @throws IOException If the main view can't be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException
     {
