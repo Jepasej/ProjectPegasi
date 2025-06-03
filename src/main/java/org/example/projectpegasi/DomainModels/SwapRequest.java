@@ -4,6 +4,7 @@ import java.sql.Date;
 
 /**
  * Represents a swaprequest when a user has accepted a match
+ * t includes profile IDs, match info, sender, state, and timestamps.
  */
 public class SwapRequest
 {
@@ -17,6 +18,7 @@ public class SwapRequest
     private Date requestDateResponse;
 
 
+    //region GettersSetters
     public int getProfileAId() {
         return profileAId;
     }
@@ -80,4 +82,6 @@ public class SwapRequest
     public void setRequestDateResponse(Date requestDateResponse) {
         this.requestDateResponse = requestDateResponse;
     }
+
+    //endregion
 }

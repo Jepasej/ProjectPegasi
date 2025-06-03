@@ -2,6 +2,8 @@ package org.example.projectpegasi.DomainModels;
 
 /**
  * Class modelling a User of the system.
+ * Contains basic user information such as username, password,
+ * profile reference and userID.
  */
 public class User
 {
@@ -10,6 +12,13 @@ public class User
     private Profile profile;
     private int userID;
 
+    /**
+     * Creates a user with username, password, and associated profile.
+     *
+     * @param userName the user's username
+     * @param password the user's password
+     * @param profile  the user's profile
+     */
     public User(String userName, String password, Profile profile)
     {
         this.userName = userName;
@@ -17,12 +26,21 @@ public class User
         this.profile = profile;
     }
 
+    /**
+     * Creates a user with only username and password.
+     *
+     * @param userName the user's username
+     * @param password the user's password
+     */
     public User(String userName, String password)
     {
         this.userName = userName;
         this.password = password;
     }
 
+    /**
+     * Default constructor for user.
+     */
     public User()
     {
 
@@ -49,10 +67,7 @@ public class User
         this.password = password;
     }
 
-    public Profile getProfile()
-    {
-        return profile;
-    }
+    public Profile getProfile() { return profile; }
 
     public void setProfile(Profile profile)
     {

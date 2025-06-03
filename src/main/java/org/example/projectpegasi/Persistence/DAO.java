@@ -9,6 +9,11 @@ import java.util.List;
 
 import java.sql.SQLException;
 
+/**
+ * DAO interface for database access
+ * Provides methods for CRUD operations and specific functionality
+ * such as user management, profile data handling and match logic.
+ */
 public interface DAO
 {
     void create(Object object);
