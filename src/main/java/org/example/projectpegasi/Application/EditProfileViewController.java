@@ -6,7 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.example.projectpegasi.BusinessService.ControllerNames;
-import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.JobSwapApplication;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.sql.SQLException;
@@ -114,7 +114,7 @@ public class EditProfileViewController
      */
     public void onCancelButtonClickEdit()
     {
-        HelloApplication.changeScene(ControllerNames.ProfileView);
+        JobSwapApplication.changeScene(ControllerNames.ProfileView);
     }
 
 }

@@ -12,13 +12,12 @@ import org.example.projectpegasi.BusinessService.ControllerNames;
 import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.JobSwapApplication;
 import org.example.projectpegasi.DomainModels.MatchDetails;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller for the Match View.
@@ -130,7 +129,7 @@ public class MatchViewController {
      */
         public void onOutgoingRequestButtonClick ()
         {
-            HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
+            JobSwapApplication.changeScene(ControllerNames.OutgoingRequestView);
         }
 
     /**
@@ -138,7 +137,7 @@ public class MatchViewController {
      */
         public void onIncomingRequestButtonClick ()
         {
-            HelloApplication.changeScene(ControllerNames.IncomingRequestView);
+            JobSwapApplication.changeScene(ControllerNames.IncomingRequestView);
         }
 
     /**
@@ -146,6 +145,6 @@ public class MatchViewController {
      */
         public void onBackToProfileButtonClick ()
         {
-            HelloApplication.changeScene(ControllerNames.ProfileView);
+            JobSwapApplication.changeScene(ControllerNames.ProfileView);
         }
     }

@@ -2,7 +2,6 @@ package org.example.projectpegasi.Application;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,12 +14,11 @@ import org.example.projectpegasi.BusinessService.SwapRequestManager;
 import org.example.projectpegasi.DomainModels.Match;
 import org.example.projectpegasi.DomainModels.MatchDetails;
 import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.JobSwapApplication;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller for handling incoming swap requests.
@@ -128,7 +126,7 @@ public class IncomingRequestViewController
      */
     public void onMatchesButtonClick()
     {
-        HelloApplication.changeScene(ControllerNames.MatchView);
+        JobSwapApplication.changeScene(ControllerNames.MatchView);
     }
 
     /**
@@ -136,7 +134,7 @@ public class IncomingRequestViewController
      */
     public void onOutgoingRequestsButtonClick()
     {
-        HelloApplication.changeScene(ControllerNames.OutgoingRequestView);
+        JobSwapApplication.changeScene(ControllerNames.OutgoingRequestView);
     }
 
     /**
@@ -144,6 +142,6 @@ public class IncomingRequestViewController
      */
     public void onBackToProfileButtonClick()
     {
-        HelloApplication.changeScene(ControllerNames.ProfileView);
+        JobSwapApplication.changeScene(ControllerNames.ProfileView);
     }
 }

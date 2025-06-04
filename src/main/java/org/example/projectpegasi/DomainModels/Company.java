@@ -8,16 +8,29 @@ public class Company
     private String name, address;
     private int ID;
 
+    /**
+     * Overloaded Constructor
+     * @param name
+     */
     public Company(String name)
     {
         this.name = name;
     }
+
+    /**
+     * Overloaded Constructor
+     * @param name
+     * @param address
+     */
     public Company(String name, String address)
     {
         this.name = name;
         this.address = address;
     }
 
+    /**
+     * Default Constructor
+     */
     public Company()
     {
 

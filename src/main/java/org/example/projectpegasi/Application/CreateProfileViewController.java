@@ -9,7 +9,7 @@ import org.example.projectpegasi.DomainModels.Company;
 import org.example.projectpegasi.DomainModels.JobFunction;
 import org.example.projectpegasi.DomainModels.User;
 import org.example.projectpegasi.DomainModels.Profile;
-import org.example.projectpegasi.HelloApplication;
+import org.example.projectpegasi.JobSwapApplication;
 import org.example.projectpegasi.Persistence.DAO;
 import org.example.projectpegasi.Persistence.DataAccessObject;
 
@@ -83,7 +83,7 @@ public class CreateProfileViewController
         MatchManager matchManager = new MatchManager();
         matchManager.findAllMatches();
 
-        HelloApplication.changeScene(ControllerNames.MainView);
+        JobSwapApplication.changeScene(ControllerNames.MainView);
     }
 
     @FXML
@@ -332,6 +332,6 @@ public class CreateProfileViewController
     public void onCancelButtonClick()
     {
         clearFields();
-        HelloApplication.changeScene(ControllerNames.MainView);
+        JobSwapApplication.changeScene(ControllerNames.MainView);
     }
 }

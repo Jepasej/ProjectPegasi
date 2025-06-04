@@ -25,7 +25,7 @@ import java.util.List;
  * It loads the first scene and prepares all other scenes using lazy loading.
  * It also sets up a timeline that updates matches automatically.
  */
-public class HelloApplication extends Application
+public class JobSwapApplication extends Application
 {
     private static Collection<SceneControllerPairs> scenes = new ArrayList<>();
     private static Stage stageHolder = null;

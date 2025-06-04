@@ -5,6 +5,9 @@ import org.example.projectpegasi.Persistence.DataAccessObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Match Algorithm class to sort through the database profiles and match them accordingly
+ */
 public class MatchMaker
 {
     /**
