@@ -1,3 +1,26 @@
+USE DBJobSwapSystem;
+GO
+
+-- Step 1: Remove all data in correct order (First delete from child tables - those with foreign keys to others) --
+DELETE FROM tblProfileJobFunction;
+DELETE FROM tblJobFunction;
+DELETE FROM tblMatches;
+DELETE FROM tblProfile;
+DELETE FROM tblUser;
+DELETE FROM tblState;
+DELETE FROM tblCompany;
+
+-- Step 2: Drop tables in reverse dependency order (Drop child tables before parent tables to avoid foreign key errors) --
+DROP TABLE tblProfileJobFunction;
+DROP TABLE tblJobFunction;
+DROP TABLE tblMatches;
+DROP TABLE tblProfile;
+DROP TABLE tblUser;
+DROP TABLE tblState;
+DROP TABLE tblCompany;
+
+GO
+
 DROP DATABASE DBJobSwapSystem
 
 GO
